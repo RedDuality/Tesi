@@ -1,0 +1,71 @@
+\documentclass[12pt,italian]{article}
+\usepackage[T1]{fontenc}
+\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{subfiles}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{titlesec}
+\usepackage{longtable}
+\usepackage{xcolor,colortbl}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{amsmath}
+\usepackage{mdframed}
+\usepackage{listings}
+\usepackage{minted}
+\usepackage{subfigure}
+
+\usepackage[a4paper,right=25mm,top=25mm,bottom=25mm, left=25mm]{geometry}
+\usepackage{afterpage}
+\usepackage{array,ragged2e}
+\usepackage{booktabs}
+
+
+\graphicspath{
+  {./immagini/}
+  {./immagini/requisiti/}
+}
+
+\definecolor{LightGray}{gray}{0.9}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\newcolumntype{P}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\renewcommand{\baselinestretch}{1.5} 
+
+\newlist{tabitem}{itemize}{1}
+\setlist[tabitem]{nosep,
+                  topsep     = 0pt,
+                  partopsep  = 0pt,
+                  leftmargin = *,
+                  label      = \textbullet,
+                  before = \vspace{-1\baselineskip},
+                  after = \vspace{-0.5\baselineskip}}
+
+\hypersetup{
+    linktoc=all,
+    pdfpagemode=FullScreen,
+}
+\definecolor{Gray}{gray}{0.85}
+\definecolor{LightCyan}{rgb}{0.88,1,1}
+
+
+\newcommand{\mycomment}[1]{}
+
+\mycomment{}
+
+\begin{document}
+\input{./titlepage.tex}
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+\input{./introduzione.tex}
+\input{./contesto.tex}
+\end{document}requisiti
