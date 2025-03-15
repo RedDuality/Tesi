@@ -17,6 +17,7 @@
 \usepackage{listings}
 \usepackage{minted}
 \usepackage{subfigure}
+\usepackage{changepage}
 
 \usepackage[a4paper,right=25mm,top=25mm,bottom=25mm, left=25mm]{geometry}
 \usepackage{afterpage}
@@ -26,7 +27,6 @@
 
 \graphicspath{
   {./immagini/}
-  {./immagini/requisiti/}
 }
 
 \definecolor{LightGray}{gray}{0.9}
@@ -61,11 +61,16 @@
 \mycomment{}
 
 \begin{document}
+
 \input{./titlepage.tex}
+\input{./abstract.tex}
 \pagenumbering{roman}
 \tableofcontents
 \clearpage
 \pagenumbering{arabic}
 \input{./introduzione.tex}
-\input{./contesto.tex}
+\input{./primo.tex}
+\input{./secondo.tex}
+\input{./terzo.tex}
+\input{./fine.tex}
 \end{document}requisiti
