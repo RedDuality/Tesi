@@ -24,6 +24,14 @@
 \usepackage{array,ragged2e}
 \usepackage{booktabs}
 
+\titlespacing*{\section}
+{0pt}{20pt}{30pt}
+
+\titlespacing*{\subsection}
+{0pt}{20pt}{30pt}
+
+\titlespacing*{\subsubsection}
+{0pt}{20pt}{25pt}
 
 \graphicspath{
   {./immagini/}
@@ -68,9 +76,11 @@
 \tableofcontents
 \clearpage
 \pagenumbering{arabic}
-\input{./introduzione.tex}
-\input{./primo.tex}
-\input{./secondo.tex}
-\input{./terzo.tex}
+%\input{./introduzione.tex}
+\input{./analisi-1.tex}
+\input{./analisi-2.tex}
+\input{./struttura.tex}
+\input{./persistenza.tex}
+\input{./immagini.tex}
 \input{./fine.tex}
 \end{document}requisiti
