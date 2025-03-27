@@ -228,7 +228,7 @@ il dispositivo utente aggiunge anche il token di autenticazione, salvato durante
 Il server verifica quindi la validità del token prima di procedere con l'esecuzione della richiesta.
 
 \clearpage
-\subsection{Sicurezza}
+\subsection{La sicurezza}
 
 Il collegamento tra i vari componenti all’interno dell’ambiente Azure richiede l’utilizzo di chiavi e stringhe di connessione. 
 Il salvataggio di tutte le chiavi sensibili è stato affidato al servizio Azure Key Vault,
@@ -248,6 +248,8 @@ che permettono comunque l’identificazione dell’oggetto senza rivelare ulteri
 In particolare, il caricamento delle immagini avviene grazie ad un link univoco dato dalla combinazione degli identificativi dell’evento e dell’immagine. 
 Utilizzando i codici di hash diventa molto complicato il ritrovamento delle immagini senza essere a conoscenza dei codici, 
 che non avendo natura incrementale ma distribuita rende indovinare un link valido.
+
+TODO Dos e limite alle dimensioni delle richieste
 
 \clearpage
 \subsection{Monitoraggio}

@@ -1,6 +1,6 @@
 \section{L'Analisi delle funzionalità}
 
-Lo sviluppo di qualunque tipo di progetto inizia da una fase in cui, partendo dall’abstract del progetto,  si analizzano i requisiti e le funzionalità da realizzare.
+La realizzazione di qualunque prodotto software inizia da una fase in cui, partendo dall’abstract del progetto,  si analizzano i requisiti e le funzionalità da realizzare.
 L’obiettivo è arrivare ad una definizione concisa e condivisa col cliente delle proprietà e del comportamento desiderato nell’applicazione.
 senza entrare nel merito delle scelte implementative.\\
 A quel punto si può procedere con la progettazione del programma vero e proprio.
@@ -13,15 +13,15 @@ Uno studio dell’abstract del progetto porta all’individuazione e alla descri
 I requisiti formalizzano le funzionalità da realizzare, sintetizzando e schematizzando gli elementi descrittivi del prodotto.
 I casi d'uso descrivono le interazioni tra l'utente e il sistema, suddividendo le funzionalità in azioni elementari.\\
 \clearpage
-\subsubsection{Requisiti e vocabolario}
+\subsubsection{I requisiti e il vocabolario}
 Devono risultare chiari e precisi per permettere di procedere in modo corretto e trasparente.
 
 Si suddividono in funzionali o non funzionali in base alle caratteristiche che descrivono.
 I requisiti funzionali descrivono le funzionalità che il sistema deve avere,
-mentre i requisiti non funzionali descrivono le caratteristiche che il sistema deve avere per essere considerato valido.\\
+mentre i requisiti non funzionali descrivono le caratteristiche che il sistema deve soddisfare per essere considerato valido.\\
 
-Le caratteristiche di scalabilità e velocità vengono individuate ed introdotte fin da subito.
-
+Si noti come le caratteristiche di velocità e scalabilità vengono individuate ed introdotte fin da subito.
+(non è detto che tutte le applicazioni debbano servire milioni di utenti)
 \begin{table}
     \begin{tabular} {|P{1.3cm}|P{11.2cm}|P{3cm}|}
         \hline
@@ -122,9 +122,16 @@ Si affianca alla tabella dei requisiti quella del vocabolario, che definisce i t
 \clearpage
 
 
-\subsubsection{Casi d’uso}
+\subsubsection{I casi d’uso}
 
-I casi d’uso descrivono le interazioni tra l’utente e il sistema, suddividendo le funzionalità in azioni elementari.
+I casi d’uso descrivono le interazioni tra gli attori ed il sistema, suddividendo le funzionalità in azioni elementari.
+Gli attori sono tutti gli elementi che compiono una parte attiva all'interno del programma.
+I casi d'uso sono collegati tra loro dai rapporti di inclusione ed estensione.
+Si dice che un caso include un altro se contiene il suo comportamento.
+"An include relationship defines that a use case contains the behavior defined in another use case."
+Si dice che un caso d'uso estende un altro se 
+"A relationship from an extending use case to an extended use case that specifies how and when the behavior defined in
+the extending use case can be inserted into the behavior defined in the extended use case."
 
 \begin{figure}[h!]
     \centering
@@ -132,11 +139,12 @@ I casi d’uso descrivono le interazioni tra l’utente e il sistema, suddividen
     \caption{Diagramma dei casi d'uso}
 \end{figure}
 
-per ogni caso d'uso si identifica uno scenaro di utilizzo, che descrive le particolarità, le aspettative e i punti critici dell'utilizzo.
-In particolare, si riportano gli scenari di utilizzo per i casi d'uso principali.
+Per ogni caso d'uso viene identificato uno scenaro di utilizzo, che chiarifica il contesto, il comportamento e i punti critici dell'utilizzo.
+In particolare, si riportano gli scenari di utilizzo per i casi d'uso principali di Wyd.
+che vanno più ad impattare sulla struttura e sulle esigenze del progetto.
 \clearpage
 Lo scenario di registrazione vede la responsabilità, oltre che di creare un account, di associare un profilo all'utente.
-Questo permette di avere una struttura gerarchica che permette di associare più profili ad un'unico utente, che può in seguito crearne di nuovi.\\
+Questo permette di avere una struttura gerarchica che permette di associare più profili ad un'unico utente, che può in seguito crearne o associarne di nuovi.\\
 
 \begin{table}[htb]
     \begin{tabular} {|P{4.5cm}|P{11cm}|}
@@ -176,8 +184,8 @@ Questo permette di avere una struttura gerarchica che permette di associare più
 
 \clearpage
 
-A seguito della modifica dell'evento, oltre al salvataggio dei dati, viene chiesto l'aggiornamento in tempo reale di tutte le parti interessate.
-La modifica dei dati comporta inoltre un controllo sulle richieste contemporanee per evitare conflitti.\\
+A seguito della modifica dell'evento, che implica il salvataggio dei dati, viene chiesto l'aggiornamento in tempo reale di tutte le parti interessate.
+La modifica dei dati necessita inoltre un controllo sulle richieste contemporanee per evitare conflitti.\\
 \begin{table}[htb]
     \begin{tabular} {|P{4.5cm}|P{11cm}|}
         \hline
@@ -203,15 +211,16 @@ La modifica dei dati comporta inoltre un controllo sulle richieste contemporanee
         \textbf{Requisiti non funzionali} & Velocità in lettura e scrittura dei dati \newline
         Scalabilità delle richieste                                                                                                      \\
         \hline
-        \textbf{Punti aperti}             & Le modifiche all'evento devono essere consistenti, anche in caso di richieste simultanee     \\
+        \textbf{Punti aperti}             & Le modifiche all'evento devono essere consistenti, soprattutto in caso di richieste simultanee     \\
         \hline
     \end{tabular}
     \caption{Scenario della modifica di un evento}
 \end{table}
 
-Il caricamento delle immagini è un'operazione di particolare importanza vista la sua importanza
-nel coinvolgimento degli utenti alle funzionalità centrali dell'applicazione, e quindi al successo del progetto.
-Olte a mostrare un'interfaccia intuitiva, il sistema deve essere in grado di gestire le richieste di caricamento in modo efficiente e scalabile.\\
+Il caricamento o salvataggio delle immagini è un'operazione di particolare importanza vista la sua rilevanza
+nel coinvolgimento degli utenti all'utilizzo delle funzionalità centrali dell'applicazione, e quindi al successo del progetto.
+Oltre a mostrare un'interfaccia intuitiva, il sistema deve essere in grado di gestire le richieste di caricamento, 
+che generalmente richiedono più tempo e memoria, in modo efficiente e scalabile.\\
 \clearpage
 
 \begin{table}[htb]
@@ -258,9 +267,11 @@ Olte a mostrare un'interfaccia intuitiva, il sistema deve essere in grado di ges
 \end{table}
 \clearpage
 
-L'azione di recupero delle immagini semplifica l'utilizzo dell'applicazione, spostando l'azione richiesta all'utente dalla ricerca delle immagini alla sola conferma.
-La sua corretta implementazione ne fa apprezzare l'utilità, con un significativo impatto sull'esperienza utente.\\
-
+L'azione di recupero delle immagini facilita l'utilizzo dell'applicazione semplificando il procedimento di ricerca delle immagini, 
+richiedendo all'utente solo la loro conferma.
+La sua corretta implementazione ne fa apprezzare l'utilità, con una significativo influenza sull'esperienza utente.\\
+Richede la pianificazione e l'automazione del processo di cernita di dati, 
+con effetti sull'analisi tecnologica, sui processi in background e sulla gestione della memoria locale.
 \begin{table}[htb]
     \begin{tabular} {|P{4.5cm}|P{11cm}|}
         \hline
@@ -296,12 +307,19 @@ La sua corretta implementazione ne fa apprezzare l'utilità, con un significativ
 \clearpage
 \subsubsection{I requisiti di sicurezza}
 
-Per definire i requisiti di sicurezza è prima richiesta un'analisi del rischio.
-L'analisi del rischio avviene partendo dalla valutazione dei beni, dall'identificazione delle minacce e dei punti deboli noti,
-per individuare i possibili vettori di attacco e concentrare le risorse dove più necessario.
+Ogni sistema è esposto a vulnerabilità e rischi che impattano sul corretto funzionamento dell'applicazione
+ e possono comportare disservizi in base alla loro rilevanza nel funzionamento del sistema.
+La definizione dei requisiti di sicurezza deriva quindi da un'analisi del rischio.\\
+\\
+L'analisi del rischio avviene tramite la valutazione dei beni, l'identificazione delle minacce e dei punti deboli noti nelle tecnologie,
+per individuare i possibili vettori di attacco e orientare le risorse dove più necessario.\\
+\\
+La valutazione dei beni determina i componenti fondamentali da proteggere,
+risaltandone il valore e l'esposizione relativa.
+Questo permette di stabilire le priorità dei componenti sui cui concentrare le attenzioni.\\
+\\
 
 \begin{table}[htb]
-
     \begin{tabular} {|P{3.5cm}|P{5.5cm}|P{6.7cm}|}
         \hline
         \textbf{Bene}                     & \textbf{Valore}                                                                                              & \textbf{Esposizione}      \\
@@ -322,6 +340,13 @@ per individuare i possibili vettori di attacco e concentrare le risorse dove pi�
     \end{tabular}
     \caption{Valutazione dei beni}
 \end{table}
+
+\clearpage
+
+La tabella delle minacce individua gli attacchi principali previsti che possono avvenire sul sistema. 
+Esamina la loro probabilità, le azioni richieste per controllarli ed il costo di realizzazione delle contromisure necessarie.
+Fornisce quindi una prima analisi sulle necessità implementative.\\
+\\
 
 \begin{table}[htbp]
     \centering
@@ -345,25 +370,43 @@ per individuare i possibili vettori di attacco e concentrare le risorse dove pi�
     \label{<label>}
 \end{table}
 
+\clearpage
+
+L'analisi tecnologica della sicurezza entra nel merito delle tecnologie che si prevede necessarie.
+Per ognuna esamina i punti deboli e i limiti intrinseci, 
+producendo un quadro delle particolarità su cui porre maggiore attenzione.\\
+\\
+
+
 \begin{table}[htbp]
     \centering
     \begin{tabular} {|P{4cm}|P{12cm}|}
         \hline
         Tecnologia                     & Vulnerabilità                                            \\
         \hline
-        Autenticazione email/password  & • Utente rivela volontariamente la password \linebreak
-        • Utente rivela la password con un attacco di ingegneria sociale \linebreak
-        • Password banali                                                                         \\
+        Autenticazione email/password  &
+        \begin{itemize} 
+            \item Utente rivela volontariamente la password
+            \item Utente rivela la password con un attacco di ingegneria sociale
+            \item Password banali        
+        \end{itemize}                                                                 \\
         \hline
-        Cifratura comunicazioni        & • In caso di cifratura simmetrica particolare
-        attenzione va alla lunghezza delle chiavi ed alla loro memorizzazione                     \\
+        Cifratura comunicazioni        &
+        \begin{itemize}
+            \item In caso di cifratura simmetrica particolare attenzione va alla lunghezza delle chiavi ed alla loro memorizzazione   
+        \end{itemize}                   \\
         \hline
-        Architettura Client/Server     & • DoS \linebreak
-        • Man in the Middle \linebreak
-        • Sniffing delle comunicazioni                                                            \\
+        Architettura Client/Server     & 
+        \begin{itemize} 
+            \item DoS
+            \item Man in the Middle
+            \item Sniffing delle comunicazioni  
+        \end{itemize}                                                           \\
         \hline
-        Connessione Server/Persistenza & • Limite massimo di connessioni contemporanee \linebreak
-        • Saturazione del Database                                                                \\
+        Connessione Server/Persistenza & \begin{itemize} 
+            \item Limite massimo di connessioni contemporanee
+            \item Saturazione del Database     
+        \end{itemize}                                                            \\
         \hline
     \end{tabular}
     \caption{Analisi tecnologica della sicurezza}
@@ -371,7 +414,13 @@ per individuare i possibili vettori di attacco e concentrare le risorse dove pi�
 \end{table}
 
 \clearpage
-Si prevedono quindi i principali attori malevoli e i relativi casi d'uso, per poi definire i requisiti su cui si baseranno le contromisure necessarie.
+Si prevedono quindi i principali attori malevoli e i relativi casi d'uso, 
+per poi definire i requisiti su cui si baseranno le contromisure necessarie. 
+I casi d'uso identificano le principali modalità di attacco, 
+e ad ognuno ne viene corrisposto un altro che ne comporta la mitigazione. 
+Vengono quindi integrati con i casi d'uso individuati in precedenza, 
+evidenziando le necessità e la loro applicazione.\\
+\\
 \begin{figure}[h!]
     \begin{center}
         \includegraphics[width=\textwidth]{SecurityCase.png}
@@ -381,12 +430,15 @@ Si prevedono quindi i principali attori malevoli e i relativi casi d'uso, per po
 \end{figure}
 \clearpage
 
-Sussistono quindi i seguenti requisiti inerenti alla protezione dei dati:
+Visti i costi ed appurate le risorse a disposizoine sussistono i seguenti requisiti 
+inerenti alla protezione dei dati e delle funzionalità:
 \begin{enumerate}
     \item Implementare un sistema di log per tracciare tutti i messaggi tra i client e i server, inclusi gli accessi, le richieste di prenotazione, di conferma, di sospensione e di invio e ricezione di dati
     \item I dati salvati devono essere protetti da un attaccante che abbia accesso al sistema, prendendo misure di sicurezza fisica, eventualmente cifrando i dati
     \item I dati inviati tra le parti remote devono essere protetti, utilizzando la cifratura dei dati
     \item Tutte le azioni avvenute sul sistema devono essere tracciate tramite un sistema di log.
+    \item Il sistema deve essere resistente ad un alto numero di richieste contemporanee
+    \item La dimensione delle richieste non deve superare una determinata soglia
 \end{enumerate}
 
 La visione e l'analisi dei log verrà gestita con uno strumento esterno, accessibile solo al personale autorizzato.
@@ -408,6 +460,8 @@ La visione e l'analisi dei log verrà gestita con uno strumento esterno, accessi
         cifrando i dati                   & Non Funzionale                                                                      \\
         \hline
         R8NF                              & I dati inviati tra le parti remote devono essere protetti, utilizzando la cifratura dei dati & Non Funzionale                                                                      \\
+        \hline
+        R9NF & Il sistema deve essere resistente ad un alto numero di richieste contemporanee & Non funzionale  \\
         \hline
     \end{tabular}
     \caption{Requisiti di sicurezza}
