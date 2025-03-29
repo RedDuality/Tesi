@@ -8,16 +8,12 @@ Nella fase successiva, di implementazione, si procede con il passaggio dall’an
 dove la selezione dell’architettura e delle tecnologie di riferimento assumono un ruolo centrale.
 Le decisioni prese in questa fase determinano il comportamento dei diversi componenti e le modalità con cui essi interagiscono tra loro.
 Un’attenta selezione delle soluzioni ottimali, più adatte ai requisiti definiti in fase di progettazione,
-permette di impostare fin dalle prime iterazioni uno sviluppo efficiente e strutturato, minimizzando la necessità di revisioni successive.
+permette di impostare fin dalle prime iterazioni uno sviluppo efficiente e strutturato, minimizzando la necessità di revisioni successive.\\
 \\
 Mentre alcune decisioni risultano immediate o intercambiabili, altre richiedono analisi approfondite per individuare la soluzione più adatta.
 Un approccio efficace consiste nello sviluppare inizialmente i componenti con requisiti ben definiti,
 per poi affinare progressivamente l'integrazione e la configurazione degli altri elementi del sistema.
 L'identificazione, anche parziale, di una struttura iniziale consente di delineare i vincoli di integrazione e di semplificare la definizione delle soluzioni residue.\\
-\\
-Sebbene per alcune parti le decisioni possano risultare semplici o intercambiabili, altre possono dover richiedere ulteriori analisi.
-Risulta conveniente sviluppare prima i componenti di cui sono ben definiti i requisiti ed per cui è presente una soluzione chiara che risponde alle esigenze specifiche.
-L’identificazione, anche parziale, di una struttura iniziale determina ulteriori requisiti di integrazione che facilitano l’individuazione delle restanti soluzioni necessarie.\\
 \\
 L’architettura dell’applicativo si basa su una chiara suddivisione in componenti, ciascuno con un ruolo specifico all’interno del sistema.
 L'interfaccia grafica è responsabile della presentazione e dell’interazione con l’utente, ponendo particolare attenzione alla coerenza visiva e alla fluidità dell’esperienza.\\
@@ -43,14 +39,14 @@ rappresenta quindi un elemento chiave per garantire la stabilità e l’efficien
     \includegraphics[width=\textwidth]{ProgettoDiagrammaPackage.png}
     \caption{Struttura e responsabilità delle parti del progetto}
 \end{figure}
-Sebbene per alcune parti le decisioni possano risultare semplici o intercambiabili, altre possono dover richiedere ulteriori analisi. Risulta conveniente sviluppare prima i componenti di cui sono ben definiti i requisiti ed è presente una soluzione chiara che risponde alle esigenze specifiche. L’identificazione, anche parziale, di una struttura iniziale determina ulteriori requisiti di integrazione che facilitano l’individuazione delle restanti soluzioni necessarie.
 
 \clearpage
 \subsection{Lo sviluppo del client}
 
-L’utilizzo delle applicazioni per la gestione degli eventi può essere suddiviso in due fasi distinte, ciascuna con specifiche esigenze funzionali.\\
+L’utilizzo delle applicazioni per la gestione degli eventi può essere suddiviso in due fasi distinte, 
+ciascuna con specifiche esigenze funzionali.\\
 La prima fase riguarda infatti la pianificazione a lungo termine e l’organizzazione degli impegni.
-In questo tempo l’utente decide come distribuire il proprio tempo, pianificando attività e appuntamenti,
+In questa circostanza l’utente decide come distribuire il proprio tempo, pianificando attività e appuntamenti,
 e strutturando il proprio calendario nel modo più efficiente per le proprie necessità.
 La seconda fase riguarda invece la gestione degli eventi non ancora certi e definiti;
 ciò include l’invito a un evento, l’eventuale conferma da parte dell’utente,
@@ -79,7 +75,7 @@ Diversi fattori motivano tale decisione. \\
 In primo luogo, l'architettura di Flutter si basa su un motore grafico indipendente dalla piattaforma di esecuzione,
 il che consente di ottenere elevate prestazioni e garantire un'esperienza utente uniforme su dispositivi diversi. \\
 In secondo luogo, Flutter adotta un approccio dichiarativo nella progettazione dell'interfaccia grafica,
-che facilita lo sviluppo di componenti reattivi e scalabili attraverso un codice conciso, facilmente manutenibile.\\
+che facilita lo sviluppo di componenti reattivi attraverso un codice conciso, facilmente manutenibile.\\
 \\
 Un ulteriore vantaggio di Flutter è rappresentato dalla crescente adozione nel settore,
 dalla solidità della community di sviluppo e dal supporto offerto da Google,
@@ -88,9 +84,11 @@ Infine, Flutter consente uno sviluppo rapido e interattivo grazie alla sua sinta
 che riduce significativamente i tempi di compilazione e facilita il testing in tempo reale.\\
 \\
 Tra le altre tecnologie valutate per lo sviluppo dell'interfaccia grafica, vi erano React Native e Xamarin.
-Tuttavia, entrambe presentano alcune limitazioni: le applicazioni finali sviluppate con React Native tendono ad avere dimensioni più elevate e le prestazioni risultano inferiori,
+Tuttavia, entrambe presentano alcune limitazioni: 
+le applicazioni finali sviluppate con React Native tendono ad avere dimensioni più elevate e le prestazioni risultano inferiori,
 in particolare nella gestione della memoria.
-Xamarin, pur essendo una valida opzione, presenta una curva di apprendimento più ripida e una comunità di sviluppatori più ridotta rispetto a Flutter,
+Xamarin, pur essendo una valida opzione, presenta una curva di apprendimento più ripida e 
+una comunità di sviluppatori ridotta rispetto a Flutter,
 con una conseguente minore disponibilità di componenti e librerie.\\
 \\
 Per quanto Flutter consenta di uniformare l'esperienza utente su dispositivi diversi e semplifichi la compilazione per le varie piattaforme,
@@ -102,7 +100,8 @@ sia a livello di deployment che di gestione delle versioni.\\
 In una fase iniziale dello sviluppo, nell'ottica di coprire il più ampio mercato possibile con il minor numero di piattaforme,
 si è deciso di sviluppare una versione fruibile via web e una per dispositivi Android.\\
 \\
-
+\subsubsection{L'implementazione}
+\clearpage
 \subsubsection{La distribuzione}
 
 Già consolidata e affidabile, sin dalle prime fasi di sviluppo del progetto è stata adottata la piattaforma cloud Azure, per garantire un'infrastruttura solida e scalabile.\\
@@ -121,6 +120,8 @@ migliorando così le prestazioni e riducendo il carico computazionale delegato a
 Inoltre, in attesa della pubblicazione dell’applicazione sull’App Store di Android, l’eseguibile è stato temporaneamente reso disponibile tramite Azure Storage Container.
 Questo servizio consente l’archiviazione e la distribuzione di file di varie tipologie, fornendo un link diretto per il recupero.\\
 
+
+\clearpage
 \begin{figure}[h!]
     \begin{center}
         \includegraphics[height=0.28\textheight]{DeployFront.png}
@@ -133,6 +134,7 @@ Per garantire un processo di aggiornamento efficiente e automatizzato,
 sia il codice distribuito sulla web app che l’applicativo ospitato nel container vengono gestiti tramite GitHub Actions,
 che ne assicura l’aggiornamento automatico a ogni nuova versione. \\
 \\
+
 Nella fruizione tramite browser, il codice si aggiorna automaticamente a ogni accesso, mentre per l’applicativo su dispositivo mobile è necessaria una reinstallazione manuale.
 Per questa ragione, gli utenti dell’applicazione verranno notificati tempestivamente ogni volta che sarà disponibile una nuova versione.\\
 \\

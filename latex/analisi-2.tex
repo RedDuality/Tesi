@@ -1,11 +1,48 @@
 \subsection{L’analisi del problema}
 
-Una volta identificati i requisiti ed i casi d'uso, si procede con l'analisi del problema.
-L'analisi del probleme consiste nel 
-che consiste nell'individuare le funzionalità e nel definire l'architettura logica del sistema. 
+Una volta identificati i requisiti ed i casi d'uso, si procede con l'analisi del problema.\\
+\\
+L'analisi del problema entra nel merito del comportamento dell'applicazione,
+ evidenziando il rapporto tra requisiti, casi d'uso e funzionalità.
+Determina quindi l'architettura logica, che delinea le relazioni fondamentali del sistema, 
+individuando i componenti logici principali e le loro responsabilità.\\
 
 \subsubsection{Analisi delle funzionalità}
-dai casi d'uso si deducono le funzionalità, che raggruppano i casi d'uso e sintetizzano le .. principali, con i relativi requisiti.
+Le funzionalità sono dedotte dai casi d'uso, sintetizzando i servizi principali dell'applicazione.
+In particolare, le funzionalità vengono rilevate in base alla loro relazione con gli agli casi d'uso,
+alla specificità del compito che assolvono e alla pertinenza reciproca.\\
+\\
+Si riportano in tabella le funzionalità che racchiudono altri casi d'uso.
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular} {|P{7.3cm}|P{8cm}|}
+        \hline
+        \textbf{Funzionalità} & \textbf{Scomposizione}                                                                                                                            \\
+        \hline
+        EventiConfermati      & VisualizzaEvento                                                                                                                                  \\
+        \hline
+        EventiProposti        & VisualizzaEvento                                                                                                                                  \\
+        \hline
+        VisualizzaEvento      & CreaEvento, ModificaEvento, ConfermaEvento, DisdiciEvento, CondividiConLink, CondividiAiGruppi, CaricaImmagini, EliminaImmagini, ConfermaImmagini \\
+        \hline
+        GestioneGruppi        & CercaProfili, AggiungiProfiloAlGruppo, CreaGruppo                                                                                                 \\
+        \hline
+        CercaProfili          & AggiungiProfilo                                                                                                                                   \\
+        \hline
+        GestioneProfili       & CambiaProfilo                                                                                                                                     \\
+        \hline
+    \end{tabular}
+    \caption{Scomposizione delle funzionalità}
+
+\end{table}
+
+\clearpage
+
+Di ogni funzionalità vengono evidenziati il grado di complessità, la tipologia di azione che svolgono ed i requisiti collegati.
+Il grado di complessità riassume la quantità e la difficoltà implementativa delle azioni che una funzionalità ricopre.
+La tipologia riporta in maniera generale la qualità dei servizi offerti.
+Infine si riportano gli identificatori dei requisiti funzionali che ogni finzionalità soddisfa.\\
 
 \begin{table}[htbp]
     \centering
@@ -37,9 +74,10 @@ dai casi d'uso si deducono le funzionalità, che raggruppano i casi d'uso e sint
 
     \caption{Funzionalità}
 \end{table}
-
-Dopo l'analisi delle informazioni che ogni funzionalità deve gestire, si procede con l'analisi deli vincoli,
-in cui si chiarificano i requisiti non funzionali, evidenziando le loro criticità e quali componenti ne vengono coinvolti.
+Si procede analizzando i dati che ogni funzionalità gestisce, indicandone la tipologia, la protezione richesta ed i vincoli correlati,
+per conoscere in maniera definitiva tutte le caratteristiche delle informazioni scambiate.
+A seguito dell'analisi delle informazioni, si procede con l'analisi dei vincoli,
+in cui si chiarificano i requisiti non funzionali, evidenziandone le criticità e quali componenti ne vengono coinvolti.
 
 \begin{table}[htbp]
     \centering
@@ -62,47 +100,71 @@ in cui si chiarificano i requisiti non funzionali, evidenziando le loro criticit
     \end{tabular}
     \caption{Vincoli}
 \end{table}
-
-
-maschere, che rappresentano l'interfaccia utente.
 \clearpage
 
+Infine si definiscono logicamente le maschere, ovvero i componenti visuali essenziali del programma.
+Ad ogni maschera corrisponderà un'interfaccia grafica tramite la quale l'utente potrà accedere alle funzionalità.
+Vengono quindi associate le maschere alle funzionalità di cui permettono l'esecuzione, indicando le informazioni relative.
 
 \begin{table}[htbp]
     \centering
-    \begin{tabular} {|P{7.3cm}|P{8cm}|}
-        \hline
-        \textbf{Funzionalità} & \textbf{Scomposizione}                                                                                                                            \\
-        \hline
-        EventiConfermati      & VisualizzaEvento                                                                                                                                  \\
-        \hline
-        EventiProposti        & VisualizzaEvento                                                                                                                                  \\
-        \hline
-        VisualizzaEvento      & CreaEvento, ModificaEvento, ConfermaEvento, DisdiciEvento, CondividiConLink, CondividiAiGruppi, CaricaImmagini, EliminaImmagini, ConfermaImmagini \\
-        \hline
-        GestioneGruppi        & CercaProfili, AggiungiProfiloAlGruppo, CreaGruppo                                                                                                 \\
-        \hline
-        CercaProfili          & AggiungiProfilo                                                                                                                                   \\
-        \hline
-        GestioneProfili       & CambiaProfilo                                                                                                                                     \\
-        \hline
-    \end{tabular}
-    \caption{Scomposizione delle funzionalità}
-
+\begin{tabular} {|P{4.5cm}|P{6.5cm}|P{4cm}|}
+    \hline
+    \textbf{Maschera}     & \textbf{Informazioni}                                                                                                              & \textbf{Funzionalità}              \\
+    \hline
+    View Login            & email, password                                                                                                                    & Login                              \\
+    \hline
+    View Registrazione    & email, password                                                                                                                    & Registrazione                      \\
+    \hline
+    View EventiConfermati & lista eventi confermati                                                                                                            & EventiConfermati, AggiornaEvento   \\
+    \hline
+    View EventiProposti   & lista eventi proposti                                                                                                              & EventiProposti, \linebreak AggiornaEvento     \\
+    \hline
+    View VisualizzaEvento & Identificativo utente, titolo, descrizione, data e orario di inizio, data e orario di fine, confermato, immagini, profili associati & VisualizzaEvento, RecuperaImmagini \\
+    \hline
+    View GestioneGruppi   & lista gruppi                                                                                                                       & GestioneGruppi                     \\
+    \hline
+    View CercaProfili     & tag di ricerca, lista profili                                                                                                      & CercaProfili                       \\
+    \hline
+    View GestioneProfili  & Lista profili, Identificativo utente, Identificativo profilo corrente                                                              & GestioneProfili                    \\
+    \hline
+\end{tabular}
+\caption{Maschere}
 \end{table}
 
 \clearpage
 
+
+
+
 \subsubsection{Architettura logica}
 
-Il seguente diagramma delle classi rappresenta la parte di modello del dominio relativa al sistema. \\
+
+Definite le relazioni e le informazioni relative alle funzionalità, 
+si necessita di esprimere logicamente i componenti principali del prodotto e le loro relazioni.
+Le funzionalità vengono espresse a livello logico tramite package e diagrammi delle classi, 
+mentre i dati vengono descritti all'interno del dominio. \\
+\\
+Il modello del dominio individua le entità che rappresentano logicamente le dipendenze tra i dati.
+Ogni entità presenta i suoi dati tramite proprietà, identificate da un nome e dalla tipologia del dato.
+Inoltre, all'interno del modello vengono indicati i rapporti tra le entità specificando le cardinalità reciproche.\\
 
 \begin{figure}[h!]
     \begin{center}
         \includegraphics[width=\textwidth]{ModelloDominio.png}
-        \caption{Modello del Dominio}
+        \caption{Modello del dominio}
     \end{center}
 \end{figure}
+\clearpage
+
+
+La divisione delle responsabilità logiche viene descritta nel diagramma dei package.
+Ogni package rappresenta una parte di prodotto che soddisfa una determinata responsabilità. 
+La responsabilità viene individuata in base alla peculierità ed alle dipendenze delle funzionalità che ricopre.
+Si possono così distinguere, ad esempio, package relativi a interfacce grafiche, logiche applicative o gestione della persistenza, 
+in base alle caratteristiche specifiche del prodotto.
+Il diagramma dei package offre una prima struttura delle parti del progetto e del loro rapporto.\\
+\\
 
 \begin{figure}[h!]
     \begin{center}
@@ -110,12 +172,18 @@ Il seguente diagramma delle classi rappresenta la parte di modello del dominio r
         \caption{Diagramma dei Package}
     \end{center}
 \end{figure}
+\clearpage
 
-
+Ogni package contiene una o più classi che lo implementano.
+Ogni classe rappresenta un componente logico che assume uno specifico scopo.
+Le classi possono presentare dei metodi, ovvero delle istanze che descrivono le funzionalità fornite,
+alle quali altri componenti possono fare richiesta di esecuzione.
+La definizione delle classi permette di creare una struttura iniziale presentando le funzionalità minime e 
+le dipendenze tra le parti.
 
 \begin{figure}[h!]
     \begin{center}
-        \includegraphics[width=\textwidth]{GestioneAccesso.png}
+        \includegraphics[height=0.18\textheight]{GestioneAccesso.png}
         \caption{Diagramma delle classi: interfacca e gestione accesso}
     \end{center}
 \end{figure}
@@ -123,7 +191,7 @@ Il seguente diagramma delle classi rappresenta la parte di modello del dominio r
 
 \begin{figure}[h!]
     \begin{center}
-        \includegraphics[width=\textwidth]{GestioneProfilo.png}
+        \includegraphics[height=0.425\textheight]{GestioneProfilo.png}
         \caption{Diagramma delle classi: interfacca utente, gestione profilo ed aggiornamenti}
     \end{center}
 \end{figure}
