@@ -274,6 +274,13 @@ sono state definite le proprietà tra le varie entità, per poi inizializzare in
 Le modifiche alla struttura del database vengono infatti generate automaticamente da EFCore in seguito alla creazione o alla modifica degli attributi degli oggetti. 
 Questo permette di star dietro agli aggiornamenti, generando e salvando le modifiche da applicare ad ogni modifica delle proprietà del dominio.\\
 \\
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=\textwidth]{ModelClassDiagram.png}
+        \caption{Modello delle classi del client}
+    \end{center}
+\end{figure}
+
 Per la riduzione del carico computazionale richiesto da elementi con tante relazioni si utilizza la tecnica del lazy loading. 
 La tecnica del Lazy Loading consiste nel richiedere i dati delle relazioni di un elemento solo quando strettamente necessario. 
 La sua realizzazione tramite EFCore è attuata grazie alla proprietà virtual, 
