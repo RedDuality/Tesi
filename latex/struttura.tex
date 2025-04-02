@@ -41,7 +41,7 @@ rappresenta quindi un elemento chiave per garantire la stabilità e l’efficien
 \end{figure}
 
 \clearpage
-\subsection{Lo sviluppo del client}
+\subsection{Lo sviluppo dell'applicazione utente}
 
 L’utilizzo delle applicazioni per la gestione degli eventi può essere suddiviso in due fasi distinte, 
 ciascuna con specifiche esigenze funzionali.\\
@@ -66,20 +66,22 @@ Inoltre, considerando che l'applicazione è destinata a un utilizzo diffuso e a 
 Ciò implica la progettazione di un sistema in grado di scalare facilmente,
 per supportare un ampio numero di utenti simultanei senza compromettere le prestazioni.\\
 \\
+Già consolidata e affidabile, sin dalle prime fasi di sviluppo del progetto è stata adottata la piattaforma cloud Azure, per garantire un'infrastruttura solida e scalabile.
 \clearpage
 
 
 \subsubsection{Il framework di sviluppo}
-Al fine di ottenere tutte le prestazioni precedentemente elencate, la scelta è ricaduta sull’adozione del framework di sviluppo Flutter.
+Al fine di ottenere tutte le prestazioni precedentemente elencate, 
+la scelta è ricaduta sull’adozione del framework di sviluppo Flutter.
 Diversi fattori motivano tale decisione. \\
+\\
 In primo luogo, l'architettura di Flutter si basa su un motore grafico indipendente dalla piattaforma di esecuzione,
 il che consente di ottenere elevate prestazioni e garantire un'esperienza utente uniforme su dispositivi diversi. \\
 In secondo luogo, Flutter adotta un approccio dichiarativo nella progettazione dell'interfaccia grafica,
 che facilita lo sviluppo di componenti reattivi attraverso un codice conciso, facilmente manutenibile.\\
-\\
 Un ulteriore vantaggio di Flutter è rappresentato dalla crescente adozione nel settore,
 dalla solidità della community di sviluppo e dal supporto offerto da Google,
-che ne assicurano la stabilità, l'efficienza, la sicurezza e la disponibilità di componenti personalizzabili per l'intero ciclo di vita del prodotto.
+che ne assicurano la stabilità, l'efficienza, la sicurezza e la disponibilità di componenti personalizzabili per l'intero ciclo di vita del prodotto.\\
 Infine, Flutter consente uno sviluppo rapido e interattivo grazie alla sua sintassi intuitiva e al meccanismo di hot reload,
 che riduce significativamente i tempi di compilazione e facilita il testing in tempo reale.\\
 \\
@@ -91,25 +93,86 @@ Xamarin, pur essendo una valida opzione, presenta una curva di apprendimento pi�
 una comunità di sviluppatori ridotta rispetto a Flutter,
 con una conseguente minore disponibilità di componenti e librerie.\\
 \\
-Per quanto Flutter consenta di uniformare l'esperienza utente su dispositivi diversi e semplifichi la compilazione per le varie piattaforme,
-alcune configurazioni rimangono comunque dipendenti dalla tecnologia su cui l'applicazione viene eseguita.
-Di conseguenza, ciascun eseguibile richiede una manutenzione aggiuntiva, inclusi gli aggiornamenti delle dipendenze specifiche,
-sia a livello di deployment che di gestione delle versioni.\\
+L'applicazione utente ha come obiettivo la soddisfazione di due compiti principali: interagire con l'utente e 
+comunicare con il server, per recuperare i dati e salvare le modifiche apportate.
+
+\clearpage
+
+
+\subsubsection{Le interfacce grafiche}
+L'interazione utente avviene tramite interfacce grafiche 
+che permettono di visualizzare i dati e le funzionalità a disposizione. 
+Per rispettare il requisito di semplicità e fluidità dell'esperienza è essenziale che 
+ogni interfaccia sia il più intuitiva possibile, tramite una limitata varietà di azioni nella stessa pagina,
+ognuna delle quali il più riconoscibile e accessibile possibile in base sua importanza e funzionalità.\\
 \\
-
-In una fase iniziale dello sviluppo, nell'ottica di coprire il più ampio mercato possibile con il minor numero di piattaforme,
-si è deciso di sviluppare una versione fruibile via web e una per dispositivi Android.\\
+Per ogni maschera individuata in fase di analisi corrisponde almeno un'interfaccia grafica che, 
+oltre a gestire la navigazione con le altre interfacce, 
+pemette all'utente di eseguire le proprie funzionalità,
+esponendo chiaramente le informazioni,
+concentrando l'attenzione sui dati eventualmente richiesti e segnalando le azioni eseguibili.\\
 \\
-\subsubsection{L'implementazione}
-
-due parti: interfaccia grafica e collegamento con il server
-
-\begin{figure}[h!]
+Nei diagrammi di dettaglio le interfacce vengono presentate elencando le funzionalità di cui dispongono, 
+assieme alle loro relazioni di dipendenza. \\
+\\
+Si riportano le interfacce di gestione dei gruppi e di visualizzazione degli eventi, 
+in quanto funzionalità centrali, il cui stile grafico è stato rispettato nella creazione del resto dell'applicazione.\\
+\\
+\begin{figure}[htbp]
     \begin{center}
-        \includegraphics[width=\textwidth]{ProgettoViewGestioneAccesso.png}
-        \caption{Diagramma di dettaglio delle interfacce di accesso}
+        \includegraphics[width=\textwidth]{ProgettoViewGruppi.png}
+        \caption{Diagramma di dettaglio delle interfacce di gestione dei gruppi}
     \end{center}
 \end{figure}
+\clearpage
+L'interfaccia di gestione dei gruppi ha il compito di presentare tutti i gruppi associati al profilo attualmente in uso,
+fornendo l'accesso alle azioni relative. 
+Li elenca quindi in maniera chiara, definendo la differenza tra gruppi di due o più persone.
+Per ognuno mostra un bottone dal quale, se selezionato, compariranno le azioni attuabili sul gruppo 
+(ad esempio, di aggiungere un profilo).\\
+\\
+Correlata alla gestione dei profili c'è la loro ricerca, 
+che consente il ritrovamento e la sucessiva aggiunta dei profili tra i propri gruppi.
+La schermata risulta minimale, consentendo all'utente di concentrarsi sulle sole informazioni e funzionalità essenziali.\\
+\\
+
+
+\mycomment{
+TODO immagini gruppi(aggiungi profilo al gruppo)
+(crea gruppo)
+
+}
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[height=11.5cm, keepaspectratio]{gruppi.png}
+        \caption{Elenco dei gruppi}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[height=11.5cm, keepaspectratio]{cerca.png}
+        \caption{Ricerca dei profili}
+    \end{subfigure}
+    \caption{Schermate dei gruppi}
+\end{figure}
+
+
+\clearpage
+
+La visualizzazione degli eventi prevede due componenti principali.\\
+\\
+Il primo consiste in una panoramica generale, affiancando gli eventi tra loro a livello settimanale,
+per fornire all'utente un quadro complessivo degli impegni. 
+Tale vista è ripetuta sia per gli eventi proposti che per quelli confermati, 
+con la possibilità di navigare tra le due schermate.\\
+\\
+Il secondo entra nel particolare dell'evento, 
+mostrando i dettagli relativi e fornendo la possibilità di modificarli. 
+Concentra inoltre le principali funzionalità dell'applicazione, 
+quali la conferma della partecipazione all'evento, la condivisione con i gruppi e il caricamento delle immagini.\\
+\\
 
 \begin{figure}[h!]
     \begin{center}
@@ -117,20 +180,71 @@ due parti: interfaccia grafica e collegamento con il server
         \caption{Diagramma di dettaglio delle interfacce di visualizzazione eventi}
     \end{center}
 \end{figure}
+\clearpage
 
-\begin{figure}[h!]
-    \begin{center}
-        \includegraphics[width=\textwidth]{ProgettoViewGruppi.png}
-        \caption{Diagramma di dettaglio delle interfacce di gestione dei gruppi}
-    \end{center}
+Queste due funzionalità sono al centro del servizio del sistema, 
+ed è quindi essenziale che l'interfaccia proposta sia veloce ma sopratutto intuitiva.
+Fondamentale in questo riguardo è l'importanza data dai colori, attraverso i quali
+ogni elemento risalta in base alla sua importanza, e fornisce il suo contesto e le sue proprietà 
+grazie al puro impatto visivo.\\
+\\
+
+
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[height=11.5cm, keepaspectratio]{agenda.png}
+        \caption{Visualizzazione generale degli eventi}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[height=11.5cm, keepaspectratio]{evento.png}
+        \caption{Dettaglio di un evento}
+    \end{subfigure}
+    \caption{Schermate degli eventi}
 \end{figure}
 
-\begin{figure}[h!]
-    \begin{center}
-        \includegraphics[width=\textwidth]{ProgettoViewProfili.png}
-        \caption{Diagramma di dettaglio delle interfacce di gestione dei profili}
-    \end{center}
-\end{figure}
+\clearpage
+
+
+\subsubsection{La logica applicativa}
+
+Ogni interazione con l'utente scatena una qualche forma di elaborazione di dati. 
+La visualizzazione di qualunque componente comporta il ritrovamento delle infomazioni, 
+la loro modifica necessita di essere salvata e la loro condivisione esige la propagazione degli aggiornamenti.
+Inoltre, alcuni casi d'uso richiedono azioni da svolgere in autonomia.
+L'implementazione della logica necessaria, 
+per rispondere efficacemente ai requisiti di velocità ed efficenza,
+avviene tramite la creazione di diversi componenti.\\
+\\
+La suddivisione del programma individua e raggruppa le funzionalità in base al loro contesto, 
+affidando ad ogni componente meno responsabilità possibili.
+Questo permette di concentrare le logiche condivise, 
+evitando duplicazioni e definendo chiaramente il ruolo di ogni metodo.
+La semplicità del codice così raggiunta semplifica il futuro sviluppo e la sua manutenzione.\\
+\\
+La principale suddivisione dei componenti avviene in base agli elementi del dominio.
+Per ogni principale entità, infatti, viene creato un servizio che ne racchiude
+le richeste di ritrovamento, modifica e salvataggio correlate.
+Collegando i servizi al dominio si concentrano anche le eventuali dipendenze da altri servizi, 
+riducendole alle sole inerenti all'elemento specifico, 
+mantenendo un parallelismo logico anche a livello di relazione.\\
+\\
+La maggior parte delle richieste che riguardano gli elementi del dominio prevede 
+la comunicazione con il server esterno. 
+La ricezione e l'aggiornamento dei dati, così come la permanenza delle modifiche, avviene infatti attraverso 
+l'interazione con la persistenza principale, a cui si può accedere tramite il server.
+Vista la complessità specifica nella creazione delle trasmissioni e 
+la loro secondaria importanza a livello logico, 
+vengono realizzati dei componenti dedicati, chiamati API.
+I componenti API permettono quindi l'astrazione delle trasmissioni con il server, 
+semplificando il codice e 
+separando la logica applicativa dalle complessità richieste dalla tecnologia dei protocolli usata.
+
+\clearpage 
 
 \begin{figure}[h!]
     \begin{center}
@@ -139,12 +253,107 @@ due parti: interfaccia grafica e collegamento con il server
     \end{center}
 \end{figure}
 
+Non tutte le funzionalità sono però correlate direttamente al dominio.
+Per questo motivo si creano servizi ausiliari dedicati, 
+anch'essi separatati in base al ruolo che ricoprono.
+\clearpage
+Un servizio è stato dedicato all'acquisizione e al salvataggio dei permessi necessari per operare, 
+quali l'invio delle notifiche e l'accesso alla galleria. 
+Mette a disposizione degli altri processi, quindi, la conferma dell'accesso ai permessi richiesti o, 
+in caso non lo si possegga, gestirà il suo ottenimento.\\ 
+\\
+L'invio delle notifiche e la ricezione degli aggiornamenti, 
+per quanto concettualemte simili e strettamente correlati,
+sono stati implementati in due componenti differenti. 
+Le notifiche possono essere infatti richieste anche da altri metodi, 
+e ad ogni aggiornamento potrebbe non corrispondere una notifica.
+La ricezione delle modifiche in tempo reale avviene usando il pattern observer, 
+nel quale il servizio si connette ad un canale e rimane in attesa di eventuali messaggi.
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=\textwidth]{IIModificaEvento1.png}
+        \caption{Diagramma di sequenza della modifica di un evento}
+    \end{center}
+\end{figure}
+
 \clearpage
 
+Il salvataggio in memoria locale dei dati risulta fondamentale per la reattività dell'applicazione,
+in quanto permette di ridurre le richieste di dati e velocizza il loro recupero.
+La memoria locale viene implementata grazie a classi Provider, create in relazione agli elementi del dominio.
+Un'altra funzionalità centrale dell'applicazione è il recupero automatico 
+delle foto scattate durante l'evento. 
+Questo richiede la pianificazione di azioni automatiche nel tempo,
+così come la scansione della galleria per trovare le immagini interessate.
+Sia la gestione locale della memoria che il recupero delle immagini vedono uno o più componenti dedicati.
+La loro realizzazione viene trattata nei capitoli seguenti.\\
+\\
+Durante l'implementazione della logica applicativa si sono dovuti affrontare altri problemi quali, degni di nota, 
+la gestione della condivisione di un evento tramite link e l'inizializzazione dell'applicazione.\\
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=\textwidth]{Avvio.png}
+        \caption{Diagramma di sequenza dell'avvio dell'applicazione}
+    \end{center}
+\end{figure}
+
+La condivisione di un evento tramite link consiste in due passaggi principali: 
+la creazione del link stesso e il sucessivo ritrovamento dell'evento associato.
+La generazione del link avviene tramite l'unione del dominio del server con il codice identificativo dell'evento.
+\clearpage
+All'apertura dell'applicazione tramite link viene estratto il codice identificativo dell'evento 
+per la sucessiva richiesta dei dati al server.
+Se l'utente non si è ancora autenticato, però, il router dell'applicazione lo reindirizza alla schermata di login, 
+cambiando il link e perdendo l'informazione allegata.
+Per evitare questo problema, nel momento in cui l'utente accede all'applicazione tramite un link,
+le sue informazioni vengono salvate in memoria locale.
+Al termine del login, se sono presenti dati salvati, l'utente verrà indirizzato alla schermata degli eventi proposti, 
+che recupererà i dati relativi all'evento, per poi mostrarli a video.
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=\textwidth]{IIVisualizzaEventiProposti.png}
+        \caption{Diagramma di sequenza della visualizzazione degli eventi proposti}
+    \end{center}
+\end{figure}
+
+\clearpage
+
+La fase di inizializzazione avviene a seguito di un login andato a buon fine.
+Parallelamente alla visualizzazione della schermata iniziale si recuperano i dati 
+relativi ai profili associati all'utente e vengono fatti partire i servizi autonomi. 
+In particolare, vengono controllati i permessi necessari per i quali, se non ancora concessi, 
+verrà richiesto l'ottenimento. 
+Viene inoltre avviato il servizio di ricezione degli aggiornamenti, che si connette al canale relativo all'utente.
+Per ogni profilo vengono, sempre in maniera parallela, recuperati i gruppi e gli eventi associati.
+Al termine della ricezione degli eventi, indipendentemente dalle altre richieste, 
+per ogni evento sucessivo al momento attuale viene avviato un timer, che scatena, 
+al momento giusto, il recupero delle immagini.
+Se l'applicazione è stata aperta tramite link di condivisione, 
+la schermata a cui si verrà reindirizzati sarà quella degli eventi proposti, altrimenti quella degli eventi confermati.\\
+\\
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=\textwidth]{Init.png}
+        \caption{Diagramma di sequenza della fase di inizializzazione }
+    \end{center}
+\end{figure}
+
+
+\clearpage
 
 \subsubsection{La distribuzione}
 
-Già consolidata e affidabile, sin dalle prime fasi di sviluppo del progetto è stata adottata la piattaforma cloud Azure, per garantire un'infrastruttura solida e scalabile.\\
+Per quanto Flutter consenta di uniformare l'esperienza utente su dispositivi diversi e semplifichi la compilazione per le varie piattaforme,
+alcune configurazioni rimangono comunque dipendenti dalla tecnologia su cui l'applicazione viene eseguita.
+Di conseguenza, ciascun eseguibile richiede una manutenzione aggiuntiva, inclusi gli aggiornamenti delle dipendenze specifiche,
+sia a livello di deployment che di gestione delle versioni.\\
+\\
+In una fase iniziale dello sviluppo, nell'ottica di coprire il più ampio mercato possibile con il minor numero di piattaforme,
+si è deciso di sviluppare una versione fruibile via web e una per dispositivi Android.\\
 \\
 Nell'ambito delle tecnologie offerte da Azure per la  distribuzione del codice web, si è scelto Azure Static Web App, un servizio di hosting progettato per applicazioni web statiche. \\
 \\
@@ -158,9 +367,7 @@ Questa scelta consente di rendere l’interfaccia grafica completamente indipend
 migliorando così le prestazioni e riducendo il carico computazionale delegato a Azure Static Web App.\\
 \\
 Inoltre, in attesa della pubblicazione dell’applicazione sull’App Store di Android, l’eseguibile è stato temporaneamente reso disponibile tramite Azure Storage Container.
-Questo servizio consente l’archiviazione e la distribuzione di file di varie tipologie, fornendo un link diretto per il recupero.\\
-
-
+Questo servizio consente l’archiviazione e la distribuzione di file di varie tipologie, fornendo un link diretto per il recupero.
 \clearpage
 \begin{figure}[h!]
     \begin{center}
@@ -179,6 +386,14 @@ Nella fruizione tramite browser, il codice si aggiorna automaticamente a ogni ac
 Per questa ragione, gli utenti dell’applicazione verranno notificati tempestivamente ogni volta che sarà disponibile una nuova versione.\\
 \\
 \clearpage
+
+
+
+
+
+
+
+
 \subsection{L’architettura del server principale}
 
 Per poter essere in grado di gestire un numero elevato di richieste in tempi ridotti, l’applicazione deve garantire un’elevata scalabilità.\\
