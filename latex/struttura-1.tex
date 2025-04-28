@@ -1,4 +1,4 @@
-\section{Struttura centrale}
+\chapter{La realizzazione della struttura centrale}
 
 Terminata l'analisi del problema, che ne ha stabilito i requisiti, le funzionalità e la struttura generale,
 si passa alla fase di progettazione.
@@ -53,7 +53,7 @@ il sistema è integrato con strumenti di logging e analisi delle prestazioni.\\
 
 
 \clearpage
-\subsection{Lo sviluppo dell'applicazione utente}
+\section{Lo sviluppo dell'applicazione utente}
 
 L’utilizzo delle applicazioni per la gestione degli eventi può essere suddiviso in due fasi distinte, 
 ciascuna con specifiche esigenze funzionali.\\
@@ -85,7 +85,7 @@ Già consolidata e affidabile, sin dalle prime fasi di sviluppo del progetto è 
 \clearpage
 
 
-\subsubsection{Il framework di sviluppo}
+\subsection{La scelta del framework di sviluppo}
 Al fine di ottenere tutte le prestazioni precedentemente elencate, 
 la scelta è ricaduta sull’adozione del framework di sviluppo Flutter.
 Diversi fattori motivano tale decisione. \\
@@ -117,7 +117,7 @@ comunicare con il server, per recuperare i dati e salvare le modifiche apportate
 \clearpage
 
 
-\subsubsection{Le interfacce grafiche}
+\subsection{La realizzazione delle interfacce grafiche}
 L'interazione utente avviene tramite interfacce grafiche 
 che permettono di visualizzare i dati e le funzionalità a disposizione. 
 Per rispettare il requisito di semplicità e fluidità dell'esperienza è essenziale che 
@@ -227,7 +227,7 @@ grazie al puro impatto visivo.\\
 \clearpage
 
 
-\subsubsection{La logica applicativa}
+\subsection{L'implementazione della logica applicativa}
 
 Ogni interazione con l'utente scatena una qualche forma di elaborazione di dati. 
 La visualizzazione di qualunque componente comporta il ritrovamento delle infomazioni, 
@@ -362,7 +362,7 @@ la schermata a cui si verrà reindirizzati sarà quella degli eventi proposti, a
 
 \clearpage
 
-\subsubsection{La distribuzione}
+\subsection{La distribuzione del codice sui dispositivi utente}
 
 Per quanto Flutter consenta di uniformare l'esperienza utente su dispositivi diversi e semplifichi la compilazione per le varie piattaforme,
 alcune configurazioni rimangono comunque dipendenti dalla tecnologia su cui l'applicazione viene eseguita.
@@ -393,7 +393,6 @@ Questo servizio consente l’archiviazione e la distribuzione di file di varie t
     \end{center}
 \end{figure}
 
-\subsubsection{L'aggiornamento}
 Per garantire un processo di aggiornamento efficiente e automatizzato,
 sia il codice distribuito sulla web app che l’applicativo ospitato nel container vengono gestiti tramite GitHub Actions,
 che ne assicura l’aggiornamento automatico a ogni nuova versione. \\

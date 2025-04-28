@@ -1,4 +1,4 @@
-\subsection{L’architettura del server principale}
+\section{La creazione del server principale}
 
 Per poter essere in grado di gestire un numero elevato di richieste in tempi ridotti, l’applicazione deve garantire un’elevata scalabilità.\\
 \\
@@ -21,7 +21,7 @@ Per ottimizzare l’allocazione delle risorse, il sistema avvia perciò solo le 
 stanziando al minimo il consumo computazionale.
 \clearpage
 
-\subsubsection{La scelta del linguaggio}
+\subsection{La scelta del linguaggio di programmazione}
 Come linguaggio di programmazione per lo sviluppo delle funzioni è stato utilizzato C\#.
 La consapevolezza che sia l’ambiente di sviluppo di C\#, ovvero il framework .Net, sia la piattaforma Azure siano entrambi sviluppati e mantenuti dalla stessa azienda, Microsoft,
 garantisce elevati livelli di stabilità, supporto e coordinamento delle tecnologie adottate.\\
@@ -49,7 +49,7 @@ per garantire maggiore flessibilità, compatibilità e modularità dell’archit
 \clearpage
 
 
-\subsubsection{La logica applicativa}
+\subsection{L'implementazione della logica applicativa}
 Per quanto ogni funzione ricopra un unico compito, alcuni parti possono dover essere condivise.
 Per questo motivo, la logica applicativa è stata suddivisa creando un metono specifico per ogni singola esigenza,
 che le funzioni chiameranno ogni volta che ne hanno bisogno.
@@ -126,7 +126,7 @@ i test assicurano la loro futura presa in carico anche in caso di modifica total
 
 \clearpage
 
-\subsubsection{La distribuzione}
+\subsection{La modalità di distribuzione e aggiornamento}
 Lo sviluppo è stato condotto utilizzando Visual Studio Code, 
 programma sviluppato dalla stessa Microsoft per la creazione di codice.
 Visual Studio Code permette l'integrazione con molteplici estensioni fornendo il supporto
