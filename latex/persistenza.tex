@@ -1,4 +1,4 @@
-\section{ La persistenza}
+\section{La persistenza}
 
 Nel contesto di un sistema che prevede la gestione di eventi e impegni, è essenziale garantire che l’utente possa accedere in qualsiasi momento alla propria agenda, 
 visualizzando gli appuntamenti più urgenti e pianificando efficacemente il proprio tempo. 
@@ -52,7 +52,7 @@ una strategia basata su un database centralizzato può risultare più efficiente
 L’adozione di un’architettura centralizzata consente infatti di ottimizzare i tempi di accesso ai dati e ridurre la latenza delle operazioni, 
 a fronte di una minore complessità nella sincronizzazione e nel mantenimento della consistenza delle informazioni.\\
 \\
-\subsubsection{ I database e la scalabilità}
+\subsubsection{I database e la scalabilità}
 
 I database si suddividono in due macro categorie principali: relazionali e non relazionali. 
 I database relazionali si caratterizzano per strutture dati rigide e schematizzate, che consentono di stabilire connessioni tra le diverse risorse in tempi estremamente rapidi. 
@@ -113,7 +113,7 @@ richiedendo comunque tempistiche e capacità elaborative non indifferenti. \\
 \\
 Tuttavia, non vi è alcun vincolo che impedisca l’affiancamento di database di tipologia diversa per rispondere a esigenze specifiche e sfruttare i punti di forza di entrambe le tecnologie.
 
-\subsubsection{ Analisi del dominio}
+\subsubsection{Analisi del dominio}
 
 La scelta del database deriva da un’attenta analisi delle principali interazioni tra gli elementi del dominio. 
 Il dominio descrive i componenti dell’applicazione e le loro relazioni. 
@@ -124,7 +124,7 @@ ma soprattutto che l’oggetto Photo è strettamente legato all’oggetto Event.
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{ProgettoDominioServer.png}
-    \caption{ Diagramma del dominio}
+    \caption{Diagramma del dominio}
 \end{figure}
 Le richieste riguardo alle informazioni tra Account, User e Profile, con i relativi UserRole, vengono eseguite all’avvio del programma, per poi essere mantenute in memoria locale. 
 Le modifiche a questi elementi sono sporadiche.
@@ -162,7 +162,7 @@ per quanto non strettamente necessario, garantisce l’uniformità delle informa
 \\
 
 \clearpage
-\subsubsection{La salvandocelta del database}
+\subsubsection{La scelta del database}
 
 Azure offre un’ampia scelta di database relazionali che possono essere integrati con il resto dell’ecosistema. 
 Oltre alla tecnologia proposta, nella scelta del database più adatto bisogna considerare soprattutto l’integrazione con servizi accessori, 
@@ -223,7 +223,7 @@ garantendo comunque prestazioni soddisfacenti per il servizio.\\
 Al server principale è stata affiancata una replica che rimane costantemente aggiornata. 
 Situata in una località differente dal server principale, garantisce alta disponibilità continuando a fornire i servizi anche in caso di malfunzionamenti al server principale.
 \clearpage
-\subsubsection{ Le limitazioni dei database relazionali}
+\subsubsection{Le limitazioni dei database relazionali}
 
 La scelta di un database relazionale può però comportare limitazioni a livello prestazionale. 
 Il più grande tallone d'Achille dei database relazionali è il numero limitato di connessioni contemporanee permesso. 
@@ -286,14 +286,14 @@ La tecnica del Lazy Loading consiste nel richiedere i dati delle relazioni di un
 La sua realizzazione tramite EFCore è attuata grazie alla proprietà virtual, 
 che permette di gestire un oggetto con un riferimento al database richiedendo i dati delle sue relazioni solo quando viene espressamente richiesto.
 \clearpage
-\subsection{ Cache Locale}
+\subsection{Cache Locale}
 
 Richiedere e ottenere dati dal server comporta ritardi che impattano sulle prestazioni. 
 Se la tecnologia del dispositivo lo permette, è utile salvare copie delle informazioni usate più frequentemente nella memoria locale del dispositivo. 
 Nel momento di una interazione che richiede la ricerca dei dati, si possono fornire le informazioni disponibili in copia, 
 per poi eventualmente aggiornarle se si rivelassero imprecise. Questo permette un tempo di risposta apparente minore e una migliore esperienza utente.\\
 \\
-\subsubsection{ Creazione della memoria locale}
+\subsubsection{Creazione della memoria locale}
 Non tutti i dispositivi permettono una gestione della memoria a lungo termine. 
 In particolare, i browser web non presentano questa funzionalità, ma i dispositivi mobili e i programmi sì. \\
 \\
@@ -323,7 +323,7 @@ Una volta creati all’avvio del programma, infatti, tutti gli elementi dell’a
 
 eventualmente salvataggio delle modifiche offline per caricarle quando si torna online. \\
 \clearpage
-\subsubsection{ L'allineamento con la memoria centrale}
+\subsubsection{L'allineamento con la memoria centrale}
 
 il client ha la responsabilità di tenere allineata la propria cache ai valori della memoria centrale. 
 Per quanto possa fare temporaneamente affidamento sulle risorse che ha salvato in cache per ridurre i tempi di risposta con l’utente, 
@@ -353,7 +353,7 @@ Lo spostamento di un appuntamento, la conferma di una presenza o la modifica del
 \\
 Il cloud fornisce strumenti per il supporto e lo sviluppo di queste funzionalità, ma, oltre a dover individuare la tecnologia più adatta, bisogna anche essere in grado di integrarla nel resto del progetto.\\
 \\
-\subsubsection{ Scelta della tecnologia}
+\subsubsection{Scelta della tecnologia}
 
 
 La comunicazione con il server finora implementata si basa sul protocollo Hypertext Transfer Protocol (HTTP). HTTP prevede un fornitore di servizi (il server) mettere a disposizione una porta ad un indirizzo fisso rimanendo in attesa di eventuali utilizzatori (client) che, interfacciandosi attivamente alla porta disponibile,  espongono le loro richieste.

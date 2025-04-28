@@ -1,8 +1,9 @@
 \section{Struttura centrale}
 
-Lo sviluppo di un’applicazione segue un processo strutturato, articolato in diverse fasi. In fase di progettazione,
-l'obiettivo principale è identificare le caratteristiche funzionali e comportamentali del sistema, delineando le componenti principali e le rispettive responsabilità.
-Questa fase permette di definire un'architettura coerente, facilitando le successive scelte tecnologiche e implementative.\\
+Terminata l'analisi del problema, che ne ha stabilito i requisiti, le funzionalità e la struttura generale,
+si passa alla fase di progettazione.
+Durante questa fase l'obiettivo principale è identificare le caratteristiche funzionali e comportamentali del sistema, delineando le componenti principali e le rispettive responsabilità.
+Questo permette di definire un'architettura coerente, facilitando le successive scelte tecnologiche e implementative.\\
 \\
 Nella fase successiva, di implementazione, si procede con il passaggio dall’analisi teorica alla realizzazione concreta,
 dove la selezione dell’architettura e delle tecnologie di riferimento assumono un ruolo centrale.
@@ -10,52 +11,66 @@ Le decisioni prese in questa fase determinano il comportamento dei diversi compo
 Un’attenta selezione delle soluzioni ottimali, più adatte ai requisiti definiti in fase di progettazione,
 permette di impostare fin dalle prime iterazioni uno sviluppo efficiente e strutturato, minimizzando la necessità di revisioni successive.\\
 \\
-Mentre alcune decisioni risultano immediate o intercambiabili, altre richiedono analisi approfondite per individuare la soluzione più adatta.
+Nonostante alcune decisioni risultino immediate o intercambiabili, altre richiedono analisi approfondite per individuare la soluzione più adatta.
 Un approccio efficace consiste nello sviluppare inizialmente i componenti con requisiti ben definiti,
-per poi affinare progressivamente l'integrazione e la configurazione degli altri elementi del sistema.
+per poi affinare progressivamente l'integrazione e la configurazione con gli altri elementi del sistema.
 L'identificazione, anche parziale, di una struttura iniziale consente di delineare i vincoli di integrazione e di semplificare la definizione delle soluzioni residue.\\
 \\
-L’architettura dell’applicativo si basa su una chiara suddivisione in componenti, ciascuno con un ruolo specifico all’interno del sistema.
-L'interfaccia grafica è responsabile della presentazione e dell’interazione con l’utente, ponendo particolare attenzione alla coerenza visiva e alla fluidità dell’esperienza.\\
+L’architettura dell’applicativo si basa su una chiara suddivisione in componenti, ciascuno con un ruolo specifico all’interno del sistema.\\
 \\
-La logica applicativa viene gestita da un server centrale, il quale si occupa di coordinare le comunicazioni tra i diversi servizi e di garantire il corretto flusso delle operazioni.
-La gestione dell’autenticazione degli utenti è delegata a un servizio apposito,
-che consente di separare questa responsabilità dal resto del sistema, migliorando sia le prestazioni che la sicurezza.\\
-\\
-Un ulteriore aspetto fondamentale nella progettazione del sistema riguarda la protezione delle comunicazioni e dei dati sensibili.
-L’adozione di misure di sicurezza adeguate è essenziale per garantire la protezione delle informazioni scambiate tra i vari componenti e
-per ridurre i rischi derivanti da eventuali attacchi esterni.
-Inoltre, per monitorare il corretto funzionamento dell’applicazione e identificare tempestivamente eventuali anomalie,
-il sistema è integrato con strumenti di logging e analisi delle prestazioni.\\
-\\
-Questa organizzazione modulare consente di ottimizzare la scalabilità e la manutenibilità dell’applicativo,
+Tale organizzazione modulare consente di ottimizzare la scalabilità e la manutenibilità dell’applicativo,
 facilitando eventuali evoluzioni future.
 La suddivisione chiara delle responsabilità, unita a un’architettura flessibile e sicura,
 rappresenta quindi un elemento chiave per garantire la stabilità e l’efficienza del sistema nel lungo periodo.\\
+\clearpage
+L'interfaccia grafica è responsabile della presentazione e dell’interazione con l’utente, 
+ponendo particolare attenzione alla coerenza visiva e alla fluidità dell’esperienza.
+La logica applicativa sarà gestita da un server dedicato, 
+il quale si occupa di coordinare le comunicazioni tra i diversi servizi
+e di garantire il corretto flusso delle operazioni.
+La gestione dell’autenticazione degli utenti verrà separata dal resto del sistema, 
+delegando questa responsabilità ad un servizio apposito,
+per migliorare sia le prestazioni che la sicurezza.\\
 \\
 
-\begin{figure}[h!]
+\begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{ProgettoDiagrammaPackage.png}
     \caption{Struttura e responsabilità delle parti del progetto}
 \end{figure}
 
 \clearpage
+
+Un ulteriore aspetto fondamentale nella progettazione del sistema riguarda 
+la protezione delle comunicazioni e dei dati sensibili.
+L’adozione di misure di sicurezza adeguate è essenziale per garantire la protezione delle informazioni scambiate tra i vari componenti e
+per ridurre i rischi derivanti da eventuali attacchi esterni.
+Inoltre, per monitorare il corretto funzionamento dell’applicazione e identificare tempestivamente eventuali anomalie,
+il sistema è integrato con strumenti di logging e analisi delle prestazioni.\\
+\\
+
+
+
+
+\clearpage
 \subsection{Lo sviluppo dell'applicazione utente}
 
 L’utilizzo delle applicazioni per la gestione degli eventi può essere suddiviso in due fasi distinte, 
 ciascuna con specifiche esigenze funzionali.\\
-La prima fase riguarda infatti la pianificazione a lungo termine e l’organizzazione degli impegni.
+\\
+La prima fase riguarda la pianificazione a lungo termine e l’organizzazione degli impegni.
 In questa circostanza l’utente decide come distribuire il proprio tempo, pianificando attività e appuntamenti,
 e strutturando il proprio calendario nel modo più efficiente per le proprie necessità.
 La seconda fase riguarda invece la gestione degli eventi non ancora certi e definiti;
 ciò include l’invito a un evento, l’eventuale conferma da parte dell’utente,
 l’identificazione degli impegni a breve termine e l’aggiornamento del loro stato
 (ad esempio, se l’evento sia ancora confermato, quante persone vi partecipano, se qualcuno ha annullato o se l'evento è già concluso)
-con la gestione degli eventuali contenuti multimediali successivi all’evento. Queste due fasi implicano un approccio diverso da parte dell’utente,
+con la gestione degli eventuali contenuti multimediali successivi all’evento. 
+Queste due fasi implicano un approccio diverso da parte dell’utente,
 comportando di conseguenza esigenze differenti a cui l’applicazione deve rispondere adeguatamente.\\
 \\
-Per rispondere a tali necessità, è fondamentale che l'applicazione offra un'interfaccia utente versatile, fruibile sia da desktop che da dispositivi mobili.
+Per rispondere a tali necessità, è fondamentale che l'applicazione offra un'interfaccia utente versatile, 
+fruibile sia da desktop che da dispositivi mobili.
 La versione desktop consente una pianificazione a lungo termine, offrendo una visione d'insieme chiara e completa di tutti gli impegni,
 tale da facilitare la gestione del tempo.
 D'altra parte, la versione mobile deve permettere una gestione rapida e dinamica degli eventi quotidiani,
@@ -76,12 +91,15 @@ la scelta è ricaduta sull’adozione del framework di sviluppo Flutter.
 Diversi fattori motivano tale decisione. \\
 \\
 In primo luogo, l'architettura di Flutter si basa su un motore grafico indipendente dalla piattaforma di esecuzione,
-il che consente di ottenere elevate prestazioni e garantire un'esperienza utente uniforme su dispositivi diversi. \\
+il che consente di ottenere elevate prestazioni e 
+garantire un'esperienza utente uniforme su dispositivi diversi.
 In secondo luogo, Flutter adotta un approccio dichiarativo nella progettazione dell'interfaccia grafica,
 che facilita lo sviluppo di componenti reattivi attraverso un codice conciso, facilmente manutenibile.\\
+\\
 Un ulteriore vantaggio di Flutter è rappresentato dalla crescente adozione nel settore,
 dalla solidità della community di sviluppo e dal supporto offerto da Google,
-che ne assicurano la stabilità, l'efficienza, la sicurezza e la disponibilità di componenti personalizzabili per l'intero ciclo di vita del prodotto.\\
+che ne assicurano la stabilità, l'efficienza, la sicurezza e la disponibilità 
+di componenti personalizzabili per l'intero ciclo di vita del prodotto.
 Infine, Flutter consente uno sviluppo rapido e interattivo grazie alla sua sintassi intuitiva e al meccanismo di hot reload,
 che riduce significativamente i tempi di compilazione e facilita il testing in tempo reale.\\
 \\
@@ -104,7 +122,7 @@ L'interazione utente avviene tramite interfacce grafiche
 che permettono di visualizzare i dati e le funzionalità a disposizione. 
 Per rispettare il requisito di semplicità e fluidità dell'esperienza è essenziale che 
 ogni interfaccia sia il più intuitiva possibile, tramite una limitata varietà di azioni nella stessa pagina,
-ognuna delle quali il più riconoscibile e accessibile possibile in base sua importanza e funzionalità.\\
+ognuna delle quali facilmente accessibile, ma anche riconoscibile in base alla sua importanza e funzionalità.\\
 \\
 Per ogni maschera individuata in fase di analisi corrisponde almeno un'interfaccia grafica che, 
 oltre a gestire la navigazione con le altre interfacce, 
@@ -113,8 +131,7 @@ esponendo chiaramente le informazioni,
 concentrando l'attenzione sui dati eventualmente richiesti e segnalando le azioni eseguibili.\\
 \\
 Nei diagrammi di dettaglio le interfacce vengono presentate elencando le funzionalità di cui dispongono, 
-assieme alle loro relazioni di dipendenza. \\
-\\
+assieme alle loro relazioni di dipendenza.
 Si riportano le interfacce di gestione dei gruppi e di visualizzazione degli eventi, 
 in quanto funzionalità centrali, il cui stile grafico è stato rispettato nella creazione del resto dell'applicazione.\\
 \\
@@ -125,7 +142,7 @@ in quanto funzionalità centrali, il cui stile grafico è stato rispettato nella
     \end{center}
 \end{figure}
 \clearpage
-L'interfaccia di gestione dei gruppi ha il compito di presentare tutti i gruppi associati al profilo attualmente in uso,
+L'interfaccia della gestione dei gruppi ha il compito di presentare tutti i gruppi associati al profilo attualmente in uso,
 fornendo l'accesso alle azioni relative. 
 Li elenca quindi in maniera chiara, definendo la differenza tra gruppi di due o più persone.
 Per ognuno mostra un bottone dal quale, se selezionato, compariranno le azioni attuabili sul gruppo 

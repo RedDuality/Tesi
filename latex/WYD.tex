@@ -23,6 +23,8 @@
 \usepackage{afterpage}
 \usepackage{array,ragged2e}
 \usepackage{booktabs}
+\usepackage{csquotes}
+
 
 \titlespacing*{\section}
 {0pt}{20pt}{30pt}
@@ -41,12 +43,6 @@
   {./immagini/}
 }
 
-\definecolor{LightGray}{gray}{0.9}
-
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
 \newcolumntype{P}[1]{>{\RaggedRight\arraybackslash}p{#1}}
 \renewcommand{\baselinestretch}{1.5} 
@@ -64,8 +60,6 @@
     linktoc=all,
     pdfpagemode=FullScreen,
 }
-\definecolor{Gray}{gray}{0.85}
-\definecolor{LightCyan}{rgb}{0.88,1,1}
 
 
 \newcommand{\mycomment}[1]{}
@@ -81,12 +75,12 @@
 \clearpage
 \pagenumbering{arabic}
 \input{./introduzione.tex}
-%\input{./analisi-1.tex}
-%\input{./analisi-2.tex}
-%\input{./struttura-1.tex}
+\input{./analisi-1.tex}
+\input{./analisi-2.tex}
+\input{./struttura-1.tex}
 \input{./struttura-2.tex}
-%\input{./struttura-3.tex}
-%\input{./persistenza.tex}
-%\input{./immagini.tex}
-%\input{./fine.tex}
+\input{./struttura-3.tex}
+\input{./persistenza.tex}
+\input{./immagini.tex}
+\input{./fine.tex}
 \end{document}

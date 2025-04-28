@@ -1,27 +1,30 @@
 \section{L'Analisi delle funzionalità}
 
-La realizzazione di qualunque prodotto software inizia da una fase in cui, partendo dall’abstract del progetto,  si analizzano i requisiti e le funzionalità da realizzare.
-L’obiettivo è arrivare ad una definizione concisa e condivisa col cliente delle proprietà e del comportamento desiderato nell’applicazione.
-senza entrare nel merito delle scelte implementative.\\
-A quel punto si può procedere con la progettazione del programma vero e proprio.
-
-\vspace{50mm}
+La realizzazione di qualunque prodotto software inizia da una fase in cui, 
+partendo dall’abstract del progetto, si analizzano i requisiti e le funzionalità da realizzare.
+L’obiettivo è arrivare ad una definizione delle proprietà e del comportamento desiderato nell’applicazione che sia concisa e condivisa col cliente,
+senza però entrare nel merito delle scelte implementative.\\
+Solo a quel punto si può procedere con la progettazione del programma vero e proprio.
 
 \subsection{I requisiti e i casi d’uso}
 
-Uno studio dell’abstract del progetto porta all’individuazione e alla descrizione delle caratteristiche essenziali.
-I requisiti formalizzano le funzionalità da realizzare, sintetizzando e schematizzando gli elementi descrittivi del prodotto.
-I casi d'uso descrivono le interazioni tra l'utente e il sistema, suddividendo le funzionalità in azioni elementari.\\
-\clearpage
-\subsubsection{I requisiti e il vocabolario}
-Devono risultare chiari e precisi per permettere di procedere in modo corretto e trasparente.
+Lo studio dell’abstract del progetto porta all’individuazione e alla descrizione delle sue caratteristiche essenziali.
+In particolare, si distinguono i requisiti ed i casi d'uso.
+I requisiti formalizzano le funzionalità che l'applicazione deve fornire, 
+sintetizzando e schematizzando le parti che descrivono del prodotto.
+I casi d'uso descrivono invece le interazioni previste tra l'utente e il sistema, 
+suddividendo le funzionalità in azioni elementari.\\
 
-Si suddividono in funzionali o non funzionali in base alle caratteristiche che descrivono.
-I requisiti funzionali descrivono le funzionalità che il sistema deve avere,
-mentre i requisiti non funzionali descrivono le caratteristiche che il sistema deve soddisfare per essere considerato valido.\\
+\subsubsection{I requisiti e il vocabolario}
+I requisiti devono risultare chiari e precisi per permettere di procedere alle fasi sucessive in maniera corretta e trasparente.
+Ogni requisito deve essere breve e puntuale, limitato ad un solo particolare desiderata,
+focalizzando una necessità specifica.\\
+\\
+Si suddividono in funzionali o non funzionali in base alle loro caratteristiche.\\
+I requisiti funzionali descrivono le funzionalità che il sistema deve fornire,
+mentre i requisiti non funzionali illustrano le caratteristiche che il sistema deve soddisfare per essere considerato valido.\\
 
 Si noti come le caratteristiche di velocità e scalabilità vengono individuate ed introdotte fin da subito.
-(non è detto che tutte le applicazioni debbano servire milioni di utenti)
 \begin{table}
     \begin{tabular} {|P{1.3cm}|P{11.2cm}|P{3cm}|}
         \hline
@@ -84,9 +87,10 @@ Si noti come le caratteristiche di velocità e scalabilità vengono individuate 
 \end{table}
 \clearpage
 
-Si affianca alla tabella dei requisiti quella del vocabolario, che definisce i termini utilizzati nel progetto.\\
+Alla tabella dei requisiti si affianca quella del vocabolario, 
+definendo i termini utilizzati nel progetto per allinearli definitivamente alle volontà del cliente.\\
 
-\begin{table}
+\begin{table}[htb]
     \begin{tabular} {|P{3.5cm}|P{9cm}|P{3cm}|}
         \hline
         \textbf{Voce}     & \textbf{Definizione}                                                             & \textbf{Sinonimi}                 \\
@@ -125,28 +129,29 @@ Si affianca alla tabella dei requisiti quella del vocabolario, che definisce i t
 \subsubsection{I casi d’uso}
 
 I casi d’uso descrivono le interazioni tra gli attori ed il sistema, suddividendo le funzionalità in azioni elementari.
-Gli attori sono tutti gli elementi che compiono una parte attiva all'interno del programma.
-I casi d'uso sono collegati tra loro dai rapporti di inclusione ed estensione.
+Si definiscono attori tutti gli elementi che compiono una parte attiva nei confronti del programma.
+Ogni attore può interagire con uno o più casi d'uso, 
+ed ogni caso d'uso può essere relazionazionato con altri, definendo la loro relazione.\\
+\\
+I casi d'uso possono essere collegati tra loro tramite rapporti di inclusione o estensione.
 Si dice che un caso include un altro se contiene il suo comportamento.
-"An include relationship defines that a use case contains the behavior defined in another use case."
-Si dice che un caso d'uso estende un altro se 
-"A relationship from an extending use case to an extended use case that specifies how and when the behavior defined in
-the extending use case can be inserted into the behavior defined in the extended use case."
+Si dice invece che un caso d'uso ne estende un altro se il suo comportamento può essere inserito all'interno del secondo.\\
+\\
 
-\begin{figure}[h!]
+\begin{figure}[htb]
     \centering
     \adjustbox{width=\textwidth}{\includegraphics{Casiduso.png}}
     \caption{Diagramma dei casi d'uso}
 \end{figure}
-
-Per ogni caso d'uso viene identificato uno scenaro di utilizzo, che chiarifica il contesto, il comportamento e i punti critici dell'utilizzo.
-In particolare, si riportano gli scenari di utilizzo per i casi d'uso principali di Wyd.
-che vanno più ad impattare sulla struttura e sulle esigenze del progetto.
 \clearpage
-Lo scenario di registrazione vede la responsabilità, oltre che di creare un account, di associare un profilo all'utente.
-Questo permette di avere una struttura gerarchica che permette di associare più profili ad un'unico utente, che può in seguito crearne o associarne di nuovi.\\
+Per ogni caso d'uso viene identificato uno scenaro di utilizzo, che chiarifica il contesto, il comportamento ed i punti critici dell'utilizzo.
+In particolare, si riportano gli scenari di utilizzo per i principali casi d'uso di Wyd, ovvero quelli
+che più andranno ad impattare sulla struttura e sulle esigenze del progetto.\\
+\\
+Lo scenario di registrazione vede la responsabilità, oltre che di creare un account, di collegare un profilo all'utente.
+Questa separazione consente di avere una struttura gerarchica che permette di associare più profili ad un'unico utente, che può così in seguito crearne o unirne di nuovi.\\
 
-\begin{table}[htb]
+\begin{table}[htbp]
     \begin{tabular} {|P{4.5cm}|P{11cm}|}
         \hline
         \textbf{Titolo}                   & Registrazione                                                                         \\
@@ -181,12 +186,10 @@ Questo permette di avere una struttura gerarchica che permette di associare più
 
     \caption{Scenario di registrazione}
 \end{table}
-
 \clearpage
-
-A seguito della modifica dell'evento, che implica il salvataggio dei dati, viene chiesto l'aggiornamento in tempo reale di tutte le parti interessate.
-La modifica dei dati necessita inoltre un controllo sulle richieste contemporanee per evitare conflitti.\\
-\begin{table}[htb]
+A seguito della modifica di un evento, che implica il salvataggio dei suoi nuovi dati, viene chiesto l'aggiornamento in tempo reale verso tutte le parti interessate.
+La modifica dei dati necessita inoltre un controllo sulle richieste che avvengono in contemporanea per evitare conflitti.\\
+\begin{table}[htbp]
     \begin{tabular} {|P{4.5cm}|P{11cm}|}
         \hline
         \textbf{Titolo}                   & ModificaEvento                                                                               \\
@@ -217,11 +220,13 @@ La modifica dei dati necessita inoltre un controllo sulle richieste contemporane
     \caption{Scenario della modifica di un evento}
 \end{table}
 
-Il caricamento o salvataggio delle immagini è un'operazione di particolare importanza vista la sua rilevanza
-nel coinvolgimento degli utenti all'utilizzo delle funzionalità centrali dell'applicazione, e quindi al successo del progetto.
+Il salvataggio delle immagini è un'operazione di particolare importanza vista la sua rilevanza
+nel coinvolgimento degli utenti nell'utilizzo delle funzionalità centrali dell'applicazione, e quindi nel successo del progetto.
 Oltre a mostrare un'interfaccia intuitiva, il sistema deve essere in grado di gestire le richieste di caricamento, 
-che generalmente richiedono più tempo e memoria, in modo efficiente e scalabile.\\
-\clearpage
+che generalmente richiedono più tempo e memoria. 
+Prevedendo che la maggior parte di queste avvenga in seguito alla conclusione dell'evento, 
+la probabilità che più richieste simultanee vertano sullo stesso evento risulta elevata,
+creando la necessità di una gestione parallela di modifiche concorrenti.
 
 \begin{table}[htb]
     \begin{tabular} {|P{4.5cm}|P{11cm}|}
@@ -253,7 +258,7 @@ che generalmente richiedono più tempo e memoria, in modo efficiente e scalabile
         5. Tutti i dispositivi relativi ai profili collegati all'evento visualizzano le immagini\newline
         Scenario alternativo C:\linebreak
         3. Nessuna immagine risulta salvata con successo\linebreak
-        4. l'utente viene notificato dell'errore e può riprovare a caricare le immagini                                     \\
+        4. l'utente viene notificato dell'errore e può riprovare                                   \\
         \hline
         \textbf{Requisiti non funzionali} & Semplicità e fluidità dell'interfaccia grafica   \linebreak
         Velocità in lettura e scrittura dei dati\linebreak
@@ -269,9 +274,9 @@ che generalmente richiedono più tempo e memoria, in modo efficiente e scalabile
 
 L'azione di recupero delle immagini facilita l'utilizzo dell'applicazione semplificando il procedimento di ricerca delle immagini, 
 richiedendo all'utente solo la loro conferma.
-La sua corretta implementazione ne fa apprezzare l'utilità, con una significativo influenza sull'esperienza utente.\\
-Richede la pianificazione e l'automazione del processo di cernita di dati, 
-con effetti sull'analisi tecnologica, sui processi in background e sulla gestione della memoria locale.
+La sua corretta implementazione ne fa apprezzare l'utilità, con una significativa influenza sull'esperienza utente.
+Richede però la pianificazione e l'automazione del processo di cernita di dati, 
+con effetti sull'analisi tecnologica, sui processi in background e sulla gestione della memoria locale.\\
 \begin{table}[htb]
     \begin{tabular} {|P{4.5cm}|P{11cm}|}
         \hline
@@ -307,18 +312,16 @@ con effetti sull'analisi tecnologica, sui processi in background e sulla gestion
 \clearpage
 \subsubsection{I requisiti di sicurezza}
 
-Ogni sistema è esposto a vulnerabilità e rischi che impattano sul corretto funzionamento dell'applicazione
- e possono comportare disservizi in base alla loro rilevanza nel funzionamento del sistema.
-La definizione dei requisiti di sicurezza deriva quindi da un'analisi del rischio.\\
-\\
-L'analisi del rischio avviene tramite la valutazione dei beni, l'identificazione delle minacce e dei punti deboli noti nelle tecnologie,
-per individuare i possibili vettori di attacco e orientare le risorse dove più necessario.\\
+Ogni sistema è esposto a vulnerabilità che impattano sul corretto funzionamento dell'applicazione
+e possono comportare disservizi in base alla loro rilevanza nel funzionamento del sistema.
+La definizione dei requisiti di sicurezza deriva dall'analisi del rischio.
+L'analisi del rischio individua i possibili vettori di attacco e serve ad orientare le risorse dove più necessario,
+tramite la valutazione dei beni, l'identificazione delle minacce e dei punti deboli noti nelle tecnologie.\\
 \\
 La valutazione dei beni determina i componenti fondamentali da proteggere,
 risaltandone il valore e l'esposizione relativa.
 Questo permette di stabilire le priorità dei componenti sui cui concentrare le attenzioni.\\
 \\
-
 \begin{table}[htb]
     \begin{tabular} {|P{3.5cm}|P{5.5cm}|P{6.7cm}|}
         \hline
@@ -430,8 +433,8 @@ evidenziando le necessità e la loro applicazione.\\
 \end{figure}
 \clearpage
 
-Visti i costi ed appurate le risorse a disposizoine sussistono i seguenti requisiti 
-inerenti alla protezione dei dati e delle funzionalità:
+Visti i costi ed appurate le risorse a disposizione sussistono quindi i seguenti requisiti 
+inerenti alla protezione dei dati e delle funzionalità di Wyd:
 \begin{enumerate}
     \item Implementare un sistema di log per tracciare tutti i messaggi tra i client e i server, inclusi gli accessi, le richieste di prenotazione, di conferma, di sospensione e di invio e ricezione di dati
     \item I dati salvati devono essere protetti da un attaccante che abbia accesso al sistema, prendendo misure di sicurezza fisica, eventualmente cifrando i dati
