@@ -2,26 +2,41 @@
 
 Terminata l'analisi del problema, che ne ha stabilito i requisiti, le funzionalità e la struttura generale,
 si passa alla fase di progettazione.
-Durante questa fase l'obiettivo principale è identificare le caratteristiche funzionali e comportamentali del sistema, delineando le componenti principali e le rispettive responsabilità.
-Questo permette di definire un'architettura coerente, facilitando le successive scelte tecnologiche e implementative.\\
+Durante questa fase l'obiettivo principale è identificare le caratteristiche funzionali e comportamentali del sistema, 
+delineando le componenti principali e le rispettive responsabilità.
+Questo permette di definire un'architettura coerente, 
+facilitando le successive scelte tecnologiche e implementative.\\
 \\
-Nella fase successiva, di implementazione, si procede con il passaggio dall’analisi teorica alla realizzazione concreta,
+Nella fase successiva, di implementazione, 
+si procede con il passaggio dall’analisi teorica alla realizzazione concreta,
 dove la selezione dell’architettura e delle tecnologie di riferimento assumono un ruolo centrale.
-Le decisioni prese in questa fase determinano il comportamento dei diversi componenti e le modalità con cui essi interagiscono tra loro.
+Le decisioni prese in questa fase determinano il comportamento dei diversi componenti e 
+le modalità con cui essi interagiscono tra loro.
 Un’attenta selezione delle soluzioni ottimali, più adatte ai requisiti definiti in fase di progettazione,
-permette di impostare fin dalle prime iterazioni uno sviluppo efficiente e strutturato, minimizzando la necessità di revisioni successive.\\
+permette di impostare fin dalle prime iterazioni uno sviluppo efficiente e strutturato, 
+minimizzando la necessità di revisioni successive.\\
 \\
-Nonostante alcune decisioni risultino immediate o intercambiabili, altre richiedono analisi approfondite per individuare la soluzione più adatta.
+Nonostante alcune decisioni risultino immediate o intercambiabili, 
+altre richiedono analisi approfondite per individuare la soluzione più adatta.
 Un approccio efficace consiste nello sviluppare inizialmente i componenti con requisiti ben definiti,
 per poi affinare progressivamente l'integrazione e la configurazione con gli altri elementi del sistema.
-L'identificazione, anche parziale, di una struttura iniziale consente di delineare i vincoli di integrazione e di semplificare la definizione delle soluzioni residue.\\
+L'identificazione, anche parziale, di una struttura iniziale consente di delineare i vincoli di integrazione e 
+di semplificare la definizione delle soluzioni residue.\\
 \\
-L’architettura dell’applicativo si basa su una chiara suddivisione in componenti, ciascuno con un ruolo specifico all’interno del sistema.\\
+L’architettura dell’applicativo si basa su una chiara suddivisione in componenti, 
+ciascuno con un ruolo specifico all’interno del sistema.
 \\
+
 Tale organizzazione modulare consente di ottimizzare la scalabilità e la manutenibilità dell’applicativo,
 facilitando eventuali evoluzioni future.
 La suddivisione chiara delle responsabilità, unita a un’architettura flessibile e sicura,
 rappresenta quindi un elemento chiave per garantire la stabilità e l’efficienza del sistema nel lungo periodo.\\
+\\
+\begin{figure}[htb]
+    \centering
+    \includegraphics[height=0.67\textheight]{ProgettoDiagrammaPackage.png}
+    \caption{Struttura e responsabilità delle parti del progetto}
+\end{figure}
 \clearpage
 L'interfaccia grafica è responsabile della presentazione e dell’interazione con l’utente, 
 ponendo particolare attenzione alla coerenza visiva e alla fluidità dell’esperienza.
@@ -32,28 +47,18 @@ La gestione dell’autenticazione degli utenti verrà separata dal resto del sis
 delegando questa responsabilità ad un servizio apposito,
 per migliorare sia le prestazioni che la sicurezza.\\
 \\
-
-\begin{figure}[htb]
-    \centering
-    \includegraphics[width=\textwidth]{ProgettoDiagrammaPackage.png}
-    \caption{Struttura e responsabilità delle parti del progetto}
-\end{figure}
-
-\clearpage
-
 Un ulteriore aspetto fondamentale nella progettazione del sistema riguarda 
 la protezione delle comunicazioni e dei dati sensibili.
 L’adozione di misure di sicurezza adeguate è essenziale per garantire la protezione delle informazioni scambiate tra i vari componenti e
 per ridurre i rischi derivanti da eventuali attacchi esterni.
-Inoltre, per monitorare il corretto funzionamento dell’applicazione e identificare tempestivamente eventuali anomalie,
+Inoltre, per monitorare il corretto funzionamento dell’applicazione e 
+identificare tempestivamente eventuali anomalie,
 il sistema è integrato con strumenti di logging e analisi delle prestazioni.\\
 \\
+Già consolidata e affidabile, sin dalle prime fasi di sviluppo del progetto è stata adottata la piattaforma cloud Azure, per garantire un'infrastruttura solida e scalabile.\\
+\\
 
-
-
-
-\clearpage
-\section{Lo sviluppo dell'applicazione utente}
+\section{Lo sviluppo del client utente}
 
 L’utilizzo delle applicazioni per la gestione degli eventi può essere suddiviso in due fasi distinte, 
 ciascuna con specifiche esigenze funzionali.\\
@@ -81,9 +86,6 @@ Inoltre, considerando che l'applicazione è destinata a un utilizzo diffuso e a 
 Ciò implica la progettazione di un sistema in grado di scalare facilmente,
 per supportare un ampio numero di utenti simultanei senza compromettere le prestazioni.\\
 \\
-Già consolidata e affidabile, sin dalle prime fasi di sviluppo del progetto è stata adottata la piattaforma cloud Azure, per garantire un'infrastruttura solida e scalabile.
-\clearpage
-
 
 \subsection{La scelta del framework di sviluppo}
 Al fine di ottenere tutte le prestazioni precedentemente elencate, 
@@ -112,10 +114,8 @@ una comunità di sviluppatori ridotta rispetto a Flutter,
 con una conseguente minore disponibilità di componenti e librerie.\\
 \\
 L'applicazione utente ha come obiettivo la soddisfazione di due compiti principali: interagire con l'utente e 
-comunicare con il server, per recuperare i dati e salvare le modifiche apportate.
-
-\clearpage
-
+comunicare con il server, per recuperare i dati e salvare le modifiche apportate.\\
+\\
 
 \subsection{La realizzazione delle interfacce grafiche}
 L'interazione utente avviene tramite interfacce grafiche 

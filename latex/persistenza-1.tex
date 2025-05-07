@@ -1,14 +1,17 @@
 \chapter{La gestione della persistenza}
 
-Nel contesto di un sistema che prevede la gestione di eventi e impegni, è essenziale garantire che l’utente possa accedere in qualsiasi momento alla propria agenda, 
+Nel contesto di un sistema che prevede la gestione di eventi e impegni, 
+è essenziale garantire che l’utente possa accedere in qualsiasi momento alla propria agenda, 
 visualizzando gli appuntamenti più urgenti e pianificando efficacemente il proprio tempo. 
 Deve perciò essere possibile trovare e mostrare nel minor tempo possibile i dati relativi all’agenda. 
 Per soddisfare questo requisito, il recupero e la visualizzazione dei dati devono avvenire con la massima rapidità possibile, 
-riducendo i tempi di latenza e ottimizzando il flusso di interazione con l’interfaccia utente. \\
+riducendo i tempi di latenza e ottimizzando il flusso di interazione con l’interfaccia utente, 
+eventualmente mascherando il caricamento dei dati dal server.\\
 \\
 L’adozione di un meccanismo di salvataggio locale sui dispositivi offre il vantaggio di migliorare le prestazioni, 
 consentendo un accesso immediato alle informazioni senza dover effettuare continue richieste al server remoto. 
-Tuttavia, questa soluzione presenta dei limiti, in quanto non garantisce una persistenza a lungo termine dei dati né assicura la loro disponibilità su più dispositivi. 
+Tuttavia, questa soluzione presenta dei limiti, in quanto non garantisce una persistenza a lungo termine dei dati 
+né assicura la loro disponibilità su più dispositivi. 
 Per superare tale criticità, è necessario definire una strategia di gestione della memoria che preveda una fonte di dati centrale e autorevole, 
 alla quale tutti i dispositivi possano fare riferimento per recuperare e aggiornare le informazioni in modo coerente e affidabile.\\
 \\
@@ -55,33 +58,40 @@ a fronte di una minore complessità nella sincronizzazione e nel mantenimento de
 \subsection{I database e la scalabilità}
 
 I database si suddividono in due macro categorie principali: relazionali e non relazionali. 
-I database relazionali si caratterizzano per strutture dati rigide e schematizzate, che consentono di stabilire connessioni tra le diverse risorse in tempi estremamente rapidi. 
-Viceversa, i database non relazionali offrono una maggiore flessibilità strutturale, permettendo l’archiviazione di dati eterogenei con un accoppiamento più debole tra le entità. 
-Questa caratteristica li rende particolarmente adatti a scenari in cui è richiesta un'elevata scalabilità orizzontale e in cui il volume di richieste è significativo.\\
+I database relazionali si caratterizzano per strutture dati rigide e schematizzate, 
+che consentono di stabilire connessioni tra le diverse risorse in tempi estremamente rapidi. 
+Viceversa, i database non relazionali offrono una maggiore flessibilità strutturale, 
+permettendo l’archiviazione di dati eterogenei con un accoppiamento più debole tra le entità. 
+Questa caratteristica li rende particolarmente adatti a scenari in cui è richiesta una elevata scalabilità orizzontale 
+e in cui il volume di richieste è significativo.\\
 \\
-
 La scelta della tipologia di database più appropriata dipende strettamente dalle esigenze specifiche del progetto. 
-I database relazionali sono gli unici in grado di garantire le proprietà di Atomicità, Consistenza, Isolamento e Durabilità (ACID), 
+I database relazionali sono nati per essere in grado di garantire le proprietà di Atomicità, Consistenza, Isolamento e Durabilità (ACID), 
 grazie all’implementazione di un rigoroso sistema di transazioni. 
-Questo meccanismo, se da un lato assicura un’elevata affidabilità dei dati, dall’altro introduce un temporaneo blocco delle risorse durante le operazioni di scrittura, 
-potenzialmente influenzando le prestazioni complessive del sistema.\\
+Questo meccanismo, se da un lato assicura un’elevata affidabilità dei dati, 
+dall’altro introduce però un temporaneo blocco delle risorse durante le operazioni di scrittura, 
+potenzialmente influenzando le prestazioni complessive del sistema. 
+Inoltre TODO indici\\
 \\
-Dal punto di vista della scalabilità, invece, i principali fattori da considerare includono il rapporto tra operazioni di lettura e scrittura, 
-la natura dei dati gestiti e la relazione tra le entità. 
+Dal punto di vista della scalabilità, invece, i principali fattori da considerare includono 
+il rapporto tra operazioni di lettura e scrittura su un determinato oggetto, la natura dei dati gestiti e la relazione tra le entità. 
 Le operazioni di lettura possono essere ottimizzate tramite la creazione di copie dei dati e la parallelizzazione dei processi, 
 permettendo di soddisfare un elevato numero di richieste simultanee.\\
 \\
-
-Al contrario, le operazioni di scrittura possono introdurre ritardi significativi, in quanto implicano la temporanea indisponibilità della risorsa fino al completamento dell’aggiornamento. 
+Al contrario, le operazioni di scrittura possono introdurre ritardi significativi, 
+in quanto possono implicare la temporanea indisponibilità della risorsa fino al completamento dell’aggiornamento e
+la necessità di distribuire le modifiche a tutte le copie. 
 In alcuni casi, in base alla tipologia del database, ciò può invalidare le copie presenti nel sistema fino alla propagazione dell’aggiornamento, 
 compromettendo temporaneamente la consistenza delle informazioni. 
 Grazie alla loro struttura flessibile e a requisiti meno stringenti in termini di garanzia ACID, 
 i database non relazionali risultano generalmente più efficienti in contesti caratterizzati da operazioni di scrittura frequenti.\\
 \\
-
-Quando il sistema richiede una gestione dinamica delle informazioni, con dati opzionali o variabili, i database non relazionali offrono un livello di adattabilità superiore. 
-Il salvataggio delle informazioni in forma di documenti consente infatti di modificare la struttura dei dati senza la necessità di riconfigurare lo schema del database, 
-garantendo una maggiore elasticità. Tuttavia, questa necessità si manifesta prevalentemente in casi specifici, che rappresentano solo una parte del dominio applicativo complessivo. \\
+Quando il sistema richiede una gestione dinamica delle informazioni, con dati opzionali o variabili, 
+i database non relazionali offrono un livello di adattabilità superiore. 
+Il salvataggio delle informazioni in forma di documenti consente infatti di modificare la struttura dei dati 
+senza la necessità di riconfigurare lo schema del database, garantendo una maggiore elasticità. 
+Tuttavia, questa necessità si manifesta prevalentemente in casi specifici, 
+che rappresentano solo una parte del dominio applicativo complessivo. \\
 \\
 
 \subsection{L'impatto delle relazioni delle entità del problema sulle risorse}
