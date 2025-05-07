@@ -26,15 +26,18 @@
 \usepackage{booktabs}
 \usepackage{csquotes}
 \usepackage{sectsty}
+\usepackage{wrapfig}
+
+\newcommand\YUGE{\fontsize{33}{25}\selectfont}
 
 \chapternumberfont{\Large} 
-\chaptertitlefont{\Huge}
+\chaptertitlefont{\YUGE}
 
 \titlespacing*{\chapter}
-{0pt}{25pt}{35pt}
+{0pt}{30pt}{35pt}
 
 \titlespacing*{\section}
-{0pt}{20pt}{30pt}
+{0pt}{30pt}{35pt}
 
 \titlespacing*{\subsection}
 {0pt}{20pt}{27pt}
@@ -81,8 +84,8 @@
 
 \pagenumbering{gobble}
 
-\input{./titlepage.tex}
-\input{./abstract.tex}
+\input{./0_titlepage.tex}
+\input{./1_abstract.tex}
 
 \tableofcontents
 \clearpage
@@ -90,19 +93,19 @@
 \pagenumbering{arabic}
 \fancyfoot[C]{\thepage}
 
-\input{./introduzione.tex}
+\input{./2_introduzione.tex}
 
 \renewcommand\chaptermark[1]{\markboth{\thechapter\,--\,#1}{}}
 \fancyhead[L]{\leftmark}
 
-\input{./analisi-1.tex}
-%\input{./analisi-2.tex}
-%\input{./struttura-1.tex}
-%\input{./struttura-2.tex}
-%\input{./struttura-3.tex}
-%\input{./persistenza-1.tex}
-%\input{./persistenza-2.tex}
-%\input{./immagini.tex}
-%\input{./fine.tex}
-\fancyhf{}nosql
+\input{./3_analisi-1.tex}
+%\input{./4_analisi-2.tex}
+%\input{./5_struttura-1.tex}
+%\input{./6_struttura-2.tex}
+%\input{./7_struttura-3.tex}
+%\input{./8_persistenza-1.tex}
+%\input{./9_persistenza-2.tex}
+%\input{./10_immagini.tex}
+%\input{./11_fine.tex}
+\fancyhf{}
 \end{document}

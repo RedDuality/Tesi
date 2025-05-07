@@ -1,24 +1,43 @@
 \chapter{L'analisi delle funzionalità}
 
-La realizzazione di qualunque prodotto software inizia da una fase in cui, 
+La realizzazione di qualunque prodotto software inizia da una fase in cui,
 partendo dall’abstract del progetto, si analizzano i requisiti e le funzionalità da realizzare.
-L’obiettivo è arrivare ad una definizione delle proprietà e 
+L’obiettivo è arrivare ad una definizione delle proprietà e
 del comportamento desiderato nell’applicazione che sia concisa e condivisa col cliente,
 senza però entrare nel merito delle scelte implementative.\\
-Solo a quel punto si può procedere con lo sviluppo del programma vero e proprio.
+Solo a quel punto si può procedere con lo sviluppo del programma vero e proprio.\\
+\\
+L'abstract del progetto è il seguente:\\
+\\
+Wyd è un'applicazione che permette ai clienti di organizzare i propri impegni,
+siano essi confermati oppure proposti.
+Mette a disposizione due calendari,
+il primo con gli eventi in cui l'utente è convinto di partecipare,
+il secondo in cui vengono riuniti gli eventi a cui l'utente è stato invitato ma senza aver ancora dato conferma.
+L'utente ha la possibilità di creare, modficare, confermare o disdire un evento,
+ma anche condividerlo con altri o allegarci foto.\\
+\\
+La condivisione di un evento può avvenire con applicazioni esterne tramite la generazione di un link o
+grazie all'ausilio di gruppi di profili.
+Inoltre, al termine di un evento, l'applicazione carica automaticamente le foto scattate
+durante l'evento, per allegarle a seguito della conferma dell'utente.
+L'utente può infatti cercare altri profili e creare gruppi con i profili trovati.
+Tutta l'interazione avviene tramite l'utilizzo di profili,
+che permettono di suddividere semanticamente gli eventi e le relazioni.
+\clearpage
 
 \section{L'individuazione dei requisiti e dei casi d’uso}
 
-Lo studio dell’abstract del progetto porta all’individuazione e 
+Lo studio dell’abstract del progetto porta all’individuazione e
 alla descrizione delle sue caratteristiche essenziali.
 In particolare, si distinguono i requisiti ed i casi d'uso.
-I requisiti formalizzano le funzionalità che l'applicazione deve fornire, 
+I requisiti formalizzano le funzionalità che l'applicazione deve fornire,
 sintetizzando e schematizzando le parti che descrivono del prodotto.
-I casi d'uso descrivono invece le interazioni previste tra l'utente e il sistema, 
+I casi d'uso descrivono invece le interazioni previste tra l'utente e il sistema,
 suddividendo le funzionalità in azioni elementari.\\
-
 \subsection{I requisiti e il vocabolario}
-I requisiti devono risultare chiari e precisi per permettere di procedere alle fasi sucessive in maniera corretta e trasparente.
+I requisiti devono risultare chiari e precisi
+per permettere di procedere alle fasi sucessive in maniera corretta e trasparente.
 Ogni requisito deve essere breve e puntuale, limitato ad un solo particolare desiderata,
 focalizzando una necessità specifica.\\
 \\
@@ -27,112 +46,106 @@ I requisiti funzionali descrivono le funzionalità che il sistema deve fornire,
 mentre i requisiti non funzionali illustrano le caratteristiche che il sistema deve soddisfare per essere considerato valido.\\
 
 Si noti come le caratteristiche di velocità e scalabilità vengono individuate ed introdotte fin da subito.
-\begin{table}
-    \begin{tabular} {|P{1.3cm}|P{11.2cm}|P{3cm}|}
-        \hline
-        \textbf{ID} & \textbf{Requisiti}                                                          & \textbf{Tipo}  \\
-        \hline
-        R1F         & Registrazione di un account tramite l’interfaccia web                       & Funzionale     \\
-        \hline
-        R2F         & Identificazione attraverso mail univoca e password di almeno 6 caratteri    & Funzionale     \\
-        \hline
-        R3F         & Visualizzazione degli eventi confermati                                     & Funzionale     \\
-        \hline
-        R4F         & Visualizzazione degli eventi proposti                                       & Funzionale     \\
-        \hline
-        R5F         & Creazione di un evento impostando almeno la data di inizio e quella di fine & Funzionale     \\
-        \hline
-        R6F         & La data di fine deve essere successiva alla data di inizio                  & Funzionale     \\
-        \hline
-        R7F         & Modifica di un evento                                                       & Funzionale     \\
-        \hline
-        R8F         & La conferma di un evento lo sposta negli eventi confermati                  & Funzionale     \\
-        \hline
-        R9F         & La disdetta di un evento lo sposta negli eventi proposti                    & Funzionale     \\
-        \hline
-        R10F        & Caricamento delle foto di un evento                                         & Funzionale     \\
-        \hline
-        R11F        & Condivisione tramite link                                                   & Funzionale     \\
-        \hline
-        R12F        & Condivisione tramite gruppo o ad altri profili                              & Funzionale     \\
-        \hline
-        R13F        & Ricerca automatica delle foto sul dispositivo mobile                        & Funzionale     \\
-        \hline
-        R14F        & Conferma delle foto                                                         & Funzionale     \\
-        \hline
-        R15F        & Ricerca di altri profili                                                    & Funzionale     \\
-        \hline
-        R16F        & Creazione di un gruppo da due o più profili                                 & Funzionale     \\
-        \hline
-        R17F        & Visualizzazione dei profili collegati                                       & Funzionale     \\
-        \hline
-        R18F        & Creazione di un nuovo profilo                                               & Funzionale     \\
-        \hline
-        R19F        & Cambio del profilo attualmente in uso                                       & Funzionale     \\
-        \hline
-        R20F        & Aggiornamento in tempo reale delle modifiche agli eventi                    & Funzionale     \\
-        \hline
-        R1NF        & Per interagire l’utente deve essere autenticato                             & Non Funzionale \\
-        \hline
-        R2NF        & Velocità di richiesta iniziale dei dati                                     & Non Funzionale \\
-        \hline
-        R3NF        & Semplicità e fluidità dell'interfaccia grafica                              & Non Funzionale \\
-        \hline
-        R4NF        & Velocità in lettura e scrittura dei dati                                    & Non Funzionale \\
-        \hline
-        R5NF        & Velocità nella ricerca dei profili                                          & Non Funzionale \\
-        \hline
-        R6NF        & Scalabilità delle richieste                                                 & Non Funzionale \\
-        \hline
-    \end{tabular}
+\begin{longtable} {|P{1.3cm}|P{11.2cm}|P{3cm}|}
+    \hline
+    \textbf{ID} & \textbf{Requisiti}                                                          & \textbf{Tipo}  \\
+    \hline
+    R1F         & Registrazione di un account tramite l’interfaccia web                       & Funzionale     \\
+    \hline
+    R2F         & Identificazione attraverso mail univoca e password di almeno 6 caratteri    & Funzionale     \\
+    \hline
+    R3F         & Visualizzazione degli eventi confermati                                     & Funzionale     \\
+    \hline
+    R4F         & Visualizzazione degli eventi proposti                                       & Funzionale     \\
+    \hline
+    R5F         & Creazione di un evento impostando almeno la data di inizio e quella di fine & Funzionale     \\
+    \hline
+    R6F         & La data di fine deve essere successiva alla data di inizio                  & Funzionale     \\
+    \hline
+    R7F         & Modifica di un evento                                                       & Funzionale     \\
+    \hline
+    R8F         & La conferma di un evento lo sposta negli eventi confermati                  & Funzionale     \\
+    \hline
+    R9F         & La disdetta di un evento lo sposta negli eventi proposti                    & Funzionale     \\
+    \hline
+    R10F        & Caricamento delle foto di un evento                                         & Funzionale     \\
+    \hline
+    R11F        & Condivisione tramite link                                                   & Funzionale     \\
+    \hline
+    R12F        & Condivisione tramite gruppo o ad altri profili                              & Funzionale     \\
+    \hline
+    R13F        & Ricerca automatica delle foto sul dispositivo mobile                        & Funzionale     \\
+    \hline
+    R14F        & Conferma delle foto                                                         & Funzionale     \\
+    \hline
+    R15F        & Ricerca di altri profili                                                    & Funzionale     \\
+    \hline
+    R16F        & Creazione di un gruppo da due o più profili                                 & Funzionale     \\
+    \hline
+    R17F        & Visualizzazione dei profili collegati                                       & Funzionale     \\
+    \hline
+    R18F        & Creazione di un nuovo profilo                                               & Funzionale     \\
+    \hline
+    R19F        & Cambio del profilo attualmente in uso                                       & Funzionale     \\
+    \hline
+    R20F        & Aggiornamento in tempo reale delle modifiche agli eventi                    & Funzionale     \\
+    \hline
+    R1NF        & Per interagire l’utente deve essere autenticato                             & Non Funzionale \\
+    \hline
+    R2NF        & Velocità di richiesta iniziale dei dati                                     & Non Funzionale \\
+    \hline
+    R3NF        & Semplicità e fluidità dell'interfaccia grafica                              & Non Funzionale \\
+    \hline
+    R4NF        & Velocità in lettura e scrittura dei dati                                    & Non Funzionale \\
+    \hline
+    R5NF        & Velocità nella ricerca dei profili                                          & Non Funzionale \\
+    \hline
+    R6NF        & Scalabilità delle richieste                                                 & Non Funzionale \\
+    \hline
     \caption{Tabella dei requisiti di Wyd}
-\end{table}
-\clearpage
+\end{longtable}
 
-Alla tabella dei requisiti si affianca quella del vocabolario, 
+
+Alla tabella dei requisiti si affianca quella del vocabolario,
 definendo i termini utilizzati nel progetto per allinearli definitivamente alle volontà del cliente.\\
 
-\begin{table}[htb]
-    \begin{tabular} {|P{3.5cm}|P{9cm}|P{3cm}|}
-        \hline
-        \textbf{Voce}     & \textbf{Definizione}                                                             & \textbf{Sinonimi}                 \\
-        \hline
-        Account           & combinazione di mail e password che identifica un utente                         &                                   \\
-        \hline
-        Utente            & Persona che utilizza l’applicazione                                              &                                   \\
-        \hline
-        Profilo           & Entità logica che raggruppa eventi e interazioni                                 &                                   \\
-        \hline
-        Profili collegati & Profili a cui l'utente può avere accesso                                         &                                   \\
-        \hline
-        Gruppo            & Insieme di profili                                                               &                                   \\
-        \hline
-        Evento            & Azione(o previsione di azione) con una durata nel tempo                          &                                   \\
-        \hline
-        Data e ora evento & Indicazione temporale del momento in cui avverrà l'azione                        &                                   \\
-        \hline
-        Evento confermato & Evento a cui il profilo ha dato conferma di partecipazione                       &                                   \\
-        \hline
-        Evento proposto   & Evento a cui il profilo non ha dato conferma di partecipazione                   & Evento disdetto, evento condiviso \\
-        \hline
-        Email             & Indirizzo di posta elettronica del cliente utilizzata anche per l'autenticazione &                                   \\
-        \hline
-        Password          & Codice alfanumerico di almeno 8 caratteri                                        &                                   \\
-        \hline
-        Credenziali       & Insieme composto da email e password necessari per accedere al sistema           &                                   \\
-        \hline
-    \end{tabular}
+\begin{longtable} {|P{3.5cm}|P{9cm}|P{3cm}|}
+    \hline
+    \textbf{Voce}     & \textbf{Definizione}                                                             & \textbf{Sinonimi}                 \\
+    \hline
+    Account           & combinazione di mail e password che identifica un utente                         &                                   \\
+    \hline
+    Utente            & Persona che utilizza l’applicazione                                              &                                   \\
+    \hline
+    Profilo           & Entità logica che raggruppa eventi e interazioni                                 &                                   \\
+    \hline
+    Profili collegati & Profili a cui l'utente può avere accesso                                         &                                   \\
+    \hline
+    Gruppo            & Insieme di profili                                                               &                                   \\
+    \hline
+    Evento            & Azione(o previsione di azione) con una durata nel tempo                          &                                   \\
+    \hline
+    Data e ora evento & Indicazione temporale del momento in cui avverrà l'azione                        &                                   \\
+    \hline
+    Evento confermato & Evento a cui il profilo ha dato conferma di partecipazione                       &                                   \\
+    \hline
+    Evento proposto   & Evento a cui il profilo non ha dato conferma di partecipazione                   & Evento disdetto, evento condiviso \\
+    \hline
+    Email             & Indirizzo di posta elettronica del cliente utilizzata anche per l'autenticazione &                                   \\
+    \hline
+    Password          & Codice alfanumerico di almeno 8 caratteri                                        &                                   \\
+    \hline
+    Credenziali       & Insieme composto da email e password necessari per accedere al sistema           &                                   \\
+    \hline
     \caption{Vocabolario di Wyd}
-\end{table}
-
-\clearpage
+\end{longtable}
 
 
 \subsection{I casi d’uso}
 
 I casi d’uso descrivono le interazioni tra gli attori ed il sistema, suddividendo le funzionalità in azioni elementari.
 Si definiscono attori tutti gli elementi che compiono una parte attiva nei confronti del programma.
-Ogni attore può interagire con uno o più casi d'uso, 
+Ogni attore può interagire con uno o più casi d'uso,
 ed ogni caso d'uso può essere relazionazionato con altri, definendo la loro relazione.\\
 \\
 I casi d'uso possono essere collegati tra loro tramite rapporti di inclusione o estensione.
@@ -194,29 +207,29 @@ La modifica dei dati necessita inoltre un controllo sulle richieste che avvengon
 \begin{table}[htbp]
     \begin{tabular} {|P{4.5cm}|P{11cm}|}
         \hline
-        \textbf{Titolo}                   & ModificaEvento                                                                               \\
+        \textbf{Titolo}                   & ModificaEvento                                                                                 \\
         \hline
-        \textbf{Descrizione}              & Salva le modifiche ad un evento                                                              \\
+        \textbf{Descrizione}              & Salva le modifiche ad un evento                                                                \\
         \hline
-        \textbf{Attori}                   & Utente                                                                                       \\
+        \textbf{Attori}                   & Utente                                                                                         \\
         \hline
-        \textbf{Relazioni}                & VisualizzaEvento                                                                             \\
+        \textbf{Relazioni}                & VisualizzaEvento                                                                               \\
         \hline
-        \textbf{Precondizioni}            & L'evento esiste e sono stati modificati dei dati                                             \\
+        \textbf{Precondizioni}            & L'evento esiste e sono stati modificati dei dati                                               \\
         \hline
-        \textbf{Postcondizioni}           & Le modifiche vengono salvate e propagate a tutti i profili collegati                         \\
+        \textbf{Postcondizioni}           & Le modifiche vengono salvate e propagate a tutti i profili collegati                           \\
         \hline
         \textbf{Scenario Principale}      & 1. VisualizzaEvento \linebreak
         2. Il sistema controlla che i dati modificati siano corretti\linebreak
         3. I cambiamenti vengono salvati\linebreak
-        4. Tutti i dispositivi collegati ai profili collegati all'evento visualizzano le immagini                                        \\
+        4. Tutti i dispositivi collegati ai profili collegati all'evento visualizzano le immagini                                          \\
         \hline
-        \textbf{Scenari Alternativi}      & 2. Se i dati risultano sbagliati, il sistema notifica l'utente originario indicando l'errore \\
+        \textbf{Scenari Alternativi}      & 2. Se i dati risultano sbagliati, il sistema notifica l'utente originario indicando l'errore   \\
         \hline
         \textbf{Requisiti non funzionali} & Velocità in lettura e scrittura dei dati \newline
-        Scalabilità delle richieste                                                                                                      \\
+        Scalabilità delle richieste                                                                                                        \\
         \hline
-        \textbf{Punti aperti}             & Le modifiche all'evento devono essere consistenti, soprattutto in caso di richieste simultanee     \\
+        \textbf{Punti aperti}             & Le modifiche all'evento devono essere consistenti, soprattutto in caso di richieste simultanee \\
         \hline
     \end{tabular}
     \caption{Scenario della modifica di un evento}
@@ -224,9 +237,9 @@ La modifica dei dati necessita inoltre un controllo sulle richieste che avvengon
 
 Il salvataggio delle immagini è un'operazione di particolare importanza vista la sua rilevanza
 nel coinvolgimento degli utenti nell'utilizzo delle funzionalità centrali dell'applicazione, e quindi nel successo del progetto.
-Oltre a mostrare un'interfaccia intuitiva, il sistema deve essere in grado di gestire le richieste di caricamento, 
-che generalmente richiedono più tempo e memoria. 
-Prevedendo che la maggior parte di queste avvenga in seguito alla conclusione dell'evento, 
+Oltre a mostrare un'interfaccia intuitiva, il sistema deve essere in grado di gestire le richieste di caricamento,
+che generalmente richiedono più tempo e memoria.
+Prevedendo che la maggior parte di queste avvenga in seguito alla conclusione dell'evento,
 la probabilità che più richieste simultanee vertano sullo stesso evento risulta elevata,
 creando la necessità di una gestione parallela di modifiche concorrenti.
 
@@ -260,7 +273,7 @@ creando la necessità di una gestione parallela di modifiche concorrenti.
         5. Tutti i dispositivi relativi ai profili collegati all'evento visualizzano le immagini\newline
         Scenario alternativo C:\linebreak
         3. Nessuna immagine risulta salvata con successo\linebreak
-        4. l'utente viene notificato dell'errore e può riprovare                                   \\
+        4. l'utente viene notificato dell'errore e può riprovare                                                            \\
         \hline
         \textbf{Requisiti non funzionali} & Semplicità e fluidità dell'interfaccia grafica   \linebreak
         Velocità in lettura e scrittura dei dati\linebreak
@@ -274,10 +287,10 @@ creando la necessità di una gestione parallela di modifiche concorrenti.
 \end{table}
 \clearpage
 
-L'azione di recupero delle immagini facilita l'utilizzo dell'applicazione semplificando il procedimento di ricerca delle immagini, 
+L'azione di recupero delle immagini facilita l'utilizzo dell'applicazione semplificando il procedimento di ricerca delle immagini,
 richiedendo all'utente solo la loro conferma.
 La sua corretta implementazione ne fa apprezzare l'utilità, con una significativa influenza sull'esperienza utente.
-Richede però la pianificazione e l'automazione del processo di cernita di dati, 
+Richede però la pianificazione e l'automazione del processo di cernita di dati,
 con effetti sull'analisi tecnologica, sui processi in background e sulla gestione della memoria locale.\\
 \begin{table}[htb]
     \begin{tabular} {|P{4.5cm}|P{11cm}|}
@@ -318,7 +331,7 @@ Ogni sistema è esposto a vulnerabilità che impattano sul corretto funzionament
 e possono comportare disservizi in base alla loro rilevanza nel funzionamento del sistema.
 La definizione dei requisiti di sicurezza deriva dall'analisi del rischio.\\
 L'analisi del rischio individua i possibili vettori di attacco e serve ad orientare le risorse dove più necessario,
-tramite la valutazione dei beni, l'identificazione delle minacce e 
+tramite la valutazione dei beni, l'identificazione delle minacce e
 l'individuazione dei punti deboli delle tecnologie di cui si prevede l'utilizzo.\\
 \\
 La valutazione dei beni determina i componenti fondamentali da proteggere,
@@ -349,7 +362,7 @@ Questo permette di stabilire le priorità dei componenti sui cui concentrare le 
 
 \clearpage
 
-La tabella delle minacce individua gli attacchi principali previsti che possono avvenire sul sistema. 
+La tabella delle minacce individua gli attacchi principali previsti che possono avvenire sul sistema.
 Esamina la loro probabilità, le azioni richieste per controllarli ed il costo di realizzazione delle contromisure necessarie.
 Fornisce quindi una prima analisi sulle necessità implementative.\\
 \\
@@ -379,7 +392,7 @@ Fornisce quindi una prima analisi sulle necessità implementative.\\
 \clearpage
 
 L'analisi tecnologica della sicurezza entra nel merito delle tecnologie che si prevede necessarie.
-Per ognuna esamina i punti deboli e i limiti intrinseci, 
+Per ognuna esamina i punti deboli e i limiti intrinseci,
 producendo un quadro delle particolarità su cui porre maggiore attenzione.\\
 \\
 
@@ -388,31 +401,31 @@ producendo un quadro delle particolarità su cui porre maggiore attenzione.\\
     \centering
     \begin{tabular} {|P{4cm}|P{12cm}|}
         \hline
-        Tecnologia                     & Vulnerabilità                                            \\
+        Tecnologia                     & Vulnerabilità                                                                            \\
         \hline
         Autenticazione email/password  &
-        \begin{itemize} 
+        \begin{itemize}
             \item Utente rivela volontariamente la password
             \item Utente rivela la password con un attacco di ingegneria sociale
-            \item Password banali        
-        \end{itemize}                                                                 \\
+            \item Password banali
+        \end{itemize}                                                       \\
         \hline
         Cifratura comunicazioni        &
         \begin{itemize}
-            \item In caso di cifratura simmetrica particolare attenzione va alla lunghezza delle chiavi ed alla loro memorizzazione   
-        \end{itemize}                   \\
+            \item In caso di cifratura simmetrica particolare attenzione va alla lunghezza delle chiavi ed alla loro memorizzazione
+        \end{itemize} \\
         \hline
-        Architettura Client/Server     & 
-        \begin{itemize} 
+        Architettura Client/Server     &
+        \begin{itemize}
             \item DoS
             \item Man in the Middle
-            \item Sniffing delle comunicazioni  
-        \end{itemize}                                                           \\
+            \item Sniffing delle comunicazioni
+        \end{itemize}                                                                                       \\
         \hline
-        Connessione Server/Persistenza & \begin{itemize} 
-            \item Limite massimo di connessioni contemporanee
-            \item Saturazione del Database     
-        \end{itemize}                                                            \\
+        Connessione Server/Persistenza & \begin{itemize}
+                                             \item Limite massimo di connessioni contemporanee
+                                             \item Saturazione del Database
+                                         \end{itemize}                                         \\
         \hline
     \end{tabular}
     \caption{Analisi tecnologica della sicurezza}
@@ -420,11 +433,11 @@ producendo un quadro delle particolarità su cui porre maggiore attenzione.\\
 \end{table}
 
 \clearpage
-Si prevedono quindi i principali attori malevoli e i relativi casi d'uso, 
-per poi definire i requisiti su cui si baseranno le contromisure necessarie. 
-I casi d'uso identificano le principali modalità di attacco, 
-e ad ognuno ne viene corrisposto un altro che ne comporta la mitigazione. 
-Vengono quindi integrati con i casi d'uso individuati in precedenza, 
+Si prevedono quindi i principali attori malevoli e i relativi casi d'uso,
+per poi definire i requisiti su cui si baseranno le contromisure necessarie.
+I casi d'uso identificano le principali modalità di attacco,
+e ad ognuno ne viene corrisposto un altro che ne comporta la mitigazione.
+Vengono quindi integrati con i casi d'uso individuati in precedenza,
 evidenziando le necessità e la loro applicazione.\\
 \\
 \begin{figure}[h!]
@@ -436,7 +449,7 @@ evidenziando le necessità e la loro applicazione.\\
 \end{figure}
 \clearpage
 
-Visti i costi ed appurate le risorse a disposizione sono stati quindi identificati i seguenti requisiti 
+Visti i costi ed appurate le risorse a disposizione sono stati quindi identificati i seguenti requisiti
 inerenti alla protezione dei dati e delle funzionalità di Wyd:
 \begin{enumerate}
     \item Implementare un sistema di log per tracciare tutti i messaggi tra i client e i server, inclusi gli accessi, le richieste di prenotazione, di conferma, di sospensione e di invio e ricezione di dati
@@ -454,20 +467,20 @@ La visione e l'analisi dei log verrà gestita con uno strumento esterno, accessi
     \centering
     \begin{tabular} {|P{1.3cm}|P{11.2cm}|P{3cm}|}
         \hline
-        \textbf{ID}                       & \textbf{Requisiti}                                                  & \textbf{Tipo} \\
+        \textbf{ID}             & \textbf{Requisiti}                                                                           & \textbf{Tipo}  \\
         \hline
-        R21F                              & Implementazione di un sistema di log per tracciare tutti i messaggi
-        tra i client e i server           & Funzionale                                                                          \\
+        R21F                    & Implementazione di un sistema di log per tracciare tutti i messaggi
+        tra i client e i server & Funzionale                                                                                                    \\
         \hline
-        R22F                              & Le richieste non devono superare una certa dimensione               & Funzionale    \\
+        R22F                    & Le richieste non devono superare una certa dimensione                                        & Funzionale     \\
         \hline
-        R7NF                              & I dati salvati devono essere protetti da un attaccante che abbia
+        R7NF                    & I dati salvati devono essere protetti da un attaccante che abbia
         accesso al sistema, prendendo misure di sicurezza fisica, eventualmente
-        cifrando i dati                   & Non Funzionale                                                                      \\
+        cifrando i dati         & Non Funzionale                                                                                                \\
         \hline
-        R8NF                              & I dati inviati tra le parti remote devono essere protetti, utilizzando la cifratura dei dati & Non Funzionale                                                                      \\
+        R8NF                    & I dati inviati tra le parti remote devono essere protetti, utilizzando la cifratura dei dati & Non Funzionale \\
         \hline
-        R9NF & Il sistema deve essere resistente ad un alto numero di richieste contemporanee & Non funzionale  \\
+        R9NF                    & Il sistema deve essere resistente ad un alto numero di richieste contemporanee               & Non funzionale \\
         \hline
     \end{tabular}
     \caption{Requisiti di sicurezza}
