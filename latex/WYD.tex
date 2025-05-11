@@ -20,13 +20,17 @@
 \usepackage{changepage}
 \usepackage{fancyhdr}
 
-\usepackage[a4paper,right=25mm,top=25mm,bottom=25mm, left=25mm]{geometry}
+\usepackage[a4paper,right=25mm,top=25mm,bottom=25mm,left=25mm]{geometry}
 \usepackage{afterpage}
 \usepackage{array,ragged2e}
 \usepackage{booktabs}
 \usepackage{csquotes}
 \usepackage{sectsty}
 \usepackage{wrapfig}
+
+\graphicspath{
+  {./immagini/}
+}
 
 \newcommand\YUGE{\fontsize{33}{25}\selectfont}
 
@@ -40,15 +44,11 @@
 {0pt}{30pt}{35pt}
 
 \titlespacing*{\subsection}
-{0pt}{20pt}{27pt}
+{0pt}{25pt}{27pt}
 
+\setlength{\parindent}{0cm}
 \setlist[itemize]{noitemsep, topsep=0pt}
 
-
-
-\graphicspath{
-  {./immagini/}
-}
 
 
 \newcolumntype{P}[1]{>{\RaggedRight\arraybackslash}p{#1}}
@@ -98,8 +98,8 @@
 \renewcommand\chaptermark[1]{\markboth{\thechapter\,--\,#1}{}}
 \fancyhead[L]{\leftmark}
 
-\input{./3_analisi-1.tex}
-%\input{./4_analisi-2.tex}
+%\input{./3_analisi-1.tex}
+\input{./4_analisi-2.tex}
 %\input{./5_struttura-1.tex}
 %\input{./6_struttura-2.tex}
 %\input{./7_struttura-3.tex}
