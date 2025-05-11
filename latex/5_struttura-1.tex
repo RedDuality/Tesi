@@ -44,7 +44,7 @@ La logica applicativa sarà gestita da un server dedicato,
 il quale si occupa di coordinare le comunicazioni tra i diversi servizi
 e di garantire il corretto flusso delle operazioni.
 La gestione dell’autenticazione degli utenti verrà separata dal resto del sistema, 
-delegando questa responsabilità ad un servizio apposito,
+delegando questa responsabilità a un servizio apposito,
 per migliorare sia le prestazioni che la sicurezza.\\
 \\
 Un ulteriore aspetto fondamentale nella progettazione del sistema riguarda 
@@ -88,24 +88,27 @@ per supportare un ampio numero di utenti simultanei senza compromettere le prest
 \\
 
 \subsection{La scelta del framework di sviluppo}
+
 Al fine di ottenere tutte le prestazioni precedentemente elencate, 
 la scelta è ricaduta sull’adozione del framework di sviluppo Flutter.
 Diversi fattori motivano tale decisione. \\
 \\
-In primo luogo, l'architettura di Flutter si basa su un motore grafico indipendente dalla piattaforma di esecuzione,
+In primo luogo, l'architettura di Flutter si basa su un motore grafico 
+indipendente dalla piattaforma di esecuzione,
 il che consente di ottenere elevate prestazioni e 
 garantire un'esperienza utente uniforme su dispositivi diversi.
 In secondo luogo, Flutter adotta un approccio dichiarativo nella progettazione dell'interfaccia grafica,
-che facilita lo sviluppo di componenti reattivi attraverso un codice conciso, facilmente manutenibile.\\
+che facilita lo sviluppo di componenti reattivi attraverso un codice conciso, facilmente mantenibile.\\
 \\
 Un ulteriore vantaggio di Flutter è rappresentato dalla crescente adozione nel settore,
 dalla solidità della community di sviluppo e dal supporto offerto da Google,
 che ne assicurano la stabilità, l'efficienza, la sicurezza e la disponibilità 
 di componenti personalizzabili per l'intero ciclo di vita del prodotto.
-Infine, Flutter consente uno sviluppo rapido e interattivo grazie alla sua sintassi intuitiva e al meccanismo di hot reload,
+Infine, Flutter consente uno sviluppo rapido e interattivo 
+grazie alla sua sintassi intuitiva e al meccanismo di hot reload,
 che riduce significativamente i tempi di compilazione e facilita il testing in tempo reale.\\
 \\
-Tra le altre tecnologie valutate per lo sviluppo dell'interfaccia grafica, vi erano React Native e Xamarin.
+Tra le altre tecnologie valutate per lo sviluppo dell'interfaccia grafica vi erano React Native e Xamarin.
 Tuttavia, entrambe presentano alcune limitazioni: 
 le applicazioni finali sviluppate con React Native tendono ad avere dimensioni più elevate e le prestazioni risultano inferiori,
 in particolare nella gestione della memoria.
@@ -113,8 +116,9 @@ Xamarin, pur essendo una valida opzione, presenta una curva di apprendimento pi�
 una comunità di sviluppatori ridotta rispetto a Flutter,
 con una conseguente minore disponibilità di componenti e librerie.\\
 \\
-L'applicazione utente ha come obiettivo la soddisfazione di due compiti principali: interagire con l'utente e 
-comunicare con il server, per recuperare i dati e salvare le modifiche apportate.\\
+L'applicazione utente ha come obiettivo la soddisfazione di due compiti principali: 
+interagire con l'utente e comunicare con il server, 
+per recuperare i dati e salvare le modifiche apportate.\\
 \\
 
 \subsection{La realizzazione delle interfacce grafiche}
@@ -126,7 +130,7 @@ ognuna delle quali facilmente accessibile, ma anche riconoscibile in base alla s
 \\
 Per ogni maschera individuata in fase di analisi corrisponde almeno un'interfaccia grafica che, 
 oltre a gestire la navigazione con le altre interfacce, 
-pemette all'utente di eseguire le proprie funzionalità,
+permette all'utente di eseguire le proprie funzionalità,
 esponendo chiaramente le informazioni,
 concentrando l'attenzione sui dati eventualmente richiesti e segnalando le azioni eseguibili.\\
 \\
@@ -141,24 +145,14 @@ in quanto funzionalità centrali, il cui stile grafico è stato rispettato nella
         \caption{Diagramma di dettaglio delle interfacce di gestione dei gruppi}
     \end{center}
 \end{figure}
-\clearpage
-L'interfaccia della gestione dei gruppi ha il compito di presentare tutti i gruppi associati al profilo attualmente in uso,
+
+L'interfaccia della gestione dei gruppi ha il compito di presentare tutti i gruppi 
+associati al profilo attualmente in uso,
 fornendo l'accesso alle azioni relative. 
 Li elenca quindi in maniera chiara, definendo la differenza tra gruppi di due o più persone.
 Per ognuno mostra un bottone dal quale, se selezionato, compariranno le azioni attuabili sul gruppo 
 (ad esempio, di aggiungere un profilo).\\
 \\
-Correlata alla gestione dei profili c'è la loro ricerca, 
-che consente il ritrovamento e la sucessiva aggiunta dei profili tra i propri gruppi.
-La schermata risulta minimale, consentendo all'utente di concentrarsi sulle sole informazioni e funzionalità essenziali.\\
-\\
-
-
-\mycomment{
-TODO immagini gruppi(aggiungi profilo al gruppo)
-(crea gruppo)
-
-}
 \begin{figure}[htbp]
     \centering
     \begin{subfigure}{0.49\textwidth}
@@ -174,6 +168,12 @@ TODO immagini gruppi(aggiungi profilo al gruppo)
     \end{subfigure}
     \caption{Schermate dei gruppi}
 \end{figure}
+
+Correlata alla gestione dei profili c'è la loro ricerca, 
+che consente il ritrovamento e la successiva aggiunta dei profili tra i propri gruppi.
+La schermata risulta minimale, consentendo all'utente di concentrarsi sulle sole informazioni e funzionalità essenziali.\\
+\\
+
 
 
 \clearpage
@@ -230,22 +230,22 @@ grazie al puro impatto visivo.\\
 \subsection{L'implementazione della logica applicativa}
 
 Ogni interazione con l'utente scatena una qualche forma di elaborazione di dati. 
-La visualizzazione di qualunque componente comporta il ritrovamento delle infomazioni, 
+La visualizzazione di qualunque componente comporta il ritrovamento delle informazioni, 
 la loro modifica necessita di essere salvata e la loro condivisione esige la propagazione degli aggiornamenti.
 Inoltre, alcuni casi d'uso richiedono azioni da svolgere in autonomia.
 L'implementazione della logica necessaria, 
-per rispondere efficacemente ai requisiti di velocità ed efficenza,
+per rispondere efficacemente ai requisiti di velocità ed efficienza,
 avviene tramite la creazione di diversi componenti.\\
 \\
 La suddivisione del programma individua e raggruppa le funzionalità in base al loro contesto, 
-affidando ad ogni componente meno responsabilità possibili.
+affidando a ogni componente meno responsabilità possibili.
 Questo permette di concentrare le logiche condivise, 
 evitando duplicazioni e definendo chiaramente il ruolo di ogni metodo.
 La semplicità del codice così raggiunta semplifica il futuro sviluppo e la sua manutenzione.\\
 \\
 La principale suddivisione dei componenti avviene in base agli elementi del dominio.
 Per ogni principale entità, infatti, viene creato un servizio che ne racchiude
-le richeste di ritrovamento, modifica e salvataggio correlate.
+le richieste di ritrovamento, modifica e salvataggio correlate.
 Collegando i servizi al dominio si concentrano anche le eventuali dipendenze da altri servizi, 
 riducendole alle sole inerenti all'elemento specifico, 
 mantenendo un parallelismo logico anche a livello di relazione.\\
@@ -274,18 +274,19 @@ Non tutte le funzionalità sono però correlate direttamente al dominio.
 Per questo motivo si creano servizi ausiliari dedicati, 
 anch'essi separatati in base al ruolo che ricoprono.
 \clearpage
-Un servizio è stato dedicato all'acquisizione e al salvataggio dei permessi necessari per operare, 
+Un servizio è stato dedicato all'acquisizione e 
+al salvataggio dei permessi necessari per operare, 
 quali l'invio delle notifiche e l'accesso alla galleria. 
 Mette a disposizione degli altri processi, quindi, la conferma dell'accesso ai permessi richiesti o, 
 in caso non lo si possegga, gestirà il suo ottenimento.\\ 
 \\
 L'invio delle notifiche e la ricezione degli aggiornamenti, 
-per quanto concettualemte simili e strettamente correlati,
+per quanto concettualmente simili e strettamente correlati,
 sono stati implementati in due componenti differenti. 
 Le notifiche possono essere infatti richieste anche da altri metodi, 
-e ad ogni aggiornamento potrebbe non corrispondere una notifica.
+e a ogni aggiornamento potrebbe non corrispondere una notifica.
 La ricezione delle modifiche in tempo reale avviene usando il pattern observer, 
-nel quale il servizio si connette ad un canale e rimane in attesa di eventuali messaggi.
+nel quale il servizio si connette a un canale e rimane in attesa di eventuali messaggi.
 
 \begin{figure}[h!]
     \begin{center}
@@ -317,11 +318,11 @@ la gestione della condivisione di un evento tramite link e l'inizializzazione de
 \end{figure}
 
 La condivisione di un evento tramite link consiste in due passaggi principali: 
-la creazione del link stesso e il sucessivo ritrovamento dell'evento associato.
+la creazione del link stesso e il successivo ritrovamento dell'evento associato.
 La generazione del link avviene tramite l'unione del dominio del server con il codice identificativo dell'evento.
 \clearpage
 All'apertura dell'applicazione tramite link viene estratto il codice identificativo dell'evento 
-per la sucessiva richiesta dei dati al server.
+per la successiva richiesta dei dati al server.
 Se l'utente non si è ancora autenticato, però, il router dell'applicazione lo reindirizza alla schermata di login, 
 cambiando il link e perdendo l'informazione allegata.
 Per evitare questo problema, nel momento in cui l'utente accede all'applicazione tramite un link,
@@ -346,7 +347,7 @@ verrà richiesto l'ottenimento.
 Viene inoltre avviato il servizio di ricezione degli aggiornamenti, che si connette al canale relativo all'utente.
 Per ogni profilo vengono, sempre in maniera parallela, recuperati i gruppi e gli eventi associati.
 Al termine della ricezione degli eventi, indipendentemente dalle altre richieste, 
-per ogni evento sucessivo al momento attuale viene avviato un timer, che scatena, 
+per ogni evento successivo al momento attuale viene avviato un timer, che scatena, 
 al momento giusto, il recupero delle immagini.
 Se l'applicazione è stata aperta tramite link di condivisione, 
 la schermata a cui si verrà reindirizzati sarà quella degli eventi proposti, altrimenti quella degli eventi confermati.\\
@@ -362,30 +363,79 @@ la schermata a cui si verrà reindirizzati sarà quella degli eventi proposti, a
 
 \clearpage
 
-\subsection{La distribuzione del codice sui dispositivi utente}
+\subsection{La distribuzione del codice verso i dispositivi utente}
 
-Per quanto Flutter consenta di uniformare l'esperienza utente su dispositivi diversi e semplifichi la compilazione per le varie piattaforme,
+Per quanto Flutter consenta di uniformare l'esperienza utente su dispositivi diversi e 
+semplifichi la compilazione per le varie piattaforme,
 alcune configurazioni rimangono comunque dipendenti dalla tecnologia su cui l'applicazione viene eseguita.
-Di conseguenza, ciascun eseguibile richiede una manutenzione aggiuntiva, inclusi gli aggiornamenti delle dipendenze specifiche,
-sia a livello di deployment che di gestione delle versioni.\\
+Di conseguenza, ciascun eseguibile richiede una manutenzione aggiuntiva, 
+inclusi gli aggiornamenti delle dipendenze specifiche,
+sia a livello di deployment che di gestione delle versioni.
+Per questi motivi, nella fase iniziale dello sviluppo,
+nell'ottica di coprire il più ampio mercato possibile con il minor numero di piattaforme,
+si è deciso di sviluppare una versione fruibile via web e una per dispositivi Android, 
+con l'obiettivo di estendere il servizio alle altre tecnologie in un secondo momento.\\
 \\
-In una fase iniziale dello sviluppo, nell'ottica di coprire il più ampio mercato possibile con il minor numero di piattaforme,
-si è deciso di sviluppare una versione fruibile via web e una per dispositivi Android.\\
+La grafica è stata sviluppata in maniera statica, 
+ovvero non dipende direttamente da nessuna informazione specifica dell'utente.
+L’interfaccia sviluppata infatti non prevede la creazione dinamica di contenuti:
+gli elementi visuali che vengono restituiti rimangono invariati indipendentemente dall'utente che ne effettua la richiesta.
+I dati visualizzati che interessano l'utente corrente (eventi confermati o proposti, gruppi, profili e via dicendo)
+sono recuperati dalla memoria locale del dispositivo o tramite un server terzo.
+Questa scelta consente di rendere l'interfaccia grafica completamente indipendente dall'identità o dal ruolo dell'utente,
+consentendo una separazione netta delle responsabilità dei componenti.\\
 \\
-Nell'ambito delle tecnologie offerte da Azure per la  distribuzione del codice web, si è scelto Azure Static Web App, un servizio di hosting progettato per applicazioni web statiche. \\
+Da un punto di vista della distribuzione,
+le due tecnologie per cui l'interfaccia è stata realizzata funzionano in modalità completamente diversa.
+L'interfaccia web prevede l'utilizzo di un browser utente che si connette a un server apposito
+per ottenere la grafica da visualizzare.
+L'interfaccia Android (come qualunque interfaccia realizzata per essere eseguita direttamente su un dispositivo)
+richiede invece la creazione di un applicativo apposito, 
+da scaricare e installare sul dispositivo.\\
 \\
-La preferenza per questa soluzione è derivata dalla affidabilità dell'infrastruttura di Azure e dai bassi costi operativi per un utilizzo limitato,
-fattori che la rendono particolarmente vantaggiosa.\\
+Per la fruizione del codice web si necessita di un server relativamente semplice,
+che, grazie alla staticità del sito, 
+restituisca solo gli elementi necessari per la visualizzazione e l'elaborazione locale,
+senza bisogno di modificarli.
+La creazione di questo tipo di risorsa usando tecnologie in cloud può avvenire in vari modi,
+dall'utilizzo di una macchina virtuale apposita a soluzioni che utilizzano container.
+Tuttavia, Azure mette a disposizione un servizio apposito per queste precise esigenze,
+Azure Static Web App (ASWA).\\
 \\
-Questa selezione è stata resa possibile in quanto l’interfaccia sviluppata non prevede la creazione dinamica di contenuti,
-ovvero la pagina che viene restituita rimane invariata indipendentemente dall’utente che effettua la richiesta.
-I dati specifici dell’utente verranno infatti richiesti ad un server terzo (qualora non siano già presenti in una cache locale).
-Questa scelta consente di rendere l’interfaccia grafica completamente indipendente dall’identità dell’utente,
-migliorando così le prestazioni e riducendo il carico computazionale delegato a Azure Static Web App.\\
+Questa risorsa, oltre a integrarsi direttamente con il resto dell'ambiente Azure,
+permettendo quindi (ad esempio) il collegamento con servizi di monitoraggio delle performance,
+garantisce disponibilità e scalabilità in ogni momento,
+facendosi carico di gestire la capacità computazionale richiesta.
+Il consumo delle risorse è infatti calcolato in base alla bandwidth, 
+ovvero la quantità di dati che viene fornita dal server.
+Il piano gratuito prevede i primi cento giga byte di bandwidth inclusi,
+che rende il servizio vantaggioso, oltre che pratico.\\
 \\
-Inoltre, in attesa della pubblicazione dell’applicazione sull’App Store di Android, l’eseguibile è stato temporaneamente reso disponibile tramite Azure Storage Container.
-Questo servizio consente l’archiviazione e la distribuzione di file di varie tipologie, fornendo un link diretto per il recupero.
-\clearpage
+La distribuzione dell'applicativo Android 
+necessita di un modo per scaricare il file di installazione del programma.
+In attesa della pubblicazione dell'applicativo sull'App Store di Android, 
+che fornirebbe agli utenti la possibilità di trovarlo e installarlo direttamente,
+ma che richiede ulteriori passaggi di certificazione e autenticazione,
+è stato necessario trovare un'altra soluzione.
+Anche in questo caso, 
+le opzioni per fornire un file tramite cloud ce ne sono tante,
+ma la più semplice ed efficace è attraverso l'utilizzo di Azure Blob Storage.\\
+\\
+Questo servizio consente l'archiviazione e la distribuzione di file di varie tipologie,
+fornendo un link diretto per il loro recupero.
+Ha un costo che varia in base all'utilizzo, 
+aggirandosi attorno ai due centesimi per giga byte.
+Bilanciando la temporaneità del servizio,
+la ridotta quantità di download inizialmente previsti e
+la complessità che verrebbe introdotta in caso di utilizzo di un altro servizio,
+non è stato ritenuto necessario approfondire ulteriormente la ricerca.\\
+\\
+Nonostante l'esecuzione del codice presenti alcune dipendenze in base al dispositivo,
+la distribuzione non ha introdotto nessuna necessità.
+Nessuna modifica del codice è stata quindi dovuta alla scelta della tecnologia usata per 
+la loro distribuzione.\\
+\\
+
 \begin{figure}[h!]
     \begin{center}
         \includegraphics[height=0.28\textheight]{DeployFront.png}
@@ -394,10 +444,21 @@ Questo servizio consente l’archiviazione e la distribuzione di file di varie t
 \end{figure}
 
 Per garantire un processo di aggiornamento efficiente e automatizzato,
-sia il codice distribuito sulla web app che l’applicativo ospitato nel container vengono gestiti tramite GitHub Actions,
-che ne assicura l’aggiornamento automatico a ogni nuova versione. \\
+sia il codice distribuito sulla web app che l'applicativo ospitato nel container 
+vengono gestiti tramite GitHub Actions.
+Le Github Actions sono funzionalità offerte da Github, 
+che è il sito dove viene salvato il codice.
+In particolare, a ogni nuova versione del codice sia la Static Web App che il Blob Storage vengono notificati,
+modificando il loro contenuto.
+Questo consente di offrire un servizio aggiornato 
+riducendo al minimo i tempi richiesti per applicare le modifiche. 
+ASWA gestisce in autonomia il collegamento con la repository Github, 
+mentre per aggiornare l'applicazione su Android è stato necessario crearne una appositamente.\\
 \\
-
-Nella fruizione tramite browser, il codice si aggiorna automaticamente a ogni accesso, mentre per l’applicativo su dispositivo mobile è necessaria una reinstallazione manuale.
-Per questa ragione, gli utenti dell’applicazione verranno notificati tempestivamente ogni volta che sarà disponibile una nuova versione.
+In caso di aggiornamento, 
+la fruizione dell'interfaccia tramite browser non necessita di nessuna manutenzione 
+in quanto si aggiorna automaticamente a ogni accesso.
+Per l'applicativo su dispositivo mobile è invece necessaria una nuova installazione manuale.
+Per questa ragione, gli utenti dell'applicazione verranno notificati tempestivamente 
+ogni volta che sarà disponibile una nuova versione.
 \clearpage
