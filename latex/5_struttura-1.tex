@@ -93,6 +93,11 @@ Al fine di ottenere tutte le prestazioni precedentemente elencate,
 la scelta è ricaduta sull’adozione del framework di sviluppo Flutter.
 Diversi fattori motivano tale decisione. \\
 \\
+\begin{wrapfigure}{r}{0.3\textwidth}
+    \centering
+    \includegraphics[height=.15\textheight]{flutter.png}
+    \caption{Il logo di Flutter}
+\end{wrapfigure}
 In primo luogo, l'architettura di Flutter si basa su un motore grafico 
 indipendente dalla piattaforma di esecuzione,
 il che consente di ottenere elevate prestazioni e 
@@ -107,7 +112,7 @@ di componenti personalizzabili per l'intero ciclo di vita del prodotto.
 Infine, Flutter consente uno sviluppo rapido e interattivo 
 grazie alla sua sintassi intuitiva e al meccanismo di hot reload,
 che riduce significativamente i tempi di compilazione e facilita il testing in tempo reale.\\
-\\
+\\	
 Tra le altre tecnologie valutate per lo sviluppo dell'interfaccia grafica vi erano React Native e Xamarin.
 Tuttavia, entrambe presentano alcune limitazioni: 
 le applicazioni finali sviluppate con React Native tendono ad avere dimensioni più elevate e le prestazioni risultano inferiori,
@@ -171,7 +176,8 @@ Per ognuno mostra un bottone dal quale, se selezionato, compariranno le azioni a
 
 Correlata alla gestione dei profili c'è la loro ricerca, 
 che consente il ritrovamento e la successiva aggiunta dei profili tra i propri gruppi.
-La schermata risulta minimale, consentendo all'utente di concentrarsi sulle sole informazioni e funzionalità essenziali.\\
+La schermata risulta minimale, 
+consentendo all'utente di concentrarsi sulle sole informazioni e funzionalità essenziali.\\
 \\
 
 
@@ -188,7 +194,8 @@ con la possibilità di navigare tra le due schermate.\\
 Il secondo entra nel particolare dell'evento, 
 mostrando i dettagli relativi e fornendo la possibilità di modificarli. 
 Concentra inoltre le principali funzionalità dell'applicazione, 
-quali la conferma della partecipazione all'evento, la condivisione con i gruppi e il caricamento delle immagini.\\
+quali la conferma della partecipazione all'evento, 
+la condivisione con i gruppi e il caricamento delle immagini.\\
 \\
 
 \begin{figure}[h!]
@@ -265,7 +272,7 @@ separando la logica applicativa dalle complessità richieste dalla tecnologia de
 
 \begin{figure}[h!]
     \begin{center}
-        \includegraphics[width=\textwidth]{FrontServiceClassDiagram.png}
+        \includegraphics[height=0.72\textheight]{FrontServiceClassDiagram.png}
         \caption{Modello delle classi del client}
     \end{center}
 \end{figure}
@@ -286,11 +293,11 @@ sono stati implementati in due componenti differenti.
 Le notifiche possono essere infatti richieste anche da altri metodi, 
 e a ogni aggiornamento potrebbe non corrispondere una notifica.
 La ricezione delle modifiche in tempo reale avviene usando il pattern observer, 
-nel quale il servizio si connette a un canale e rimane in attesa di eventuali messaggi.
+nel quale il servizio si connette a un canale e rimane in attesa di eventuali messaggi.\\
 
 \begin{figure}[h!]
     \begin{center}
-        \includegraphics[width=\textwidth]{IIModificaEvento1.png}
+        \includegraphics[width=\textwidth]{IIModificaEvento.png}
         \caption{Diagramma di sequenza della modifica di un evento}
     \end{center}
 \end{figure}
@@ -307,8 +314,10 @@ così come la scansione della galleria per trovare le immagini interessate.
 Sia la gestione locale della memoria che il recupero delle immagini vedono uno o più componenti dedicati.
 La loro realizzazione viene trattata nei capitoli seguenti.\\
 \\
-Durante l'implementazione della logica applicativa si sono dovuti affrontare altri problemi quali, degni di nota, 
-la gestione della condivisione di un evento tramite link e l'inizializzazione dell'applicazione.\\
+Durante l'implementazione della logica applicativa 
+si sono dovuti affrontare altri problemi quali, degni di nota, 
+la gestione della condivisione di un evento tramite link e
+ l'inizializzazione dell'applicazione.\\
 
 \begin{figure}[h!]
     \begin{center}
@@ -319,16 +328,21 @@ la gestione della condivisione di un evento tramite link e l'inizializzazione de
 
 La condivisione di un evento tramite link consiste in due passaggi principali: 
 la creazione del link stesso e il successivo ritrovamento dell'evento associato.
-La generazione del link avviene tramite l'unione del dominio del server con il codice identificativo dell'evento.
+La generazione del link avviene tramite 
+l'unione del dominio del server con il codice identificativo dell'evento.
 \clearpage
 All'apertura dell'applicazione tramite link viene estratto il codice identificativo dell'evento 
 per la successiva richiesta dei dati al server.
-Se l'utente non si è ancora autenticato, però, il router dell'applicazione lo reindirizza alla schermata di login, 
+Se l'utente non si è ancora autenticato, però, 
+il router dell'applicazione lo reindirizza alla schermata di login, 
 cambiando il link e perdendo l'informazione allegata.
-Per evitare questo problema, nel momento in cui l'utente accede all'applicazione tramite un link,
+Per evitare questo problema, 
+nel momento in cui l'utente accede all'applicazione tramite un link,
 le sue informazioni vengono salvate in memoria locale.
-Al termine del login, se sono presenti dati salvati, l'utente verrà indirizzato alla schermata degli eventi proposti, 
-che recupererà i dati relativi all'evento, per poi mostrarli a video.
+Al termine del login, se sono presenti dati salvati, 
+l'utente verrà indirizzato alla schermata degli eventi proposti, 
+che recupererà i dati relativi all'evento, per poi mostrarli a video.\\
+\\
 
 \begin{figure}[h!]
     \begin{center}
@@ -344,13 +358,15 @@ Parallelamente alla visualizzazione della schermata iniziale si recuperano i dat
 relativi ai profili associati all'utente e vengono fatti partire i servizi autonomi. 
 In particolare, vengono controllati i permessi necessari per i quali, se non ancora concessi, 
 verrà richiesto l'ottenimento. 
-Viene inoltre avviato il servizio di ricezione degli aggiornamenti, che si connette al canale relativo all'utente.
+Viene inoltre avviato il servizio di ricezione degli aggiornamenti, 
+che si connette al canale relativo all'utente.
 Per ogni profilo vengono, sempre in maniera parallela, recuperati i gruppi e gli eventi associati.
 Al termine della ricezione degli eventi, indipendentemente dalle altre richieste, 
 per ogni evento successivo al momento attuale viene avviato un timer, che scatena, 
 al momento giusto, il recupero delle immagini.
 Se l'applicazione è stata aperta tramite link di condivisione, 
-la schermata a cui si verrà reindirizzati sarà quella degli eventi proposti, altrimenti quella degli eventi confermati.\\
+la schermata a cui si verrà reindirizzati sarà quella degli eventi proposti, 
+altrimenti quella degli eventi confermati.\\
 \\
 
 \begin{figure}[h!]
@@ -379,10 +395,13 @@ con l'obiettivo di estendere il servizio alle altre tecnologie in un secondo mom
 La grafica è stata sviluppata in maniera statica, 
 ovvero non dipende direttamente da nessuna informazione specifica dell'utente.
 L’interfaccia sviluppata infatti non prevede la creazione dinamica di contenuti:
-gli elementi visuali che vengono restituiti rimangono invariati indipendentemente dall'utente che ne effettua la richiesta.
-I dati visualizzati che interessano l'utente corrente (eventi confermati o proposti, gruppi, profili e via dicendo)
+gli elementi visuali che vengono restituiti rimangono invariati 
+indipendentemente dall'utente che ne effettua la richiesta.
+I dati visualizzati che interessano l'utente corrente 
+(eventi confermati o proposti, gruppi, profili e via dicendo)
 sono recuperati dalla memoria locale del dispositivo o tramite un server terzo.
-Questa scelta consente di rendere l'interfaccia grafica completamente indipendente dall'identità o dal ruolo dell'utente,
+Questa scelta consente di rendere l'interfaccia grafica completamente 
+indipendente dall'identità o dal ruolo dell'utente,
 consentendo una separazione netta delle responsabilità dei componenti.\\
 \\
 Da un punto di vista della distribuzione,
