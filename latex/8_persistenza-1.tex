@@ -177,10 +177,11 @@ riguarda la gestione delle relazioni tra le entità.
 È fondamentale analizzare la distribuzione delle richieste per ciascun elemento
 e il carico computazionale che ogni operazione comporta. 
 Tra le operazioni più costose in termini di prestazioni, 
-che più ostacola e rallenta il recupero dei dati, vi è l'operazione di unione(join). 
+che più ostacola e rallenta il recupero dei dati, vi è l'operazione di unione(join).
 Durante l'operazione di unione vengono incrociati i dati di vari elementi 
 per restituire un oggetto coerente che presenti tutte le proprietà necessarie, 
-originariamente distribuite in molteplici tabelle. 
+originariamente distribuite in molteplici tabelle. \\
+\\
 Nonostante l'esecuzione di join su database sia altamente ottimizzata
 (particolarmente in quelli relazionali) e facilitata dall'utilizzo di indici,
 introduce comunque carichi computazionali di grande entità che impattano
@@ -244,127 +245,315 @@ eventualmente copiando i dati richiesti per evitare
 di dover recuperare il terzo elemento della relazione.
 \clearpage
 
+
 \subsection{Analisi del dominio}
 
-La scelta del database deriva da un’attenta analisi delle principali interazioni tra gli elementi del dominio. 
-Il dominio descrive i componenti dell’applicazione e le loro relazioni. 
-In particolare, vengono espresse le dipendenze, i rapporti reciproci e le cardinalità delle relazioni. 
-A titolo esemplificativo, dal diagramma del dominio si deduce che ad un oggetto Event possono corrispondere più oggetti Photo, 
-ma soprattutto che l’oggetto Photo è strettamente legato all’oggetto Event.\\
-\\
-\begin{figure}[h!]
+Il dominio descrive i componenti dell'applicazione e le loro relazioni. 
+Ne vengono espresse le dipendenze, i rapporti reciproci e la cardinalità delle relazioni. 
+La sua analisi, integrata con la previsione del carico delle richieste,
+permette di fornire un quadro dettagliato sulle necessità relative,
+per poter poi definire la tipologia delle strutture in cui salvare i dati e
+le caratteristiche richieste al database.\\
+
+\begin{figure}[htpb]
     \centering
     \includegraphics[width=\textwidth]{ProgettoDominioServer.png}
-    \caption{Diagramma del dominio}
+    \caption{Diagramma del dominio di Wyd}
 \end{figure}
-Le richieste riguardo alle informazioni tra Account, User e Profile, con i relativi UserRole, vengono eseguite all’avvio del programma, per poi essere mantenute in memoria locale. 
-Le modifiche a questi elementi sono sporadiche.
-Allo stesso modo gli oggetti Group vengono recuperati solo all’avvio dell’applicazione, e, salvo rari aggiornamenti, non occupano ulteriormente lo spazio delle richieste.\\
-\\
-La maggioranza delle richieste verterà sull’ottenimento dei dati relativi agli Event e ai Profile. 
-Infatti ad ogni avvio dell’applicazione sarà richiesto di recuperare gli eventi di ogni profilo, mentre, ogni volta che si apre il dettaglio di un evento, 
-sarà necessario recuperare i rispettivi dati, includendo i profili associati. 
-Si prevede che la cardinalità dei profili associati ad un evento risieda nell’ordine delle decine, 
-mentre agli eventi che si associano ai profili l’ordine di grandezza previsto risiede nelle migliaia. \\
-\\
-
-La relazione che accomuna Event e Profile è di tipologia molti a molti, identificata con l’oggetto ProfileEvent. 
-L’elemento ProfileEvent, oltre a descrivere la relazione, contiene la proprietà Confirmed, che indica la conferma di partecipazione di un profilo ad un evento. 
-Vista la natura del progetto, la proprietà Confirmed, assieme ai dati degli Event, sarà tra i campi che subiranno modifiche con maggiore frequenza.\\
-\\
-Riassumendo, le operazioni principali che vertono sulle prestazioni del database sono il recupero degli eventi relativi ai profili, il recupero dei profili collegati agli eventi, 
-l’aggiornamento dei campi degli oggetti Event e la modifica del campo Confirmed relativa ai ProfileEvent.\\
-\\
-
-Nonostante sia più probabile che venga richiesto il dettaglio di un evento, e quindi sia più frequente il dover recuperare i Profile relativi all’Event, 
-la proporzione delle richieste prevista non giustifica lo sbilanciamento della relazione sugli Event.
-Infatti, se si salvassero tutti i ProfileEvent sull’oggetto Event, le richieste degli eventi appartenenti ai profili, sebbene meno frequenti, 
-richiederebbero l’ispezione di tutti gli Event alla ricerca del Profile indicato. 
-Infine, se si duplicasse l’oggetto ProfileEvent, oltre che nella sua tabella originaria, anche sugli Event la sua creazione, 
-la sua eliminazione e la modifica del campo Confirmed richiederebbero il doppio delle scritture.\\
-\\
-Vista quindi la necessità di letture frequenti da entrambe le parti di una relazione molti a molti e la necessità di scrittura dell’oggetto che la identifica, 
-si individua in un database relazionale la soluzione più efficace per il dominio del progetto. 
-Infatti, i database relazionali sono ottimizzati sulle operazioni di unione tra tabelle, garantendo velocità di recupero in lettura da entrambe le parti. 
-Permettendo la separazione delle tabelle e gestendo gli oggetti ProfileEvent come entità indipendenti, 
-la modifica del campo Confirmed comporta il blocco del solo elemento ProfileEvent. 
-Le caratteristiche ACID forniscono inoltre uno stato centrale per tutta l’applicazione, che, 
-per quanto non strettamente necessario, garantisce l’uniformità delle informazioni per tutti gli utenti.\\
-\\
 
 \clearpage
-\section{La scelta del database}
-
-Azure offre un’ampia scelta di database relazionali che possono essere integrati con il resto dell’ecosistema. 
-Oltre alla tecnologia proposta, nella scelta del database più adatto bisogna considerare soprattutto l’integrazione con servizi accessori, 
-le particolarità del server su cui viene eseguito, e i costi che si andrà ad affrontare.\\
+Le entità Account, User e Profile, assieme alla relazione UserRole, 
+descrivono le specifiche di autenticazione, identificazione dell'utente e i suoi ruoli sui profili associati.
+I loro dati vengono recuperati solamente una volta nel ciclo di vita del programma, 
+a seguito del login dell'utente.
+Vengono poi salvati in memoria locale, 
+riducendo il numero di richieste relative successive a un controllo su eventuali aggiornamenti.
+Si prevede che le modifiche a questi elementi siano sporadiche.\\
+Allo stesso modo gli oggetti Group vengono recuperati solo all'avvio dell'applicazione, e, 
+salvo rari aggiornamenti, non comportano ulteriori richieste.
+Le richieste di lettura e scrittura previste per questi elementi sono quindi in quantità esigua, 
+e influiscono secondariamente sulle performance del sistema.\\
 \\
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=\textwidth]{Possibilitadelcloud.png}
-    \caption{Proposte di Azure per i database relazionali}
-\end{figure}	
+La maggioranza delle richieste verterà sull'ottenimento dei dati relativi agli Event e ai Profile. 
+Gli Event descrivono gli impegni ai quali i profili partecipano.
+Essendo la loro relazione di tipologia molti a molti,
+si introduce l'entità ProfileEvent che descrive l'associazione evento-profilo,
+indicando che un evento è condiviso con un profilo.
+La proprietà più importante di ProfileEvent è sicuramente Confirmed,
+una variabile booleana che esprime la partecipazione o meno di un profilo all'evento.
+È ragionevole prevedere che la cardinalità dei profili associati a un evento non superi l'ordine delle centinaia.
+Agli eventi che si associano ai profili l'ordine di grandezza invece previsto risiede nelle migliaia. 
+Ci sono molteplici situazioni da tenere in considerazione analizzando questa relazione.\\
+\\
+Sicuramente bisogna considerare il recupero specifico delle entità Event e Profile.
+Questo accade quando un utente decide di entrare nel dettaglio di uno dei due elementi,
+comportando la richiesta di tutti i dati dell'oggetto.
+Consistono in un'operazione di lettura tutto sommato semplice:
+essendo l'utente in possesso dell'identificativo dell'elemento,
+la ricerca risulta diretta, e i dati da recuperare esigui.\\
+\\
+La conferma o la disdetta a un evento vede la modifica di un ProfileEvent.
+Questa operazioni di per sé risulta veloce 
+in quanto necessita di recuperare un solo elemento per poi modificarlo.
+Allo stesso modo la modifica di un evento comporta l'aggiornamento di un solo oggetto Event,
+a seguito però del recupero del ProfileEvent associato, 
+necessario per controllare i permessi del profilo sull'evento.
+Entrambe le operazioni richiedono però l'invio di una notifica verso tutti i profili interessati,
+che necessita il recupero di tutti i ProfileEvent associati ogni volta che una di queste accade.\\
+\\
+La probabilità che un evento o un qualunque ProfileEvent a esso associato 
+venga modificato risulta quindi complessivamente elevata e, di conseguenza,
+l'operazione di recupero degli identificativi di tutti i profili associati all'evento
+è da considerarsi frequente.
+Questa operazione, in base all'implementazione, può risultare costosa:
+una separazione, un accoppiamento debole o la mancanza di indici tra Event e ProfileEvent
+determinano la necessità di ricercare le entità in tutto il database.\\
+\\
+Quando un utente accede per la prima volta su un dispositivo 
+è necessario ottenere gli eventi associati ai suoi profili.
+Allo stesso modo, a ogni avvio dell'applicazione si recuperano gli eventi
+che hanno subito modifiche dall'ultimo accesso.
+Inoltre, per poter garantire(all'interno di un determinato vincolo temporale) 
+la consistenza dei dati anche a livello locale, 
+il client applica una strategia di long polling 
+per ottenere gli eventi che sono stati modificati dall'ultimo aggiornamento noto.
+L'operazione di ritrovamento degli eventi a partire dal profilo risulta quindi centrale e frequente,
+per quanto possa accettare un tempo di esecuzione leggermente più lungo. \\
+
+\begin{longtable}{|P{9.5cm}|P{2.5cm}|P{2.5cm}|}
+    \hline
+    \textbf{Funzionalità} & \textbf{Frequenza }                                                 & \textbf{Complessità}\\
+    \hline
+    Recupero di un Event                & Media                            & Semplice                     \\
+    \hline
+    Recupero di un Profile         & Media                     & Semplice                     \\
+    \hline
+    Modifica di un Event      & Media                          & Semplice                      \\
+    \hline
+    Conferma/disdedda di un Event       & Alta                           & Semplice                    \\
+    \hline
+    Ritrovamento dei Profile associati a un Event        & Alta                           & Complessa      \\
+    \hline
+    Ritrovamento degli Event associati a un Profile      & Alta                          & Complessa            \\
+    \hline
+    \caption{Funzionalità principali tra Event e Profile}
+\end{longtable}
+
+La relazione tra Event e Photo impatta sulle prestazioni del sistema solo in casi particolari e
+verrà affrontato nei capitoli successivi.
+\clearpage
 
 
-A meno di necessità particolari che richiedono l’utilizzo di una tecnologia implementata da uno specifico database, 
-la grande sovrapposizione di funzionalità delle diverse offerte di database relazionali presenti sul mercato garantisce 
-il  soddisfacimento delle necessità rilevate dall’analisi del dominio indipendentemente dalla tecnologia proposta dal servizio.\\
-\\
-La grande differenza tra i vari servizi sta nelle proprietà del server incaricato di fornire il potere computazionale necessario per l’esecuzione. 
-L’architettura del server e la sua integrazione con la tecnologia del database, infatti, determinano l’effettiva capacità di scalabilità del servizio.\\
-\\
-Si intende scalabilità verticale la capacità di aumentare le risorse della stessa macchina in cui si esegue il codice. 
-La scalabilità verticale viene definita nel momento di creazione del servizio, in cui si determinano le risorse da dedicare alla macchina che esegue il programma. 
-Trattandosi di macchine virtualizzate, è sempre possibile in un secondo momento aumentare le prestazioni in caso di necessità.\\
-\\
 
-Per scalabilità orizzontale si intende invece la capacità di delegare il carico di lavoro ad altre macchine, eventualmente coordinando le modifiche. 
-Questo permette una risposta alle richieste più resistente, riducendo il rischio di colli di bottiglia che potrebbero venirsi a formare nell’utilizzo di un nodo singolo.
-La scalabilità orizzontale richiede però l’implementazione di tecnologie apposite integrate con il database che permettano l’esecuzione in nodi fisici differenti. \\
+\section{L'implementazione del database}
+Nelle sezioni precedenti si è discusso delle proprietà
+offerte dai diversi tipi di database e 
+delle necessità che il dominio impone sul sistema.
+La scelta del database deriva quindi dall'incrocio di tutte queste condizioni,
+individuando la tecnologia che meglio riesce a rispondere alle esigenze del progetto. 
+Ogni tipologia di database comporta un approccio differente alle informazioni,
+implicando una strategia di salvataggio e manipolazione dei dati propria.
+Le strutture che modellano le entità devono quindi
+essere create per sfruttare nella maniera più efficiente possibile
+i vantaggi offerti dalla tecnologia scelta.\\
+\\
+Una volta scelto il database e le strutture in base alla modalità 
+che più si addicono alle esigenze del progetto,
+l'utilizzo di servizi in cloud comporta una maggiore attenzione anche 
+alle proprietà legate al mantenimento del servizio,
+dalle quali derivano le proprietà di scalabilità e affidabilità.
+La grande differenza tra i vari servizi sta nelle proprietà del server 
+incaricato di fornire il potere computazionale necessario per l’esecuzione. 
+L’architettura del server e la sua integrazione con la tecnologia del database
+determinano infatti l’effettiva capacità di scalabilità del servizio.\\
+\\
+Si intende scalabilità verticale la capacità di aumentare le risorse 
+della stessa macchina in cui si esegue il codice. 
+La scalabilità verticale viene definita nel momento di creazione del servizio, 
+in cui si determinano le risorse da dedicare alla macchina che esegue il programma. 
+Trattandosi di macchine virtualizzate, 
+è sempre possibile in un secondo momento aumentare le prestazioni in caso di necessità.\\
+\\
+Per scalabilità orizzontale si intende invece la capacità di 
+delegare il carico di lavoro ad altre macchine, eventualmente coordinando le modifiche. 
+Questo permette una risposta alle richieste più resistente, 
+riducendo il rischio di colli di bottiglia che potrebbero venirsi a formare nell’utilizzo di un nodo singolo.
+La scalabilità orizzontale richiede però l'implementazione 
+di tecnologie apposite integrate con il database che permettano l'esecuzione in nodi fisici differenti. \\
 \\
 Una volta individuata la tecnologia adatta e il livello di scalabilità desiderati, 
-è bene considerare le altre necessità o le opportunità aggiuntive generate dalla presenza di un database nel progetto. \\
+è bene considerare le altre necessità o le opportunità aggiuntive generate 
+dalla presenza di un database nel progetto. \\
 \\
-
 L’alta disponibilità(HA) è la proprietà di garantire l’accesso al servizio nonostante i guasti. 
-Ad esempio, si può mantenere una macchina identica al server principale in grado di replicare il servizio, spostando il carico in caso di guasto del server principale. 
-Si misura in “numero di nove”, ovvero la quantità di nove presenti nella percentuale del tempo per il quale si garantisce la disponibilità del servizio.
+Ad esempio, si può mantenere una macchina identica al server principale in grado di replicare il servizio, 
+spostando il carico in caso di guasto del server principale. 
+Si misura in “numero di nove”, ovvero la quantità di nove presenti 
+nella percentuale del tempo per il quale si garantisce la disponibilità del servizio.
 I servizi offrono diverse qualità di HA, in base alle funzionalità desiderate.\\
 \\
+Alcuni servizi possono presentare offerte di backup 
+per riportare il server nello stesso stato di qualche momento precedente.
+Questo permette il ripristino del sistema a un punto precedente 
+rispetto all'avvenimento di eventuali errori o guasti del sistema.\\
+\subsection{La scelta del database}
 
-Alcuni servizi possono presentare offerte di backup per riportare il server nello stesso stato di qualche momento precedente. 
-Questo permette il ripristino del sistema ad un punto precedente rispetto all’avvenimento di eventuali errori o guasti del sistema.\\
+Viste le necessità del progetto in ambito di scalabilità 
+e le caratteristiche del dominio,
+si individua nei database documentali la tecnologia più adatta 
+per gestire la persistenza centrale dell'applicazione.\\
 \\
+I database documentali, facenti parte della categoria dei database non relazionali, 
+rappresentano un paradigma di gestione dei dati
+che organizza le informazioni in documenti. 
+Ogni documento è un'unità autonoma che incapsula la descrizione di un'entità, 
+contenendo le sue proprietà. 
+Tali documenti sono logicamente raggruppati in collezioni.
+All'interno di una collezione, 
+ciascun documento è univocamente identificato da un proprio identificativo, 
+garantendo l'accesso diretto e la manipolazione individuale.\\
+\\
+Un aspetto distintivo e strategicamente rilevante dei database documentali è
+la loro intrinseca capacità di supportare la scalabilità orizzontale in modo nativo. 
+Questo è un vantaggio fondamentale in architetture distribuite e ambienti ad alta intensità di dati. 
+La scalabilità è realizzata attraverso la partizionamento (o sharding), 
+un meccanismo che distribuisce automaticamente i dati tra diversi nodi di archiviazione fisici.\\
+\\
+Attraverso la denormalizzazione si possono migliorare le prestazioni di lettura, 
+aggregando dati correlati all'interno di un singolo documento o partizione. 
+Questo approccio semplifica la gestione delle join, 
+che possono essere ottimizzate per risiedere all'interno della stessa partizione o 
+in partizioni vicine, minimizzando la necessità di operazioni di lettura tra nodi distinti.\\
+\\
+La denormalizzazione comporta intrinsecamente 
+alcune sfide a livello di consistenza dei dati, 
+in particolare per le operazioni di recupero che coinvolgono dati potenzialmente duplicati. 
+Questo problema è efficacemente mitigato dall'adozione di Global Secondary Indexes (GSI). 
+I GSI consentono di interrogare i dati su attributi che non sono la chiave primaria del documento, 
+e risiedono quindi su partizioni differenti.
+Forniscono percorsi di accesso alternativi e performanti sull'intero dataset distribuito, 
+superando le limitazioni imposte dalla distribuzione fisica delle partizioni e 
+mantenendo un'elevata efficienza nelle query complesse.\\
+\\
+Implementando automaticamente e nativamente la scalabilità orizzontale,
+il database relazionale ci permette quindi di gestire con efficienza 
+l'incremento dei volumi di dati e dei carichi di lavoro senza interventi complessi.
+Fornisce inoltre un supporto diretto all'esigenza dell'architettura 
+riguardo alla necessita di letture performanti 
+da entrambi i lati di relazioni molti-a-molti:
+attraverso il partizionamento strategico, 
+i dati correlati possono essere collocati in partizioni vicine 
+per ottimizzare le letture da un lato della relazione, 
+mentre i Global Secondary Indexes (GSI) superano le limitazioni delle partizioni fisiche, 
+consentendo interrogazioni efficienti e performanti dall'altro lato. 
+Infine, un'attenta progettazione del modello di dati, 
+che include una denormalizzazione strategica e l'utilizzo degli indici, 
+garantirà un tempo di recupero ridotto per le informazioni, 
+massimizzando la reattività del sistema e l'efficienza complessiva.\\
+\\
+Un confronto con il paradigma relazionale evidenzia le ragioni della sua esclusione per le esigenze del nostro progetto. 
+Sebbene i database relazionali siano soluzioni consolidate per la gestione di dati strutturati, 
+presentano delle limitazioni che non si allineano con i requisiti di scalabilità richiesti. 
+La loro architettura, che spesso lega indici e tabelle alla stessa partizione logica, 
+impone intrinsecamente dei vincoli sulla scalabilità orizzontale, 
+non solo per la difficoltà di distribuire indici e tabelle su nodi diversi, 
+ma anche per il numero massimo di connessioni contemporanee che possono gestire, 
+limitando la capacità di rispondere a un numero massiccio di richieste simultanee.  
+L'implementazione dello sharding, sebbene possibile, è interamente a carico dello sviluppatore, 
+introducendo un significativo onere di progettazione, sviluppo e manutenzione.\\
+\\
+Inoltre, la gestione di relazioni molti-a-molti nel modello relazionale, 
+pur essendo logicamente chiara con tabelle di giunzione, 
+può presentare problemi di scalabilità in contesti di elevato carico. 
+Quando una query necessita di recuperare dati da entrambi i lati di una relazione molti-a-molti, 
+ciò implica l'esecuzione di join complesse tra più tabelle. 
+Sebbene queste operazioni possano essere veloci su singole istanze di database ben ottimizzate, 
+in un ambiente distribuito e con volumi di dati in crescita, 
+queste join possono richiedere il trasferimento di grandi quantità di dati tra nodi diversi per essere risolte, 
+introducendo latenza e overhead di rete significativi. 
+Questo può diventare un collo di bottiglia, compromettendo le performance complessive. 
+Infine, la mancanza di un supporto nativo per indici secondari globali (GSI) 
+rende più complessa la gestione di query su attributi non chiave distribuiti su diverse partizioni, 
+costringendo a soluzioni alternative che potrebbero compromettere 
+la reattività del sistema e aumentare la complessità del codice. 
+Questi fattori combinati ci hanno portato a escludere il modello relazionale.\\
+\\
+Essendo il progetto già improntato sulla piattaforma Azure,
+la ricerca verte inizialmente tra le opzioni che mette a disposizione.
+Azure offre un’ampia scelta di database documentali che possono essere integrati con il resto dell’ecosistema. 
+Tuttavia, Azure presenta un servizio completamente gestito e nativo
+per i database non relazionali chiamato Azure Cosmos DB.
+Garantendo la massima interoperabilità all'interno dell'ecosistema,
+si procede analizzando le proprietà e i vantaggi offerti da Cosmos DB.\\
+\\
+Azure Cosmos DB si distingue per la sua capacità di scalare orizzontalmente in maniera illimitata, 
+consentendo di gestire volumi di dati e carichi di lavoro molto elevati, 
+fino a milioni di richieste al secondo, 
+grazie alla possibilità di distribuire il carico à su più regioni Azure. 
+È stato infatti ideato per essere presentare un'architettura distribuita, 
+con replica automatica dei dati, 
+assicurando un'elevatissima disponibilità e resilienza. 
+Queste vengono assicurate anche in caso di interruzioni regionali, 
+grazie a meccanismi di failover automatico.
+Inoltre, la distribuzione globale "turnkey" garantisce che i dati siano sempre vicini agli utenti, 
+riducendo drasticamente la latenza a millisecondi a cifra singola 
+(con SLA del 99.999\% di disponibilità per account multi-regione).
+Consente l'indicizzazione attraverso più partizioni in maniera 
+automatica e personalizzabile ottimizzado le query, 
+riducendo la complessità e migliorando le prestazioni, 
+senza richiedere oneri di gestione manuale degli indici.\\
+\\
+Pur essendo focalizzato sui database documentali,
+Cosmos DB è però una soluzione multi-modello e multi-API. 
+Supporta infatti, oltre alla sua API nativa per NoSQL (che usa il modello a documenti JSON), 
+anche API compatibili con MongoDB, Apache Cassandra, Apache Gremlin (per i grafi) e Azure Table. 
+Questa versatilità permette agli sviluppatori di utilizzare strumenti familiari, 
+semplificando la migrazione di applicazioni esistenti o 
+lo sviluppo di nuove con la flessibilità di scegliere il modello di dati più appropriato.\\
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{AzureDatabase.png}
+    \caption{Proposte di Azure per i database documentali}
+\end{figure}
+
+A livello di costi è difficile fare un'analisi precisa,
+in quanto tutti i competitor presentano modelli di pagamento che utilizzano metriche di utilizzo diverse,
+rendendo necessarie ulteriori analisi che dipendono anche 
+dall'effettivo numero e tipologie di richieste che vertono sul database.
+Di seguito viene riportata una tabella per comparazione i costi delle alternative principali.
+Cosmos usa come metrica le Rerquest Units(RU) per quantificare l'impatto di una richiesta sul database.
+Le RU rappresentano un'astrazione delle risorse di sistema (CPU, I/O, memoria) necessarie per eseguire tali operazioni.\\
+\\
+\begin{longtable}{|P{9.5cm}|P{2.5cm}|P{2.5cm}|}
+    \hline
+    \textbf{Servizio} & \textbf{Costo ogni milione di scritture (normalizzate a 1 KB) }                                                 & \textbf{Costo ogni milione di scritture (normalizzate a 1 KB) }\\
+    \hline
+    AWS DynamoDB               & \$1.25                            & \$0.25                     \\
+    \hline
+    Google Cloud Firestore         & \$0.90                     & \$0.30                    \\
+    \hline
+    Azure Cosmos DB      & In base al consumo di RU, \$5.84 al mese ogni 100RU/s    & In base al consumo di RU, \$5.84 al mese ogni 100RU/s                       \\
+    \hline
+    MongoDb Atlas       & Varia in base all'host                          & Varia in base all'host                    \\
+    \hline
+    \caption{Funzionalità principali tra Event e Profile}
+\end{longtable}
 
 Inoltre, Azure mette a disposizione molteplici servizi accessori che possono essere uniti al servizio. 
 Questo permette di estendere le potenzialità del database tramite  l’analisi e il monitoraggio dei dati, 
 generando prestazioni aggiuntive o integrando i dati per lo sviluppo di altre tecnologie.\\
 \\
-Infine è necessario controllare i costi che le scelte progettuali e prestazionali hanno comportato: 
-pur generalmente legati al consumo effettivo delle risorse, e quindi in grado di fornire solo una previsione del costo finale, 
-ogni decisione presa conduce ad un possibile aumento di prezzo, 
-ed è quindi bene controllare che le risorse selezionate siano effettivamente  necessarie a soddisfare i requisiti del progetto.\\
-\\
-Riducendo al minimo i costi, visto l’utilizzo iniziale dell’applicazione, e nessuna necessità tecnologica specifica, 
-la scelta del database per la persistenza del progetto è ricaduta su Azure SQL Database. 
-Presentando un database relazionale di tecnologia proprietaria di Microsoft, Azure SQL database esegue su un solo nodo, 
-fornendo però la possibilità di  scalare  verticalmente tramite la possibilità di modificare le risorse assegnate in ogni momento, 
-garantendo comunque prestazioni soddisfacenti per il servizio.\\
-\\
+
 Al server principale è stata affiancata una replica che rimane costantemente aggiornata. 
-Situata in una località differente dal server principale, garantisce alta disponibilità continuando a fornire i servizi anche in caso di malfunzionamenti al server principale.
-\clearpage
+Situata in una località differente dal server principale, 
+garantisce alta disponibilità continuando a fornire i servizi anche in caso di malfunzionamenti al server principale.\\
+\\
 
 Nel caso in cui però fossero necessarie ulteriori prestazioni, 
 se il dominio e i requisiti lo permettono, 
 si può eventualmente delegare a un database non relazionale le modifiche ai dati e alle relazioni 
 che non necessitano delle qualità ACID ma richiedono un’alta frequenza di scrittura.\\
 \\ 
-Per ovviare ai problemi di scalabilità alcune soluzioni e accortezze
-possono essere adottate per migliorarne le prestazioni. 
-Sicuramente si deve limitare al minimo il tempo in cui ogni richiesta necessita della connessione ai dati, 
-distinguendo nel codice momenti precisi e definiti in cui vengono richieste le modifiche al database. \\
-\\  
 Interporre una cache tra la logica applicativa e il database
 semplifica e riduce il numero di richieste verso il database. 
 Il livello di caching si occupa di gestire le richieste al database 
@@ -381,6 +570,31 @@ alleviando il numero di richieste al database, estendendo così  le prestazioni 
 Tuttavia, non vi è alcun vincolo che impedisca l'affiancamento di database di tipologia diversa 
 per rispondere a esigenze specifiche e sfruttare i punti di forza di entrambe le tecnologie.
 \\
+
+\subsection{La definizione delle classi}
+Nonostante sia più probabile che venga richiesto il dettaglio di un evento, 
+e quindi sia più frequente il dover recuperare i Profile relativi all’Event, 
+la proporzione delle richieste prevista non giustifica lo sbilanciamento della relazione sugli Event.
+Infatti, se si salvassero tutti i ProfileEvent sull’oggetto Event, 
+le richieste degli eventi appartenenti ai profili, sebbene meno frequenti, 
+richiederebbero l’ispezione di tutti gli Event alla ricerca del Profile indicato. 
+Infine, se si duplicasse l’oggetto ProfileEvent, 
+oltre che nella sua tabella originaria, anche sugli Event la sua creazione, 
+la sua eliminazione e la modifica del campo Confirmed richiederebbero il doppio delle scritture.\\
+\\
+
+
+
+\subsection{L'integrazione con le Azure Functions: il framework .Net e l'eventual consistency}
+
+\clearpage
+
+
+
+
+\clearpage
+
+
 
 
 \subsection{L' integrazione con C\#}
