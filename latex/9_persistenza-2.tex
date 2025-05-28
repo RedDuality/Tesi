@@ -28,7 +28,7 @@ Trattandosi di macchine virtualizzate,
 è sempre possibile in un secondo momento aumentare le prestazioni in caso di necessità.\\
 \\
 Per scalabilità orizzontale si intende invece la capacità di
-delegare il carico di lavoro ad altre macchine, eventualmente coordinando le modifiche.
+delegare il carico di lavoro su più macchine, eventualmente coordinando le modifiche.
 Questo permette una risposta alle richieste più resistente,
 riducendo il rischio di colli di bottiglia che potrebbero venirsi a formare nell’utilizzo di un nodo singolo.
 La scalabilità orizzontale richiede però l'implementazione
@@ -68,25 +68,46 @@ garantendo l'accesso diretto e la manipolazione individuale.\\
 \\
 Un aspetto distintivo e strategicamente rilevante dei database documentali è
 la loro intrinseca capacità di supportare la scalabilità orizzontale in modo nativo.
-Questo è un vantaggio fondamentale in architetture distribuite e ambienti ad alta intensità di dati.
-La scalabilità è realizzata attraverso la partizionamento (o sharding),
-un meccanismo che distribuisce automaticamente i dati tra diversi nodi di archiviazione fisici.\\
+Data la natura dei documenti e il loro accoppiamento debole con gli altri elementi,
+la separazione delle collezioni risulta particolarmente semplificata,
+favorendo un partizionamento dei dati,  
+essenziale per distribuire il database su diversi nodi fisici di archiviazione.
+Questo vantaggio è fondamentale in architetture distribuite e ambienti ad alta intensità di dati.\\
 \\
-Attraverso la denormalizzazione si possono migliorare le prestazioni di lettura,
-aggregando dati correlati all'interno di un singolo documento o partizione.
-Questo approccio semplifica la gestione delle join,
-che possono essere ottimizzate per risiedere all'interno della stessa partizione o
-in partizioni vicine, minimizzando la necessità di operazioni di lettura tra nodi distinti.\\
+Un altro vantaggio derivato dall'utilizzo di un database non relazionale
+è la propensione verso la denormalizzazione degli elementi del dominio, 
+sia strutturale che logica.
+La denormalizzazione consiste nel riportare le stesse proprietà degli elementi in più collezioni, 
+riducendo così, se correttamente ottimizzata, 
+il numero di join o richieste al database necessario per soddisfare le richieste.
+Infatti, vista la riduzione di efficienza nell'incrocio tra entità, 
+dovuta a una difficoltà intrinseca nell'ottimizzare le join tra documenti,
+si propende, invece che a incrociare i dati, a duplicarli sui i vari documenti.
+Le operazioni di join sono così agevolate,
+in quanto possono essere ottimizzate per 
+far risiedere la risorsa voluta all'interno dello stesso documento o nella stessa partizione dell'elemento di partenza, 
+minimizzando la necessità di operazioni di giunzione di tabelle o di lettura tra nodi distinti.
+Questo permette di aggregare i dati attorno agli elementi chiave su cui vertono le richieste,
+favorendo la divisione dei dati anche in caso di relazioni complesse.\\
 \\
-La denormalizzazione comporta intrinsecamente
+La denormalizzazione comporta però intrinsecamente
 alcune sfide a livello di consistenza dei dati,
-in particolare per le operazioni di recupero che coinvolgono dati potenzialmente duplicati.
-Questo problema è efficacemente mitigato dall'adozione di Global Secondary Indexes (GSI).
-I GSI consentono di interrogare i dati su attributi che non sono la chiave primaria del documento,
-e risiedono quindi su partizioni differenti.
-Forniscono percorsi di accesso alternativi e performanti sull'intero dataset distribuito,
-superando le limitazioni imposte dalla distribuzione fisica delle partizioni e
-mantenendo un'elevata efficienza nelle query complesse.\\
+in particolare per le operazioni di modifica che coinvolgono informazioni duplicate.
+Infatti, pur se si modificasse atomicamente il documento direttamente coinvolto dalla modifica,
+bisognerebbe comunque aggiornare tutte le altre parti che includono quella proprietà.
+Oltre a dover progettare l'applicazione affinché sia resiliente all'inconsistenza temporanea,
+ad esempio mostrando dati "vecchi" per un breve periodo prima che le modifiche vengano propagate, 
+o implementando logiche di compensazione che possano correggere eventuali discrepanze,
+è quindi necessario implementare la logica per garantire che la modifica venga propagata correttamente.
+Esistono diverse strategie gestire le informazioni duplicate in modo efficace e mitigarne l'impatto. 
+Una delle soluzioni avviene tramite trigger a livello di database, 
+che scatena la chiamata che corregge poi i dati ove necessario.
+Le code di messaggistica prevedono invece un orchestratore per la distribuzione degli aggiornamenti, 
+che riceve notifiche delle variazioni e le elabora per poi applicare le modifiche.
+Un'altra tecnica è l'applicazione di servizi in background che periodicamente scansionano e sincronizzano i dati. 
+Infine, si possono adottare timestamp o numeri di versione su ciascun documento o campo denormalizzato,
+permettendo alle applicazioni di determinare la versione più recente di un dato, 
+risolvendo i conflitti quando si presentano aggiornamenti concorrenti o ritardati.\\
 \\
 Implementando automaticamente e nativamente la scalabilità orizzontale,
 il database relazionale ci permette quindi di gestire con efficienza
@@ -96,9 +117,7 @@ riguardo alla necessita di letture performanti
 da entrambi i lati di relazioni molti-a-molti:
 attraverso il partizionamento strategico,
 i dati correlati possono essere collocati in partizioni vicine
-per ottimizzare le letture da un lato della relazione,
-mentre i Global Secondary Indexes (GSI) superano le limitazioni delle partizioni fisiche,
-consentendo interrogazioni efficienti e performanti dall'altro lato.
+per ottimizzare le letture da entrambi i lati della relazione.
 Infine, un'attenta progettazione del modello di dati,
 che include una denormalizzazione strategica e l'utilizzo degli indici,
 garantirà un tempo di recupero ridotto per le informazioni,
@@ -107,28 +126,31 @@ massimizzando la reattività del sistema e l'efficienza complessiva.\\
 Un confronto con il paradigma relazionale evidenzia le ragioni della sua esclusione per le esigenze del nostro progetto.
 Sebbene i database relazionali siano soluzioni consolidate per la gestione di dati strutturati,
 presentano delle limitazioni che non si allineano con i requisiti di scalabilità richiesti.
-La loro architettura, che spesso lega indici e tabelle alla stessa partizione logica,
-impone intrinsecamente dei vincoli sulla scalabilità orizzontale,
-non solo per la difficoltà di distribuire indici e tabelle su nodi diversi,
-ma anche per il numero massimo di connessioni contemporanee che possono gestire,
+La necessità di controllare le transazioni al fine di garantire le proprietà ACID
+influenza il numero massimo di connessioni contemporanee che possono gestire,
 limitando la capacità di rispondere a un numero massiccio di richieste simultanee.
-L'implementazione dello sharding, sebbene possibile, è interamente a carico dello sviluppatore,
+Inoltre la loro architettura non prevede una separazione fisica di schemi in relazione tra loro,
+legandole alla stessa partizione logica.
+Questo impone intrinsecamente dei vincoli sulla scalabilità orizzontale,
+in quanto l'implementazione dello sharding, sebbene possibile,
+viene lasciata interamente a carico dello sviluppatore,
 introducendo un significativo onere di progettazione, sviluppo e manutenzione.\\
 \\
-Inoltre, la gestione di relazioni molti-a-molti nel modello relazionale,
-pur essendo logicamente chiara con tabelle di giunzione,
-può presentare problemi di scalabilità in contesti di elevato carico.
-Quando una query necessita di recuperare dati da entrambi i lati di una relazione molti-a-molti,
-ciò implica l'esecuzione di join complesse tra più tabelle.
-Sebbene queste operazioni possano essere veloci su singole istanze di database ben ottimizzate,
-in un ambiente distribuito e con volumi di dati in crescita,
-queste join possono richiedere il trasferimento di grandi quantità di dati tra nodi diversi per essere risolte,
-introducendo latenza e overhead di rete significativi.
-Questo può diventare un collo di bottiglia, compromettendo le performance complessive.
-Infine, la mancanza di un supporto nativo per indici secondari globali (GSI)
-rende più complessa la gestione di query su attributi non chiave distribuiti su diverse partizioni,
-costringendo a soluzioni alternative che potrebbero compromettere
-la reattività del sistema e aumentare la complessità del codice.
+La gestione di relazioni molti-a-molti nel modello relazionale 
+si pone infatti in diretto contrasto con la denormalizzazione dei dati,
+utilizzando un'unica tabella di giunzione per descriverne il rapporto.
+Se si provasse a dividere in partizioni gli schemi relazionali,
+dalla distribuzione della tabella di giunzione ne conseguirebbe uno svantaggio,
+indipendentemente dalla strategia usata.
+Separando la tabella in base a un elemento si andrebbe infatti a compromettere
+l'abilità di ritrovare i dati in base all'altro elemento e viceversa:
+per quanto si avrebbero tutti i dati di un elemento dell'associazione sulla sua stessa partizione,
+sfruttando al massimo la velocità di unione tra schemi dei relazionali,
+per eseguire la ricerca in senso inverso bisognerebbe invece 
+allargare la richiesta a tutte le partizioni del sistema.
+In un ambiente distribuito e con volumi di dati in crescita,
+le join richiedono quindi l'analisi e il trasferimento di grandi quantità di dati tra nodi diversi,
+riducendo le performance complessive.
 Questi fattori combinati ci hanno portato a escludere il modello relazionale.\\
 \\
 Essendo il progetto già improntato sulla piattaforma Azure,
@@ -142,17 +164,17 @@ si procede analizzando le proprietà e i vantaggi offerti da Cosmos DB.\\
 Azure Cosmos DB si distingue per la sua capacità di scalare orizzontalmente in maniera illimitata,
 consentendo di gestire volumi di dati e carichi di lavoro molto elevati,
 fino a milioni di richieste al secondo,
-grazie alla possibilità di distribuire il carico à su più regioni Azure.
-È stato infatti ideato per essere presentare un'architettura distribuita,
+grazie alla possibilità di distribuire il carico su più regioni Azure.
+È stato infatti ideato per presentare un'architettura distribuita,
 con replica automatica dei dati,
 assicurando un'elevatissima disponibilità e resilienza.
 Queste vengono assicurate anche in caso di interruzioni regionali,
 grazie a meccanismi di failover automatico.
-Inoltre, la distribuzione globale "turnkey" garantisce che i dati siano sempre vicini agli utenti,
-riducendo drasticamente la latenza a millisecondi a cifra singola
+Inoltre, la distribuzione globale garantisce che i dati siano sempre vicini agli utenti,
+riducendo drasticamente la latenza a millisecondi
 (con SLA del 99.999\% di disponibilità per account multi-regione).
 Consente l'indicizzazione attraverso più partizioni in maniera
-automatica e personalizzabile ottimizzado le query,
+automatica e personalizzabile ottimizzando le query,
 riducendo la complessità e migliorando le prestazioni,
 senza richiedere oneri di gestione manuale degli indici.\\
 \begin{figure}[h!]
@@ -209,18 +231,183 @@ a cui si aggiungono 1000 RU/s offerti per ogni categoria di operazione,
 suddivise in lettura, scrittura e eliminazione. 
 Dato lo stadio iniziale del progetto queste caratteristiche sono state considerate sufficenti,
 permettendo di sfruttare e testare le capacità di distribuzione.
-Nel caso in cui, in una fase sucessiva del progetto,
+Nel caso in cui, sfruttando dati derivati dall'utilizzo effettivo dell'applicazione,
+un'analisi condotta durante fasi successive del progetto faccia emergere che 
+Cosmos DB non rappresenti l’opzione più adeguata, 
+lo spostamento dei dati verso un altro gestore comporterà uno sforzo limitato,
+data la compatibilità nella rappresentazione dei dati tra le diverse tecnologie di database documentali.
 
-In caso ulteriori analisi svolte sucessivamente nel progetto,
-(grazie ai dati dell'utilizzo effettivo)
-non identifichino questa soluzione come la più adatta, 
+\subsection{La configurazione di Cosmos DB}
 
-"Qualora, in seguito a ulteriori analisi condotte nelle fasi successive del progetto — rese possibili dai dati derivanti dall’utilizzo effettivo del sistema — emergesse che la soluzione adottata non rappresenta l’opzione più adeguata, sarà possibile valutarne l’evoluzione o la sostituzione con alternative più rispondenti ai requisiti osservati."
-
-lo spostamento dei dati verso un altro gestore richiede uno sforzo limitato,
-data la compatibilità nella raprresentazione dei dati tra le diverse tecnologie di database documentali.\\
+La creazione di una nuova istanza di Cosmos DB
+richiede la definizione delle impostazioni di funzionamento,
+che ne determinano le proprietà, a livello di disponibilità, ridondanza, sicurezza e resilienza ai guasti.\\
 \\
-impostazioni di cosmos\\
+La prima impostazione riguarda la distribuzione geografica dei dati.
+Cosmos distribuisce sue risorse in zone, che vengono raggruppate in regioni.
+L'opzione di usare delle availability zones duplica i dati su più zone all'interno della stessa regione.
+Questo crea ridondanza dei dati per una maggiore resistenza ai guasti,
+e così facendo aumenta la disponibilità dei dati, 
+che da un disponibilità garantita iniziale per la zona singola del 99.99\% (sulle scritture) sale al 99.995\%,
+evitando la perdita dei dati e delle funzionalità in caso una zona non sia più raggiungibile.
+L'aggiunta di ulteriori regioni diminuirebbe il rischio indisponibilità a causa di guasti
+(i dati verrebbero duplicati anche tra le varie regioni),
+ma aumenterebbe la complessità e il costo dell'applicazione.
+Per una fase iniziale si è optato per garantire una ridondanza a livello di zone,
+selezionando quindi l'opzione delle availability zones, 
+rimanendo però all'interno di una regione singola.\\
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{cosmosbasics.png}
+    \caption{Impostazioni generali di Azure Cosmos DB}
+\end{figure}
+
+Volendo inizialmente rimanere in una singola regione,
+l'impostazione "Geo-Redundancy" non è stata abilitata.
+Allo stesso modo le scritture su più regioni non sono state abilitate,
+preferendo un approccio centralizzato.\\
+\\
+Come modello di costo Azure propone due modalità distinte: Serverless e Provisioned throughput.
+Nella modalità serverless il servizio scala in base alle richieste,
+e considerando quindi solo l'effettivo utilizzo di risorse richieste.
+Adatto a carichi di richieste improvvisi e sbilanciati,
+non supporta l'esecuzione su più regioni.
+Il provisioned throughtput invece richiede una previsione delle risorse necessarie,
+per metterle a disposizione e farsi pagare di conseguenza, che siano state usate o meno.
+Questo necessita quindi di una stima del carico previsto,
+per poi impostare le risorse.
+Azure propone però un metodo chiamato autoscale, 
+che permette di modificare automaticamente (all'interno di un intervallo predefinito)
+le risorse messe a disposizione in base al carico del momento,
+per poi considerare il massimo valore raggiunto in quell'ora.
+Questo permette di evitare l'implementazione di una strategia,
+mantenendo comunque i costi legati al consumo effettivo delle risorse.
+Prevedendo un carico di richieste non troppo elevato,
+ma anche costante e poco variegato, 
+e considerando un tempo di latenza minore e il supporto a regioni multiple,
+si è scelta una strategia di pagamento di tipologia Provisioned throughput,
+che verrà poi impostata per scalare automaticamente in un intervallo di risorse inizialmente contenuto.\\
+\\
+Per migliorare la sicurezza del database e garantire il controllo degli accessi
+il database è stato inserito all'interno di una rete virtuale privata,
+limitando l'accesso ai soli altri nodi che ne fanno parte,
+isolandolo verso l'esterno.
+Verranno quindi aggiunti alla rete solo i servizi che devono comunicare con Cosmos DB,
+in particolare Azure Functions e il KeyVault(che contiene le chiavi per la cifratura dei dati).
+Nonostante la ridondanza nelle zone garantisca il ritrovamento dei dati 
+anche in caso di indisponibilità di un'istanza del database,
+si è scoperti qualora avvengano modifiche erronee o malintenzionate.
+Il servizio di backup proposto da Azure permette di salvare lo stato dei dati 
+fino a un certo momento nel passato, 
+in maniera tale garantire il ritorno a una situazione precedente 
+in caso ci si accorga siano avvenute modifiche non desiderate. 
+Azure permette sia di personalizzare la tipologia di backup,
+in termini di durata, grandezza dei salvataggi e numero di copie,
+sia di seguire delle opzioni già configurate.
+Nel nostro caso si è scelto di applicare il servizio incluso gratuitamente
+che mantiene le modifiche avvenute negli ultimi sette giorni.\\
+\\
+
+\clearpage
+
+
+
+\subsection{La definizione delle classi}
+
+
+bisogna definire le classi in maniera da sfruttare la maniera di archiviazione 
+per ottimizzare il carichi delle richieste previsti.
+essendo la memoria in un database relazionale abbiamo ampia libertà di modellazione delle entità.
+ ogni principale entità (a parte per gli account) sono stati definite delle collezioni.
+laddove possibile, sono state incluse le relazioni all'interno di un solo documento,
+quali evento immagini, gli account con gli utenti, e la relazione utenti-profili(roles).
+i profili e gli eventi descrivono solo le informazioni essenziali per il loro recupero
+La relazione tra gruppi e profili è descritta da groups e profile details, duplicati
+ aggiunto anche per salvare tutte le impostazioni che interessano solo il profilo stesso.
+ è stato creato event details per separare le informazioni essenziali
+ per le query di recupero da quelle di dettaglio.\\
+ \\
+la relazione centrale del progetto tra event e profile è stata 
+duplicata in due documenti: ProfileEvent e EventProfile.
+EventProfile è salvato con event e copre la necessità di poter visualizzare i profili che hanno confermato l'evento.
+partition key, sono separati dall'evento in maniera tale da permettere 
+la conferma simultanea allo stesso evento da parte di più profili.
+ProfileEvent serve invece a recuperare gli eventi associati al profilo, 
+eventulmente analizzando anche la data di aggiornamento.
+
+roles\\
+\\
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{NonRelazionalModel.png}
+    \caption{Modello delle collezioni}
+\end{figure}
+
+Nonostante sia più probabile che venga richiesto il dettaglio di un evento,
+e quindi sia più frequente il dover recuperare i Profile relativi all’Event,
+la proporzione delle richieste prevista non giustifica lo sbilanciamento della relazione sugli Event.
+Infatti, se si salvassero tutti i ProfileEvent sull’oggetto Event,
+le richieste degli eventi appartenenti ai profili, sebbene meno frequenti,
+richiederebbero l’ispezione di tutti gli Event alla ricerca del Profile indicato.
+Infine, se si duplicasse l’oggetto ProfileEvent,
+oltre che nella sua tabella originaria, anche sugli Event la sua creazione,
+la sua eliminazione e la modifica del campo Confirmed richiederebbero il doppio delle scritture.\\
+\\
+
+
+
+\subsection{L'integrazione con le Azure Functions: il framework .Net e l'eventual consistency}
+
+\clearpage
+
+
+
+
+\clearpage
+
+
+
+
+\subsection{L' integrazione con Le azure functions}
+
+La scelta di un database relazionale per la persistenza ha comportato sviluppi progettuali precisi.
+In primis si rende necessario tradurre il dominio in componenti relazionali che possano essere espressi e salvati nelle tabelle del database.
+
+var cosmosClient = new CosmosClient("<your-connection-string>");
+
+per il collegamento da remoto, è necessario utilizzare una VPN per connettersi alla virtual Network
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{ProgettoDiagrammaER.png}
+    \caption{Diagramma Entità - Relzione del dominio}
+\end{figure}
+
+Si creano quindi sul server le classi logiche del programma, a partire dal dominio.
+Ogni classe corrisponde ad un oggetto del dominio, presentando i valori e le relazioni dei componenti come attributi dell’oggetto.\\
+\\
+Entity Framework Core di .Net(EFCore) è una libreria di C\# che permette di unire le classi logiche del programma alle tabelle del database.
+Fornisce un’astrazione logica del collegamento con il database e le richieste relative, fornendo una rappresentazione di alto livello delle connessioni sottostanti. \\
+\\
+Una volta collegato il server con il database tramite le stringhe di connessione salvate sull’Azure Key Vault,
+sono state definite le proprietà tra le varie entità, per poi inizializzare in automatico la struttura del database.
+Le modifiche alla struttura del database vengono infatti generate automaticamente da EFCore in seguito alla creazione o alla modifica degli attributi degli oggetti.
+Questo permette di star dietro agli aggiornamenti, generando e salvando le modifiche da applicare ad ogni modifica delle proprietà del dominio.\\
+\\
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=\textwidth]{ModelClassDiagram.png}
+        \caption{Modello delle classi del client}
+    \end{center}
+\end{figure}
+
+Per la riduzione del carico computazionale richiesto da elementi con tante relazioni si utilizza la tecnica del lazy loading.
+La tecnica del Lazy Loading consiste nel richiedere i dati delle relazioni di un elemento solo quando strettamente necessario.
+La sua realizzazione tramite EFCore è attuata grazie alla proprietà virtual,
+che permette di gestire un oggetto con un riferimento al database richiedendo i dati delle sue relazioni solo quando viene espressamente richiesto.\\
 \\
 
 
@@ -255,64 +442,4 @@ alleviando il numero di richieste al database, estendendo così  le prestazioni 
 Tuttavia, non vi è alcun vincolo che impedisca l'affiancamento di database di tipologia diversa
 per rispondere a esigenze specifiche e sfruttare i punti di forza di entrambe le tecnologie.
 \\
-
-\subsection{La definizione delle classi}
-Nonostante sia più probabile che venga richiesto il dettaglio di un evento,
-e quindi sia più frequente il dover recuperare i Profile relativi all’Event,
-la proporzione delle richieste prevista non giustifica lo sbilanciamento della relazione sugli Event.
-Infatti, se si salvassero tutti i ProfileEvent sull’oggetto Event,
-le richieste degli eventi appartenenti ai profili, sebbene meno frequenti,
-richiederebbero l’ispezione di tutti gli Event alla ricerca del Profile indicato.
-Infine, se si duplicasse l’oggetto ProfileEvent,
-oltre che nella sua tabella originaria, anche sugli Event la sua creazione,
-la sua eliminazione e la modifica del campo Confirmed richiederebbero il doppio delle scritture.\\
-\\
-
-
-
-\subsection{L'integrazione con le Azure Functions: il framework .Net e l'eventual consistency}
-
-\clearpage
-
-
-
-
-\clearpage
-
-
-
-
-\subsection{L' integrazione con C\#}
-
-La scelta di un database relazionale per la persistenza ha comportato sviluppi progettuali precisi.
-In primis si rende necessario tradurre il dominio in componenti relazionali che possano essere espressi e salvati nelle tabelle del database.
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=\textwidth]{ProgettoDiagrammaER.png}
-    \caption{Diagramma Entità - Relzione del dominio}
-\end{figure}
-
-Si creano quindi sul server le classi logiche del programma, a partire dal dominio.
-Ogni classe corrisponde ad un oggetto del dominio, presentando i valori e le relazioni dei componenti come attributi dell’oggetto.\\
-\\
-Entity Framework Core di .Net(EFCore) è una libreria di C\# che permette di unire le classi logiche del programma alle tabelle del database.
-Fornisce un’astrazione logica del collegamento con il database e le richieste relative, fornendo una rappresentazione di alto livello delle connessioni sottostanti. \\
-\\
-Una volta collegato il server con il database tramite le stringhe di connessione salvate sull’Azure Key Vault,
-sono state definite le proprietà tra le varie entità, per poi inizializzare in automatico la struttura del database.
-Le modifiche alla struttura del database vengono infatti generate automaticamente da EFCore in seguito alla creazione o alla modifica degli attributi degli oggetti.
-Questo permette di star dietro agli aggiornamenti, generando e salvando le modifiche da applicare ad ogni modifica delle proprietà del dominio.\\
-\\
-\begin{figure}[h!]
-    \begin{center}
-        \includegraphics[width=\textwidth]{ModelClassDiagram.png}
-        \caption{Modello delle classi del client}
-    \end{center}
-\end{figure}
-
-Per la riduzione del carico computazionale richiesto da elementi con tante relazioni si utilizza la tecnica del lazy loading.
-La tecnica del Lazy Loading consiste nel richiedere i dati delle relazioni di un elemento solo quando strettamente necessario.
-La sua realizzazione tramite EFCore è attuata grazie alla proprietà virtual,
-che permette di gestire un oggetto con un riferimento al database richiedendo i dati delle sue relazioni solo quando viene espressamente richiesto.
 \clearpage

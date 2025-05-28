@@ -159,8 +159,10 @@ per favorire la disponibilità e la tolleranza ai partizionamenti,
 una consistenza finale (eventual consistency),
 dove le modifiche ai dati si propagano attraverso il sistema in un certo lasso di tempo,
 piuttosto che essere immediatamente consistenti su tutti i nodi.
-Questo può portare a letture di dati "stale" (non aggiornati) in determinate circostanze,
-il che è può essere un problema per applicazioni che richiedono forte consistenza.\\
+Questo può portare a letture di dati non aggiornati in determinate circostanze,
+il che può essere un problema per applicazioni che richiedono forte consistenza,
+ma che deve essere comunque tenuto in considerazione durante l'analisi,
+per progettare un'applicazione che sia resistente a un asincronismo temporaneo dei dati.\\
 \\
 
 
