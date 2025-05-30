@@ -307,71 +307,276 @@ in termini di durata, grandezza dei salvataggi e numero di copie,
 sia di seguire delle opzioni già configurate.
 Nel nostro caso si è scelto di applicare il servizio incluso gratuitamente
 che mantiene le modifiche avvenute negli ultimi sette giorni.\\
+
+
+\subsection{La definizione delle collezioni}
+
+Stabilita la tipologia e il comportamento del servizio che ospita il database, 
+bisogna definire la struttura delle classi in maniera da sfruttare al meglio le sue proprietà,
+allineando i dati alle procedure di lettura e scrittura,
+per ottimizzare il carico e il tempo di risposta.\\
 \\
-
-\clearpage
-
-
-
-\subsection{La definizione delle classi}
-
-
-bisogna definire le classi in maniera da sfruttare la maniera di archiviazione 
-per ottimizzare il carichi delle richieste previsti.
-essendo la memoria in un database relazionale abbiamo ampia libertà di modellazione delle entità.
- ogni principale entità (a parte per gli account) sono stati definite delle collezioni.
-laddove possibile, sono state incluse le relazioni all'interno di un solo documento,
-quali evento immagini, gli account con gli utenti, e la relazione utenti-profili(roles).
-i profili e gli eventi descrivono solo le informazioni essenziali per il loro recupero
-La relazione tra gruppi e profili è descritta da groups e profile details, duplicati
- aggiunto anche per salvare tutte le impostazioni che interessano solo il profilo stesso.
- è stato creato event details per separare le informazioni essenziali
- per le query di recupero da quelle di dettaglio.\\
- \\
-la relazione centrale del progetto tra event e profile è stata 
-duplicata in due documenti: ProfileEvent e EventProfile.
-EventProfile è salvato con event e copre la necessità di poter visualizzare i profili che hanno confermato l'evento.
-partition key, sono separati dall'evento in maniera tale da permettere 
-la conferma simultanea allo stesso evento da parte di più profili.
-ProfileEvent serve invece a recuperare gli eventi associati al profilo, 
-eventulmente analizzando anche la data di aggiornamento.
-
-roles\\
+Grazie alle proprietà di accoppiamento debole e al supporto alla denormalizzazione delle entità,
+la libertà di modellazione del dominio fornita da Cosmos DB è massima. 
+Partendo dalle entità principali, per ognuna di esse è stata associata una collezione.
+Sono state così definite quindi le entità di User, Profile, Event, Image e Group, 
+che rispondono agli omonimi elementi del dominio.
+A Event e Profile si aggiungono ProfileDetails ed EventDetails,
+che contengono i dati particolari di questi elementi.
+Gli Account sono gestiti internamente da Firebase Authentication, 
+e la loro relazione con gli utenti è stata mappata in un insieme all'interno di User 
+tramite i loro Uid.
+Allo stesso modo, laddove siano presenti relazioni uno a molti con cardinalità contenute,
+è stato possibile integrare le relazioni all'interno degli oggetti stessi, duplicando i collegamenti.
+È il caso delle immagini, in cui viene salvato il riferimento dell'Event in Image,
+o di User e Profile, i quali contengono entrambi i corrispettivi riferimenti.
+UserRole è stato integrato solo in ProfileDetails, 
+essendo necessario per controllare i permessi di un utente verso un profilo, e non il contrario.\\
 \\
-
-
-\begin{figure}[h!]
+La relazione tra profili e gruppi vede cardinalità elevate, 
+infatti non è posto un limite al numero di gruppi a cui un profilo può fare parte.
+Non richiedendo però dettagli particolari o interazioni complicate (in questa fase del progetto),
+è stato considerato sufficiente mappare le relazioni tramite liste all'interno di Group e ProfileDetails.\\
+\\
+Come analizzato nelle sezioni precedenti, 
+le richieste del progetto vertono sulla relazione tra eventi e profili.
+In particolare, le richieste che sono previste più frequenti e quindi impattanti 
+sono quelle di recupero dei dati generali delle entità su entrambi i versi della relazione
+(eventi relativi ai profili o profili collegati agli eventi), 
+ma anche di conferma di un evento.
+Per prima cosa, vista la centralità di queste richieste,
+sono state separate le proprietà essenziali da quelle di dettaglio,
+salvandole in ProfileDetails ed EventDetails.
+Questo permette di ridurre la mole di dati da recuperare e analizzare, 
+rendendo le query meno pesanti e più veloci.
+Questo migliora il tempo e la dimensione delle risposte per questo tipo di richieste, 
+bilanciando il carico introdotto con le richieste aggiuntive derivate dalla separazione dell'entità.
+Prevedendo richieste di conferma sullo stesso evento molto vicine tra loro
+si è deciso di non integrare la relazione nelle entità esistenti, 
+bensì di esternarla in documenti dedicati, 
+per evitare modifiche concorrenti sullo stesso Event.\\
+\\
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{NonRelazionalModel.png}
-    \caption{Modello delle collezioni}
+    \includegraphics[height=.96\textheight]{NonRelazionalModel.png}
+    \caption{Modello delle collezioni e il loro partizionamento}
 \end{figure}
+Si introduce così ProfileEvent, 
+che presenta tutte le proprietà della relazione tra i due elementi. 
+Venendo partizionato in base all'hash del profilo corrispondente,
+assolve il compito di recuperare gli eventi associati al profilo.
+Include quindi il collegamento all'evento e
+la conferma o meno della partecipazione del profilo all'evento, 
+ma anche la data dell'ultimo aggiornamento del profilo associato,
+in maniera tale da consentire di controllare direttamente 
+se un evento è stato modificato rispetto all'ultimo aggiornamento,
+e deve quindi essere caricato.
+Prevedendo però che la quantità di richieste sia comunque importante 
+anche per ottenere dal lato opposto, 
+ovvero ottenere i profili correlati agli eventi, 
+non si può accettare una ricerca che attraversi le partizioni per recuperare queste informazioni.
+Per questo motivo viene creato EventProfile, 
+partizionato assieme agli eventi,
+che mantiene le informazioni minime necessarie per mostrare i profili collegati, 
+in maniera da limitare la quantità di dati da mantenere consistente.\\
+\\
+concentrandoci su questa relazione
+i campi replicati in questa relazione sono updated date e confirmed.
+nel momento in cui qualcuno modifica un campo principale dell'evento sarà necessario aggiornare tutte le istanze di ProfileEvent.
+allo stesso modo, quando un profilo conferma la sua partecipazione ProfileEvent viene aggiornato, 
+ma anche EventProfile deve ricevere la modifica.
 
-Nonostante sia più probabile che venga richiesto il dettaglio di un evento,
-e quindi sia più frequente il dover recuperare i Profile relativi all’Event,
-la proporzione delle richieste prevista non giustifica lo sbilanciamento della relazione sugli Event.
-Infatti, se si salvassero tutti i ProfileEvent sull’oggetto Event,
-le richieste degli eventi appartenenti ai profili, sebbene meno frequenti,
-richiederebbero l’ispezione di tutti gli Event alla ricerca del Profile indicato.
-Infine, se si duplicasse l’oggetto ProfileEvent,
-oltre che nella sua tabella originaria, anche sugli Event la sua creazione,
-la sua eliminazione e la modifica del campo Confirmed richiederebbero il doppio delle scritture.\\
+\subsection{L'integrazione con le Azure Functions nel framework .Net}
+L'utilizzo di un database documentale comporta un sviluppi implementativi specifici.
+Il polimorfismo dei documenti e la denormalizzazione delle entità
+rendono la rappresentazione logica degli elementi e la loro relazione reciproca di secondaria importanza.
+L'approccio a oggetti del Framework .Net assume quindi minore rilevanza,
+in quanto si rende meno necessaria la capacità di descrivere e astrarre 
+le entità logiche attraverso classi di codice.
+Si distinguono però due tipologie di richieste principali, 
+che determinano l'approccio apportato verso i dati:
+la recupera di un elemento e la sua modifica.\\
+\\
+Quando è necessario recuperare un elemento dal database risulta comodo 
+convertirlo in un oggetto.
+Questo consente di gestire le informazioni attraverso un'astrazione logica, con tutti i vantaggi relativi.
+La sua utilità risalta sopratutto nel caso in cui la lettura dell'elemento 
+non ha il solo fine di essere restituito al richiedente,
+ma deve venire analizzato per procedere con la logica applicativa.
+La rappresentazione dei documenti in oggetti comporta infatti un codice più pulito e ordinato, 
+interagendo con le proprietà e i metodi della classe, senza entrare nella complessità computazionale 
+dell'elaborazione del documento. 
+La conversione viene svolta automaticamente dal framework, 
+e permette di associare ai dati il codice strettamente relativo, creando metodi appositi.
+Ogni elemento del dominio avrà quindi una classe associata,
+con tutti i campi previsti dal modello.
+Il contesto logico così introdotto agevola l'interazione tra i servizi e gli oggetti,
+riducendo la probabilità di errori e semplificandone l'individuazione.
+Anche il testing viene favorito, dando la possibilità di analizzare il codice 
+senza la necessità di interrogare il database o di simularlo.
+Permette inoltre di automatizzare la conversione dei dati verso i DataTransferObject(DTO), 
+necessari per uniformare le risposte verso i client, 
+che contribuiscono a separare la logica di business da quella che gestisce la comunicazione.\\
+\\
+Nel caso la richiesta richieda invece la modifica di un elemento 
+la conversione del documento in oggetto risulta poco efficiente.
+La creazione di un nuovo oggetto comporta infatti l'intera lettura dell'elemento associato.
+Questo può essere utile se è necessario mantenere un riferimento logico,
+se si useranno le informazioni che contiene
+o se bisognerà restituire al mittente l'oggetto aggiornato.
+Nella maggior parte dei casi invece si vuole semplicemente applicare una modifica,
+lasciando che sia il sistema a propagarla.
+In tal caso, Cosmos DB permette le cosiddette patch update, 
+ovvero modifiche limitate al campo interessato,
+senza richiedere la lettura e la sovrascrittura dell'intero documento.
+Per queste occasioni vengono implementati appositi metodi che, 
+preso in ingresso i dati da modificare, 
+interagiscono con il database per aggiornare le sole parti coinvolte.\\
+\\
+La comunicazione con il database viene astratta tramite un servizio dedicato chiamato WydDbService.
+WydDbService ha il compito di gestire le richieste e le sessioni con il database,
+nascondendo le complessità implementative e di interazione.
+In particolare, la connessione con il database comporta 
+la richiesta verso Azure Key Vault per il recupero delle chiavi di accesso,
+per poi usarle per stabilire un canale attraverso il quale applicare le modifiche. 
+Mette inoltre a disposizione un'interfaccia per nascondere 
+tutte le logiche di basso livello dovute dall'interazione specifica di CosmosDB.
+Verrà utilizzato dagli altri servizi tramite dependency injection, 
+automatizzandone la creazione e l'utilizzo, e di conseguenza la connessione e le richieste al database. \\
+
+\subsection{Garantire la consistenza eventuale dei dati}
+
+Avendo salvato le entità del dominio sotto forma di documenti denormalizzati
+la modifica del campo di un elemento potrebbe dover comportare la necessità
+di propagare gli aggiornamenti su tutti gli altri componenti in cui tale dato è duplicato.\\
+\\
+Potendo accettare un ritardo nell'allineamento dei dati,
+affidare il compito di aggiornare tutti i componenti secondari coinvolti
+alla stessa funzione che ha applicato i cambiamenti richiesti sul documento principale
+risulta svantaggioso sotto molti aspetti.
+Si introdurrebbe infatti un ritardo nell'esecuzione, 
+dovuto all'attesa dell'applicazione delle ulteriori modifiche, 
+che devono essere controllate e gestite in caso falliscano.
+Complicare la funzione va inoltre contro i principi stessi 
+dei servizi serverless, 
+che prevedono invece strutture semplici con responsabilità precise e limitate.
+La loro efficienza deriva infatti dalla possibilità 
+di eseguire in maniera autonoma compiti specifici.
+L'unico requisito necessario per permettere a una funzione di delegare ad altre le modifiche derivate
+è la garanzia che la loro esecuzione venga controllata e quindi il loro successo sia assicurato.\\
+\\
+L'introduzione di una funzione con il ruolo di orchestratore 
+non sposterebbe di molto il problema.
+Per quanto soddisfi la necessità di suddividere il problema in diverse parti
+per poi affidarle a diverse funzioni e sia in grado di controllarne il risultato, 
+garantendone così il successo,
+implica comunque il ritardo dovuto all'attesa del completamento delle funzioni, 
+a cui va ad aggiungersi il tempo necessario per la sua stessa esecuzione,
+influenzato dall'accoppiamento debole con le funzioni che chiama.
+Si introdurrebbero inoltre dipendenze tra la funzione originale e
+quelle derivate dalla modifica, che, non essendo necessarie, 
+comportano solo rischi di fallimento e l'allungamento dei tempi di risposta.\\
+\\
+A questo scopo, Azure Cosmos DB mette a disposizione uno strumento apposito, chiamato Change Feed.
+Change Feed è un meccanismo tramite il quale è possibile 
+associare le modifiche di un elemento del database 
+all'esecuzione di una funzione.
+Il Change Feed viene definito come trigger all'interno di una funzione, 
+e viene associato a una collezione di documenti.
+Ogni volta che un documento di questa collezione subisce un aggiornamento
+si crea in automatico un log che,
+all'interno della partizione coinvolta, 
+viene salvato in una nuova collezione dedicata chiamata "lease".
+Il Change Feed è dunque un meccanismo che,
+nel momento in cui un log viene aggiunto alla sua lease,
+fa partire autonomamente la funzione associata.\\
+\\
+Una volta invocata, 
+la funzione legge dal lease tutti i log che non sono ancora stati processati
+per poi propagare le modifiche ove necessario.
+L'avvenuta consegna ed elaborazione del log è registrata grazie a dei token di aggiornamento, 
+che permettono di sapere in quale punto del lease sono presenti i log che non sono ancora stati processati.
+La persistenza dei log sui lease consente di garantire 
+che la modifica sia presa in carico da una funzione almeno una volta,
+mentre la presenza dei token di aggiornamento assicura 
+che la funzione venga eseguita di nuovo in seguito a un errore o a un guasto del sistema, 
+soddisfando così i requisiti di invocazione.
+Questo meccanismo è inoltre intrinsecamente scalabile. 
+Essendo infatti i lease associati alle partizioni in cui risiedono i documenti,
+è possibile dividere (e quindi distribuire, quando necessario) il carico su più funzioni.\\
+\\
+Il Change Feed viene usato, ad esempio, 
+nel caso in cui venga cambiata un'informazione importante di un evento.
+Questa operazione comporta l'aggiornamento di UpdatedDate, 
+campo che memorizza il momento in cui è stata apportata l'ultima modifica.
+UpdatedDate è stata denormalizzata all'interno dei ProfileEvent,
+e la sua modifica deve essere quindi propagata.
+Verrà quindi creata una funzione la cui invocazione sarà associata
+alla presenza di log non elaborati nel lease relativo alla collezione degli Event.
+In questa maniera i compiti vengono efficacemente suddivisi in due funzioni,
+indipendenti tra loro.
+La prima funzione avrà il solo compito di cambiare la proprietà dell'oggetto,
+informando il client riguardo al successo dell'operazione.
+Una seconda funzione, attivata in autonomia dal Change Feed, 
+si occuperà poi di aggiornare di conseguenza tutti i ProfileDetails relativi,
+senza andare a impattare sulle prestazioni o sulle dipendenze della prima.\\
+\\
+Ci sono situazioni in cui però il Change Feed non può essere usato.
+È ad esempio il caso della conferma di un evento.
+L'elemento primario coinvolto in questa operazione è ProfileEvent, 
+che sarà modificato dalla funzione iniziale.
+La conferma di partecipazione a un evento da parte di un profilo 
+conta però come modifica all'evento stesso, 
+che comporta quindi l'aggiornamento del documento Event.
+Se si associasse però una funzione anche per le modifiche a ProfileEvent tramite Change Feed,
+si verrebbe a creare una ricorsione infinita per il quale la modifica a un ProfileEvent 
+comporta la modifica a un Event, che a sua volta comporta una modifica a ProfileEvent, e via dicendo.
+Per quanto sia possibile aggiungere all'interno delle funzioni controlli 
+che analizzino ogni volta l'origine della richiesta,
+questo porterebbe a una maggiore complessità e carico implementativo,
+introducendo nuovi dati all'interno di ogni aggiornamento. 
+Si è quindi deciso di utilizzare il ChangeFeed solo per le entità 
+la cui modifica influenza molteplici altri documenti,
+delegando in maniera differente l'eventuale aggiornamento  richiesto di un singolo altro elemento.\\
+\\
+Ci sono diversi modi che le Azure Functions possono sfruttare 
+per invocare un'altra funzione, senza passare per l'utilizzo di un orchestratore.
+Una prima soluzione può essere l'invio di una nuova richiesta HTTP al server stesso,
+al quale è associata la funzione voluta.
+Per quanto risulti veloce e facile da implementare,
+questa soluzione non garantisce però l'effettiva presa in carico, esecuzione e completamento della richiesta,
+a meno di aspettarne la risposta per poi controllarla,
+procedimento che minerebbe la finalità stessa dell'operazione.
+Azure mette invece a disposizione servizi basati su code ed eventi 
+proprio per mettere in comunicazione diverse parti di uno stesso sistema. 
+Tra le funzionalità offerte da Azure e 
+quindi direttamente integrabili con le Azure Functions troviamo 
+Azure Queue Storage, Azure Service Bus e Azure Event Hub.\\
+\\
+
+queue cosa, (proprietà) perchè si e no
+service cosa, (proprietà) perchè si e no
+event hub cosa, (proprietà) perchè si e no \\
+\\
+tabella \\
+\\
+la conferma viene quindi implementata così:\\
+\\
+come ho usato service bus\\
+\\
+logo service bus\\
+\\
+immagine interazione conferma\\
 \\
 
 
 
-\subsection{L'integrazione con le Azure Functions: il framework .Net e l'eventual consistency}
-
-\clearpage
-
-
 
 
 \clearpage
 
 
 
-
-\subsection{L' integrazione con Le azure functions}
 
 La scelta di un database relazionale per la persistenza ha comportato sviluppi progettuali precisi.
 In primis si rende necessario tradurre il dominio in componenti relazionali che possano essere espressi e salvati nelle tabelle del database.
@@ -380,29 +585,15 @@ var cosmosClient = new CosmosClient("<your-connection-string>");
 
 per il collegamento da remoto, è necessario utilizzare una VPN per connettersi alla virtual Network
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=\textwidth]{ProgettoDiagrammaER.png}
-    \caption{Diagramma Entità - Relzione del dominio}
-\end{figure}
-
 Si creano quindi sul server le classi logiche del programma, a partire dal dominio.
 Ogni classe corrisponde ad un oggetto del dominio, presentando i valori e le relazioni dei componenti come attributi dell’oggetto.\\
-\\
-Entity Framework Core di .Net(EFCore) è una libreria di C\# che permette di unire le classi logiche del programma alle tabelle del database.
-Fornisce un’astrazione logica del collegamento con il database e le richieste relative, fornendo una rappresentazione di alto livello delle connessioni sottostanti. \\
 \\
 Una volta collegato il server con il database tramite le stringhe di connessione salvate sull’Azure Key Vault,
 sono state definite le proprietà tra le varie entità, per poi inizializzare in automatico la struttura del database.
 Le modifiche alla struttura del database vengono infatti generate automaticamente da EFCore in seguito alla creazione o alla modifica degli attributi degli oggetti.
 Questo permette di star dietro agli aggiornamenti, generando e salvando le modifiche da applicare ad ogni modifica delle proprietà del dominio.\\
 \\
-\begin{figure}[h!]
-    \begin{center}
-        \includegraphics[width=\textwidth]{ModelClassDiagram.png}
-        \caption{Modello delle classi del client}
-    \end{center}
-\end{figure}
+
 
 Per la riduzione del carico computazionale richiesto da elementi con tante relazioni si utilizza la tecnica del lazy loading.
 La tecnica del Lazy Loading consiste nel richiedere i dati delle relazioni di un elemento solo quando strettamente necessario.
