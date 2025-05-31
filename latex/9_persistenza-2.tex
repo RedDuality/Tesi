@@ -213,6 +213,7 @@ complessità, dimensione e al carico computazionale richiesto.\\
     \hline
     \textbf{Servizio}      & \textbf{Costo ogni milione di scritture}\newline(normalizzate a 1 KB) & \textbf{Costo ogni milione di scritture}\newline (normalizzate a 1 KB) & \textbf{Costo di manutenzione GB/mese} \\
     \hline
+    \endhead
     AWS DynamoDB           & \$1.25                                                                & \$0.25                                                                 & \$0.25                                 \\
     \hline
     Google Cloud Firestore & \$0.90                                                                & \$0.30                                                                 & \$0.156                                \\
@@ -273,7 +274,7 @@ Nella modalità serverless il servizio scala in base alle richieste,
 e considerando quindi solo l'effettivo utilizzo di risorse richieste.
 Adatto a carichi di richieste improvvisi e sbilanciati,
 non supporta l'esecuzione su più regioni.
-Il provisioned throughtput invece richiede una previsione delle risorse necessarie,
+Il provisioned throughput invece richiede una previsione delle risorse necessarie,
 per metterle a disposizione e farsi pagare di conseguenza, che siano state usate o meno.
 Questo necessita quindi di una stima del carico previsto,
 per poi impostare le risorse.
@@ -380,8 +381,8 @@ partizionato assieme agli eventi,
 che mantiene le informazioni minime necessarie per mostrare i profili collegati, 
 in maniera da limitare la quantità di dati da mantenere consistente.\\
 \\
-concentrandoci su questa relazione
-i campi replicati in questa relazione sono updated date e confirmed.
+Analizzando questa relazione si evince che 
+i campi replicati sono UpdatedDate e Confirmed.
 nel momento in cui qualcuno modifica un campo principale dell'evento sarà necessario aggiornare tutte le istanze di ProfileEvent.
 allo stesso modo, quando un profilo conferma la sua partecipazione ProfileEvent viene aggiornato, 
 ma anche EventProfile deve ricevere la modifica.
@@ -553,18 +554,101 @@ Tra le funzionalità offerte da Azure e
 quindi direttamente integrabili con le Azure Functions troviamo 
 Azure Queue Storage, Azure Service Bus e Azure Event Hub.\\
 \\
+Azure Queue Storage è un servizio di code di messaggi
+offerto come parte di Azure Storage, 
+che si occupa del salvataggio di informazioni 
+che non rientrano nei casi d'uso dei database tradizionali.
+Le funzioni hanno quindi la possibilità di aggiungere alla coda i propri messaggi,
+che verranno poi elaborati da un'altra funzione grazie a un trigger associato.
+La dimensione massima che i messaggi possono avere è di 64 KB,
+e rimangono in memoria per un tempo prestabilito, che può essere configurato. 
+Le code sono persistenti e altamente disponibili,
+assicurando che i messaggi non vadano persi in caso di fallimento del consumer,
+ma non presentano ulteriori funzionalità associate. 
+La sua semantica di consegna garantisce che il messaggio venga elaborato almeno una volta,
+il che significa che la sua consegna potrebbe avvenire più volte,
+in caso di errori o di timeout di elaborazione da parte della prima funzione che lo ha preso in carico.
+Presenta quindi un servizio semplice e veloce,
+estremamente robusto ma anche scalabile.
+La sua semplicità, sebbene contribuisca a ridurne il costo,
+ne comporta però la mancanza di ulteriori proprietà avanzate.
+Ad esempio, Azure Queue Service non presenta la capacità 
+di gestire i messaggi in caso la loro esecuzione continui a fallire, 
+che può essere desiderata in caso sia necessario assicurare che l'operazione giunga al suo termine.\\
+\\
+Azure Service Bus è invece un servizio di messaggistica
+che supporta scenari più complessi rispetto a Queue Storage. 
+Offre due tipologie principali di comunicazione: code e argomenti. 
+Le code di Service Bus supportano le stesse funzionalità del servizio precedente,
+a cui però se ne aggiungono di più avanzate quali l'ordinamento, 
+le sessioni per il raggruppamento di messaggi correlati, 
+la funzionalità di "dead-letter queue" integrata per la gestione automatica dei messaggi non elaborabili e 
+l'elaborazione transazionale. 
+Gli argomenti prevedono un pattern publish/subscribe,
+nel quale più fruitori possono collegarsi allo stesso argomento per poi 
+venire tutti notificati in contemporanea in caso venga inviato un messaggio a esso inerente.
+Essendo stato progettato per soddisfare carichi di lavoro aziendale,
+oltre a fornire garanzie di consegna più robuste e 
+integrare meccanismi di gestione degli errori,
+garantisce un'elevata scalabilità.
+Risulta però più costoso e relativamente più complesso da utilizzare.\\
+\\
+Azure Event Hub è un servizio di ingestione di dati altamente scalabile e a bassa latenza, 
+progettato per lo streaming di grandi volumi di eventi da diverse fonti. 
+Non è una coda di messaggi nel senso tradizionale, 
+ma piuttosto un "broker di eventi", 
+in cui gli eventi vengono aggiunti a una coda distribuita su più partizioni 
+dove rimangono disponibili per i consumer per un periodo configurabile (fino a 90 giorni). 
+I consumer leggono gli eventi dalla partizione mantenendo ognuno il proprio progresso, 
+il che permette a più consumer group di leggere gli stessi eventi indipendentemente. 
+Anche in questo caso, la semantica garantisce che il messaggio venga elaborato almeno una volta.
+Presenta quindi elevate caratteristiche di scalabilità, 
+fornendo una bassa latenza, un throughput estremamente elevato
+e la possibilità di parallelizzare il consumo dei messaggi.
+Pur mantenendo in memoria i dati, 
+e quindi assicurando che sia sempre possibile applicare le modifiche,
+tutta la logica necessaria per controllare l'esecuzione, ritentare ed eliminare il messaggio 
+rimane però a carico dello sviluppatore.\\
+\\
+\begin{longtable}{|P{2.9cm}|P{3.9cm}|P{3.9cm}|P{3.9cm}|}
+    \hline
+    \textbf{Caratteristica}&\textbf{Queue Storage}      & \textbf{Service Bus} & \textbf{Event Hub}\\
+    \hline
+    \endhead
+    Tipo di servizio     & Coda di messaggi semplice   & Coda/Broker di messaggi & Flusso di eventi                               \\
+    \hline
+    Modalità di fruizione &  Competing Customers (Point-to-point) & Competing Customers (Point-to-point)\newline Publish/Subscribe (argomenti) & Publish/ Subscribe (molti a molti)                               \\
+    \hline
+    Caratteristiche & Semplice, scalabile e robusto ma nessun controllo degli errori & Affidabile, scalabile, garantisce e integra il controllo dell'esecuzione, ordinamento dei messaggi & Scalabile, robusto, ordinato ma nessun controllo sull'esecuzione\\
+    \hline
+    Costo & €0,04 GB/mese + €0.0004 ogni diecimila operazioni & €0,044 ogni milione di operazioni (piano Basic con solo le code)& €0,014/ora per ogni Unità di throughput + €0,025 ogni milione di eventi\\
+    \hline
+    \caption{Proprietà dei servizi Azure per la propagazione interna di messaggi }
+\end{longtable}
 
-queue cosa, (proprietà) perchè si e no
-service cosa, (proprietà) perchè si e no
-event hub cosa, (proprietà) perchè si e no \\
+Viste queste considerazioni, 
+per garantire la consistenza degli oggetti nei casi in cui non sia possibile sfruttare il Change Feed
+si è scelto di adottare Azure Service Bus.
+La scelta deriva principalmente dalla suo supporto nativo al controllo dell'esecuzione delle funzioni,
+grazie all'utilizzo di una dead-letter queue.
+La dead-letter queue è un contenitore in cui vengono inseriti 
+tutti i messaggi la cui elaborazione è fallita una determinata quantità di volte.
+Garantisce quindi, in aggiunta a ulteriori tentativi in caso di insuccesso, 
+il monitoraggio di tutte le operazioni che non riescono a essere portate a termine.
+Questo permette di assicurare che gli aggiornamenti necessari per allineare i documenti
+siano sempre controllati.\\
 \\
-tabella \\
-\\
-la conferma viene quindi implementata così:\\
-\\
-come ho usato service bus\\
-\\
-logo service bus\\
+Tornando all'esempio precedente, 
+nel quale era necessario propagare la conferma di un evento, 
+la modifica di Event e di EventProfile verrà eseguita da due funzioni dedicate.
+Al termine della modifica di ProfileEvent, 
+la funzione inserirà in coda al Service Bus un messaggio 
+con le informazioni necessarie alle altre due,
+per poi inviare la risposta al client.
+Le due funzioni verranno quindi invocate, 
+aggiornando gli elementi coinvolti.
+Nel caso di Event, il Change Feed associato aggiornerà di conseguenza 
+tutti i sui ProfileEvent, senza però creare ricorsioni.\\
 \\
 immagine interazione conferma\\
 \\
