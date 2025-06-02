@@ -245,7 +245,11 @@ dove era essenziale garantire il controllo e il successo dell'operazione,
 in questo caso si preferisce ottenere uno svolgimento veloce senza 
 che questo richieda tutto il carico aggiuntivo derivato dal controllo del risultato,
 considerando accettabile la sua eventuale perdita o fallimento.\\
-\\
+\begin{wrapfigure}{r}{0.25\textwidth}
+    \centering
+    \includegraphics[height=.12\textheight]{queue.png}
+    Azure Storage Queue
+\end{wrapfigure}
 Queste considerazioni hanno portato alla scelta di Azure Storage Queue
 come strumento di delega per le operazioni di notifica.
 Offre infatti un servizio veloce ed economico, 
@@ -258,10 +262,10 @@ Una seconda funzione, la cui attivazione è collegata all'aggiunta di oggetti in
 leggerà il messaggio, per poi eseguire il recupero dei profili e il collegamento con AWPS.\\
 \begin{figure}[htpb]
     \centering
-    \includegraphics[width=\textwidth]{IIModificaEvento2.png}
+    \includegraphics[width=\textwidth]{NotificationsSchema.png}
     \caption{Interazione delle Azure Functions con la Queue}
 \end{figure}
-\\
+\clearpage
 Nell'ottica di rendere il processo di invio delle notifiche 
 il più veloce ed efficiente possibile, 
 si è deciso di includere nel messaggio le informazioni minime sull'accaduto.
