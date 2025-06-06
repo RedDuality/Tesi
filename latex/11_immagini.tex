@@ -235,7 +235,7 @@ che includono, oltre al loro hash, il riferimento all'evento, la loro estensione
 e lo stato di elaborazione, inizializzato a "Created".
 Si connette quindi ad Azure Blob Storage per ottenere un Shared Access Signarure (SAS) token.\\
 \\
-Lo SAS token è un codice che viene usato per fornire permessi su servizi a entità terze.
+Il SAS token è un codice che viene usato per fornire permessi su servizi a entità terze.
 Chiunque sia in possesso del token ha la possibilità di eseguire le modifiche a esso collegate. 
 È infatti possibile definire i permessi, la durata e la località da associare al token.
 In particolare, essendo le immagini salvate in un percorso logico che segue l'evento,
@@ -243,6 +243,11 @@ il token richiesto dalla funzione e generato dal ABS
 avrà la possibilità di creare e scrivere file sul container "eventi", 
 nel percorso dell'evento corrispondente.
 La validità di utilizzo ha durata dieci minuti.\\
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{SASTokenSchema.png}
+    \caption{Interazione logica per l'ottenimento del token}
+\end{figure}
 \\
 La risposta verso il client sarà quindi composta, oltre che dal token di accesso, 
 anche dai nomi delle immagini, affiancate dalle loro estensioni.
@@ -266,6 +271,11 @@ procederà eliminando di entrambe le risorse,
 ovvero sia l'immagine logica sul database che il blob caricato.
 Altrimenti, se tutto risulta corretto,
 procederà ad aggiornare lo stato dell'immagine a "Uploaded".\\
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{ImageUploadSchema.png}
+    \caption{Interazione logica per il caricamento dell'immagine}
+\end{figure}
 \\
 Il caricamento di un'immagine costituisce una modifica all'evento.
 Per questo motivo è necessario aggiornare la data di aggiornamento dell'evento.
