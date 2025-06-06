@@ -1,8 +1,8 @@
 
 \section{Lo sviluppo di una memoria locale}
 
-La visualizzazione di un elemento comporta il recupero dei suoi dati, 
-necessari per mostrare le informazioni desiderate.
+Per poter visualizzare un elemento sul dispositivo utente
+è necessario resuperare le informazioni relative.
 Attualmente questa funzionalità è realizzata effettuando una chiamata al server
 ogni volta che viene richiesto un dato.
 Chiedere, ottenere ed elaborare dati dal server richiede però tempo e risorse,
@@ -12,10 +12,10 @@ che diventa così inutilizzabile in situazioni in cui il dispositivo non abbia m
 \\
 È quindi utile salvare copie degli elementi usati più frequentemente 
 nella memoria locale del dispositivo,
-nel caso in cui tecnologia del dispositivo lo permetta.
+nel caso in cui la tecnologia del dispositivo lo permetta.
 In questa maniera, nel momento in cui un'interazione richieda la visualizzazione dei dati, 
 si possono fornire immediatamente le informazioni disponibili in copia, 
-senza la necessità di utilizzare un'ulteriore richiesta.
+senza la necessità di effettuare un'ulteriore richiesta.
 Questo permette la diminuzione del carico del server, 
 una maggiore reattività del prodotto e una migliore esperienza utente.\\
 \\
@@ -36,7 +36,8 @@ la conferma di una presenza o la modifica del luogo di appuntamento
 sono elementi critici per i quali gli utenti devono venire informati il prima possibile. \\
 \\
 Tutto questo comporta sfide progettuali che permettano di garantire allo stesso tempo 
-sia la correttezza dei dati presenti che il loro allineamento all'interno del minor ritardo possibile.
+sia la correttezza dei dati presenti che il loro allineamento,
+all'interno del minor ritardo possibile.
 \clearpage
 \subsection{La realizzazione della cache}
 Per motivi di prestazioni,

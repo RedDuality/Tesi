@@ -1,7 +1,7 @@
 \section{La creazione del server principale}
 
-Il server principale ha il compito di ricevere tutte le richieste dai vari client,
-per poi elaborarle e restituire le informazioni volute,
+Il server principale è il componente con il compito di ricevere tutte le richieste dai client,
+elaborarle e restituire le informazioni volute,
 eventualmente a seguito di un'interrogazione verso la persistenza centrale.
 Per poter essere in grado di rispondere a un numero sempre maggiore di utenti,
 idealmente senza che questo impatti sul tempo di risposta o sulle performance in generale,
@@ -41,10 +41,10 @@ I gestori in cloud che offrono servizi FaaS sono limitati.
 Escludendo i fornitori improntati allo sviluppo di applicazioni principalmente front-end,
 i fornitori sul mercato con servizi testati e maturi sono
 Amazon Web Services con AWS Lambda, Azure con Azure Functions e Google Cloud Provider con Google Cloud Functions.
-Tuttavia, queste tre soluzioni si assomigliano particolarmente.\\
-\\
+Tuttavia, queste tre soluzioni si assomigliano particolarmente.
 Nonostante siano state tutte implementate usando una tecnologia proprietaria,
-le proprietà computazionali, di supporto ai linguaggi e di costo risultano molto simili.\\
+le proprietà computazionali, il supporto ai linguaggi e di costo risultano molto simili.\\
+\\
 Presentano tutti una granularità relativa alla scalabilità delle richieste a livello di funzione,
 ovvero permettono di duplicare il solo codice necessario per l'esecuzione della funzione richiesta.
 Il supporto ai linguaggi è molto esteso,
@@ -128,8 +128,9 @@ ma va notato che, oltre a essere un caso particolare del funzionamento,
 dipende molto dal linguaggio di programmazione,
 dalle dipendenze e dalla dimensione del progetto.
 Viene inoltre mitigato dal tempo di attesa prima di spegnere le istanze e
-dalla quantità degli utenti,
-che contribuiscono a diminuire la frequenza dello spegnimento.\\
+dalla quantità degli utenti attivi,
+che, fornendo una continuità di richieste,
+ contribuiscono a diminuire la frequenza dello spegnimento.\\
 \\
 Essendo le differenze tra un servizio e l'altro minime,
 sia a livello di costi che di prestazioni,
@@ -159,7 +160,8 @@ e non è quindi automatico che a una Function corrisponda una sola parte di codi
 soprattutto in quanto alcune richieste potrebbero avere alcune parti in comune
 (ad esempio, l'autenticazione è necessaria alla maggior parte delle richieste).
 Nel caso in cui una richiesta si componga di più passaggi logici,
-per poterli racchiudere in un'unica Function bisogna analizzarne la relazione.
+per poterli racchiudere in un'unica Function bisogna analizzarne la relazione.\\
+\par
 Innanzi tutto ogni passaggio deve essere implementato sempre in maniera indipendente e stateless
 come richiesto alle Function.
 A questo punto è necessario però che tutti i passaggi siano in diretta successione,
@@ -167,7 +169,7 @@ e che il fallimento di uno solo di questi comporti il fallimento di tutta la fun
 In caso contrario, è sconsigliato raggrupparle in un'unica Function,
 quanto piuttosto suddividerli in altre piccole Function (con le stesse proprietà di cui sopra),
 per poi coordinarle tramite l'utilizzo di un orchestratore o di code di eventi.\\
-\par
+\\
 L'orchestratore è una Function che ha la caratteristica
 di poter invocare e controllare altre Function.
 Consente di gestire efficacemente scenari

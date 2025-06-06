@@ -160,6 +160,11 @@ Tuttavia, Azure presenta un servizio completamente gestito e nativo
 per i database non relazionali chiamato Azure Cosmos DB.
 Garantendo la massima interoperabilità all'interno dell'ecosistema,
 si procede analizzando le proprietà e i vantaggi offerti da Cosmos DB.\\
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{AzureDatabase.png}
+    \caption{Proposte di Azure per i database documentali}
+\end{figure}
 \\
 Azure Cosmos DB si distingue per la sua capacità di scalare orizzontalmente in maniera illimitata,
 consentendo di gestire volumi di dati e carichi di lavoro molto elevati,
@@ -177,13 +182,7 @@ Consente l'indicizzazione attraverso più partizioni in maniera
 automatica e personalizzabile ottimizzando le query,
 riducendo la complessità e migliorando le prestazioni,
 senza richiedere oneri di gestione manuale degli indici.\\
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=\textwidth]{AzureDatabase.png}
-    \caption{Proposte di Azure per i database documentali}
-\end{figure}
-
-
+\\
 \begin{wrapfigure}{r}{0.25\textwidth}
     \centering
     \includegraphics[height=.12\textheight]{cosmos.png}
@@ -229,8 +228,8 @@ Cosmos DB offre infatti una quota gratuita di risorse iniziali,
 per tutta la durata dell'utilizzo.
 Il piano prevede 25 GigaByte di memoria gratuita,
 a cui si aggiungono 1000 RU/s offerti per ogni categoria di operazione,
-suddivise in lettura, scrittura e eliminazione.
-Dato lo stadio iniziale del progetto queste caratteristiche sono state considerate sufficenti,
+suddivise in lettura, scrittura ed eliminazione.
+Dato lo stadio iniziale del progetto queste caratteristiche sono state considerate sufficienti,
 permettendo di sfruttare e testare le capacità di distribuzione.
 Nel caso in cui, sfruttando dati derivati dall'utilizzo effettivo dell'applicazione,
 un'analisi condotta durante fasi successive del progetto faccia emergere che
@@ -287,7 +286,7 @@ mantenendo comunque i costi legati al consumo effettivo delle risorse.
 Prevedendo un carico di richieste non troppo elevato,
 ma anche costante e poco variegato,
 e considerando un tempo di latenza minore e il supporto a regioni multiple,
-si è scelta una strategia di pagamento di tipologia Provisioned throughput,
+si è scelta una strategia di pagamento di tipologia provisioned throughput,
 che verrà poi impostata per scalare automaticamente in un intervallo di risorse inizialmente contenuto.\\
 \\
 Per migliorare la sicurezza del database e garantire il controllo degli accessi
@@ -298,7 +297,8 @@ Verranno quindi aggiunti alla rete solo i servizi che devono comunicare con Cosm
 in particolare Azure Functions e il KeyVault(che contiene le chiavi per la cifratura dei dati).
 Nonostante la ridondanza nelle zone garantisca il ritrovamento dei dati
 anche in caso di indisponibilità di un'istanza del database,
-si è scoperti qualora avvengano modifiche erronee o malintenzionate.
+si è scoperti qualora avvengano modifiche erronee o malintenzionate.\\
+\\
 Il servizio di backup proposto da Azure permette di salvare lo stato dei dati
 fino a un certo momento nel passato,
 in maniera tale garantire il ritorno a una situazione precedente
@@ -313,7 +313,8 @@ che mantiene le modifiche avvenute negli ultimi sette giorni.\\
 \subsection{La definizione delle collezioni}
 
 Stabilita la tipologia e il comportamento del servizio che ospita il database,
-bisogna definire la struttura delle classi in maniera da sfruttare al meglio le sue proprietà,
+bisogna definire la struttura il cui le classi vengono salvate,
+in maniera da sfruttare al meglio le sue proprietà,
 allineando i dati alle procedure di lettura e scrittura,
 per ottimizzare il carico e il tempo di risposta.\\
 \\
@@ -326,16 +327,24 @@ A Event e Profile si aggiungono ProfileDetails ed EventDetails,
 che contengono i dati particolari di questi elementi.
 Gli Account sono gestiti internamente da Firebase Authentication,
 e la loro relazione con gli utenti è stata mappata in un insieme all'interno di User
-tramite i loro Uid.
+tramite i loro Uid.\\
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[height=.96\textheight]{NonRelazionalModel.png}
+    \caption{Modello delle collezioni e il loro partizionamento}
+\end{figure}
+\\
 Allo stesso modo, laddove siano presenti relazioni uno a molti con cardinalità contenute,
-è stato possibile integrare le relazioni all'interno degli oggetti stessi, duplicando i collegamenti.
+è stato possibile integrarle all'interno degli oggetti stessi, duplicando i collegamenti.
+Si evita così la necessità di cercare e recuperare i dati, 
+rendendoli già direttamente disponibili.
 È il caso delle immagini, in cui viene salvato il riferimento dell'Event in Image,
 o di User e Profile, i quali contengono entrambi i corrispettivi riferimenti.
 UserRole è stato integrato solo in ProfileDetails,
 essendo necessario per controllare i permessi di un utente verso un profilo, e non il contrario.\\
 \\
-La relazione tra profili e gruppi vede cardinalità elevate,
-infatti non è posto un limite al numero di gruppi a cui un profilo può fare parte.
+La relazione tra profili e gruppi vede invece cardinalità elevate:
+non è infatti posto un limite al numero di gruppi a cui un profilo può fare parte.
 Non richiedendo però dettagli particolari o interazioni complicate (in questa fase del progetto),
 è stato considerato sufficiente mappare le relazioni tramite liste all'interno di Group e ProfileDetails.\\
 \\
@@ -345,23 +354,21 @@ In particolare, le richieste che sono previste più frequenti e quindi impattant
 sono quelle di recupero dei dati generali delle entità su entrambi i versi della relazione
 (eventi relativi ai profili o profili collegati agli eventi),
 ma anche di conferma di un evento.
-Per prima cosa, vista la centralità di queste richieste,
-sono state separate le proprietà essenziali da quelle di dettaglio,
-salvandole in ProfileDetails ed EventDetails.
-Questo permette di ridurre la mole di dati da recuperare e analizzare,
-rendendo le query meno pesanti e più veloci.
-Questo migliora il tempo e la dimensione delle risposte per questo tipo di richieste,
-bilanciando il carico introdotto con le richieste aggiuntive derivate dalla separazione dell'entità.
+Per prima cosa, vista la centralità delle richieste su queste entità,
+sono state separate le proprietà di dettaglio da quelle essenziali,
+salvandole in ProfileDetails ed EventDetails.\\
+\\
+Oltre a migliorare il tempo di recupero delle informazioni
+che si ritiene necessario essere immediatamente disponibili, 
+si evita così che le operazioni che vertono su dati secondari 
+impattino sul flusso principale delle richieste.
+Riducendo la mole di dati da recuperare e analizzare,
+si rendono le query relazionali meno pesanti e più veloci.\\
+\\
 Prevedendo richieste di conferma sullo stesso evento molto vicine tra loro
 si è deciso di non integrare la relazione nelle entità esistenti,
 bensì di esternarla in documenti dedicati,
-per evitare modifiche concorrenti sullo stesso Event.\\
-\\
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[height=.96\textheight]{NonRelazionalModel.png}
-    \caption{Modello delle collezioni e il loro partizionamento}
-\end{figure}
+per evitare modifiche concorrenti sullo stesso Event.
 Si introduce così ProfileEvent,
 che presenta tutte le proprietà della relazione tra i due elementi.
 Venendo partizionato in base all'hash del profilo corrispondente,
@@ -371,21 +378,28 @@ la conferma o meno della partecipazione del profilo all'evento,
 ma anche la data dell'ultimo aggiornamento del profilo associato,
 in maniera tale da consentire di controllare direttamente
 se un evento è stato modificato rispetto all'ultimo aggiornamento,
-e deve quindi essere caricato.
-Prevedendo però che la quantità di richieste sia comunque importante
-anche per ottenere dal lato opposto,
-ovvero ottenere i profili correlati agli eventi,
-non si può accettare una ricerca che attraversi le partizioni per recuperare queste informazioni.
+e deve quindi essere caricato.\\
+\\
+Si prevede però che la quantità di richieste sia comunque importante
+anche dal lato opposto della relazione,
+ovvero per ottenere i profili correlati agli eventi.
+Non è accettabile una ricerca che attraversi le partizioni per recuperare queste informazioni.
 Per questo motivo viene creato EventProfile,
-partizionato assieme agli eventi,
-che mantiene le informazioni minime necessarie per mostrare i profili collegati,
+che, partizionato assieme agli eventi,
+mantiene le informazioni minime necessarie per mostrare i profili collegati,
 in maniera da limitare la quantità di dati da mantenere consistente.\\
 \\
-Analizzando questa relazione si evince che
-i campi replicati sono UpdatedDate e Confirmed.
-nel momento in cui qualcuno modifica un campo principale dell'evento sarà necessario aggiornare tutte le istanze di ProfileEvent.
-allo stesso modo, quando un profilo conferma la sua partecipazione ProfileEvent viene aggiornato,
-ma anche EventProfile deve ricevere la modifica.
+La distribuzione dei dati supporta così la scalabilità totale del sistema.
+Ogni richiesta di dati infatti non incrocia mai più di due elementi,
+e rimane in ogni caso limitata alla sua partizione.
+Lo stesso può essere affermato per le richieste di modifica, 
+le quali vertono su un unico elemento principale considerato come fonte di verità,
+in base al quale le eventuali copie dovranno essere aggiornate.
+Se è vero che le richieste sono state rese rapide 
+sia in lettura che in scrittura,
+questo è reso possibile grazie alla denormalizzazione, 
+che deve però prevedere un procedimento per l'allineamento
+dei dati copiati.\\
 
 \subsection{L'integrazione con le Azure Functions nel framework .Net}
 L'utilizzo di un database documentale comporta un sviluppi implementativi specifici.
@@ -408,7 +422,8 @@ La rappresentazione dei documenti in oggetti comporta infatti un codice più pul
 interagendo con le proprietà e i metodi della classe, senza entrare nella complessità computazionale
 dell'elaborazione del documento.
 La conversione viene svolta automaticamente dal framework,
-e permette di associare ai dati il codice strettamente relativo, creando metodi appositi.
+e permette di associare ai dati il codice strettamente relativo, creando metodi appositi.\\
+\\
 Ogni elemento del dominio avrà quindi una classe associata,
 con tutti i campi previsti dal modello.
 Il contesto logico così introdotto agevola l'interazione tra i servizi e gli oggetti,
@@ -452,9 +467,10 @@ la modifica del campo di un elemento potrebbe dover comportare la necessità
 di propagare gli aggiornamenti su tutti gli altri componenti in cui tale dato è duplicato.\\
 \\
 Potendo accettare un ritardo nell'allineamento dei dati,
-affidare il compito di aggiornare tutti i componenti secondari coinvolti
-alla stessa funzione che ha applicato i cambiamenti richiesti sul documento principale
-risulta svantaggioso sotto molti aspetti.
+è possibile separare la modifica del documento principale
+dalla sua distribuzione sul resto del database.
+Affidare il compito di aggiornare tutti i componenti secondari coinvolti
+alla stessa funzione risulta svantaggioso sotto molti aspetti.
 Si introdurrebbe infatti un ritardo nell'esecuzione,
 dovuto all'attesa dell'applicazione delle ulteriori modifiche,
 che devono essere controllate e gestite in caso falliscano.
@@ -464,19 +480,23 @@ che prevedono invece strutture semplici con responsabilità precise e limitate.
 La loro efficienza deriva infatti dalla possibilità
 di eseguire in maniera autonoma compiti specifici.
 L'unico requisito necessario per permettere a una funzione di delegare ad altre le modifiche derivate
-è la garanzia che la loro esecuzione venga controllata e quindi il loro successo sia assicurato.\\
+è la garanzia che la loro esecuzione venga controllata e che quindi il loro successo sia assicurato.\\
 \\
 L'introduzione di una funzione con il ruolo di orchestratore
 non sposterebbe di molto il problema.
-Per quanto soddisfi la necessità di suddividere il problema in diverse parti
-per poi affidarle a diverse funzioni e sia in grado di controllarne il risultato,
-garantendone così il successo,
-implica comunque il ritardo dovuto all'attesa del completamento delle funzioni,
-a cui va ad aggiungersi il tempo necessario per la sua stessa esecuzione,
-influenzato dall'accoppiamento debole con le funzioni che chiama.
-Si introdurrebbero inoltre dipendenze tra la funzione originale e
-quelle derivate dalla modifica, che, non essendo necessarie,
-comportano solo rischi di fallimento e l'allungamento dei tempi di risposta.\\
+Nonostante soddisfi la necessità di affidare a diverse funzioni
+le diverse parti del problema e sia in grado di controllarne il risultato,
+potendone così garantire il successo,
+implica comunque l'attesa del loro completamento.
+Aggiungerebbe inoltre un ritardo dovuto al tempo necessario per la sua stessa esecuzione,
+che aspetta e controlla le funzioni che ha chiamato.
+Questo ritardo è negativamente influenzato dall'accoppiamento debole
+tra l'orchestratore e le funzioni figlie,
+che non assicura l'immediata ripresa del padre 
+al termine dell'esecuzione di una funzione da lui chiamata.
+Le dipendenze che verrebbero così introdotte tra 
+l'orchestratore, la funzione originale e quelle necessarie per la consistenza dei dati,
+comporterebbero solo rischi di fallimento e l'allungamento dei tempi di risposta.\\
 \\
 A questo scopo, Azure Cosmos DB mette a disposizione uno strumento apposito, chiamato Change Feed.
 Change Feed è un meccanismo tramite il quale è possibile
@@ -488,21 +508,23 @@ Ogni volta che un documento di questa collezione subisce un aggiornamento
 si crea in automatico un log che,
 all'interno della partizione coinvolta,
 viene salvato in una nuova collezione dedicata chiamata "lease".
-Il Change Feed è dunque un meccanismo che,
+Il Change Feed è dunque il meccanismo che,
 nel momento in cui un log viene aggiunto alla sua lease,
 fa partire autonomamente la funzione associata.\\
 \\
 Una volta invocata,
 la funzione legge dal lease tutti i log che non sono ancora stati processati
 per poi propagare le modifiche ove necessario.
-L'avvenuta consegna ed elaborazione del log è registrata grazie a dei token di aggiornamento,
-che permettono di sapere in quale punto del lease sono presenti i log che non sono ancora stati processati.
-La persistenza dei log sui lease consente di garantire
+L'avvenuto successo dell'elaborazione del log viene registrato
+grazie a dei token di aggiornamento,
+che permettono di sapere in quale punto del lease 
+sono presenti i log che non sono ancora stati processati.
+La persistenza dei log sui lease garantisce
 che la modifica sia presa in carico da una funzione almeno una volta,
 mentre la presenza dei token di aggiornamento assicura
 che la funzione venga eseguita di nuovo in seguito a un errore o a un guasto del sistema,
 soddisfando così i requisiti di invocazione.
-Questo meccanismo è inoltre intrinsecamente scalabile.
+Questo meccanismo è intrinsecamente scalabile.
 Essendo infatti i lease associati alle partizioni in cui risiedono i documenti,
 è possibile dividere (e quindi distribuire, quando necessario) il carico su più funzioni.\\
 \\
@@ -512,46 +534,52 @@ Questa operazione comporta l'aggiornamento di UpdatedDate,
 campo che memorizza il momento in cui è stata apportata l'ultima modifica.
 UpdatedDate è stata denormalizzata all'interno dei ProfileEvent,
 e la sua modifica deve essere quindi propagata.
-Verrà quindi creata una funzione la cui invocazione sarà associata
-alla presenza di log non elaborati nel lease relativo alla collezione degli Event.
+La propagazione di questo aggiornamento sarà delegata a una seconda funzione.
+L'invocazione di questa funzione verrà associata
+al lease relativo alla collezione degli Event,
+nel caso siano presenti log non ancora elaborati.
 In questa maniera i compiti vengono efficacemente suddivisi in due funzioni,
 indipendenti tra loro.
 La prima funzione avrà il solo compito di cambiare la proprietà dell'oggetto,
 informando il client riguardo al successo dell'operazione.
 Una seconda funzione, attivata in autonomia dal Change Feed,
-si occuperà poi di aggiornare di conseguenza tutti i ProfileDetails relativi,
+si occuperà poi di aggiornare tutti i ProfileDetails relativi,
 senza andare a impattare sulle prestazioni o sulle dipendenze della prima.\\
 \\
-Ci sono situazioni in cui però il Change Feed non può essere usato.
+Ci sono situazioni in cui il Change Feed non può essere usato.
 È ad esempio il caso della conferma di un evento.
 L'elemento primario coinvolto in questa operazione è ProfileEvent,
 che sarà modificato dalla funzione iniziale.
 La conferma di partecipazione a un evento da parte di un profilo
-conta però come modifica all'evento stesso,
+viene considerato come modifica all'evento stesso,
 che comporta quindi l'aggiornamento del documento Event.
-Se si associasse però una funzione anche per le modifiche a ProfileEvent tramite Change Feed,
-si verrebbe a creare una ricorsione infinita per il quale la modifica a un ProfileEvent
-comporta la modifica a un Event, che a sua volta comporta una modifica a ProfileEvent, e via dicendo.
+Se però si associasse una funzione anche per le modifiche a ProfileEvent tramite Change Feed,
+si verrebbe a creare una ricorsione infinita per il quale 
+la modifica a un ProfileEvent comporta la modifica a un Event, 
+che a sua volta comporta una modifica a ProfileEvent, e via dicendo.
 Per quanto sia possibile aggiungere all'interno delle funzioni controlli
 che analizzino ogni volta l'origine della richiesta,
-questo porterebbe a una maggiore complessità e carico implementativo,
+questo porterebbe a una maggiore complessità e a un aumento del carico implementativo,
 introducendo nuovi dati all'interno di ogni aggiornamento.
 Si è quindi deciso di utilizzare il ChangeFeed solo per le entità
 la cui modifica influenza molteplici altri documenti,
-delegando in maniera differente l'eventuale aggiornamento  richiesto di un singolo altro elemento.\\
+delegando in maniera differente l'eventuale aggiornamento di un altro elemento singolo.\\
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{EventChangeFeed.png}
     \caption{Aggiornamento dei documenti tramite Change Feed}
 \end{figure}\\
 Ci sono diversi modi che le Azure Functions possono sfruttare
-per invocare un'altra funzione, senza passare per l'utilizzo di un orchestratore.
+per invocare un'altra funzione, senza passare per l'utilizzo di un orchestratore.\\
+\\
 Una prima soluzione può essere l'invio di una nuova richiesta HTTP al server stesso,
 al quale è associata la funzione voluta.
 Per quanto risulti veloce e facile da implementare,
-questa soluzione non garantisce però l'effettiva presa in carico, esecuzione e completamento della richiesta,
-a meno di aspettarne la risposta per poi controllarla,
-procedimento che minerebbe la finalità stessa dell'operazione.
+questa soluzione non garantisce l'effettiva presa in carico, esecuzione e completamento della richiesta,
+a meno di controllarne la risposta.
+Il controllo della risposta comporta però l'attesa della richiesta,
+procedimento che mina la finalità stessa dell'operazione.\\
+\\
 Azure mette invece a disposizione servizi basati su code ed eventi
 proprio per mettere in comunicazione diverse parti di uno stesso sistema.
 Tra le funzionalità offerte da Azure e
@@ -568,7 +596,8 @@ La dimensione massima che i messaggi possono avere è di 64 KB,
 e rimangono in memoria per un tempo prestabilito, che può essere configurato.
 Le code sono persistenti e altamente disponibili,
 assicurando che i messaggi non vadano persi in caso di fallimento del consumer,
-ma non presentano ulteriori funzionalità associate.
+ma non presentano ulteriori funzionalità associate.\\
+\\
 La sua semantica di consegna garantisce che il messaggio venga elaborato almeno una volta,
 il che significa che la sua consegna potrebbe avvenire più volte,
 in caso di errori o di timeout di elaborazione da parte della prima funzione che lo ha preso in carico.
@@ -576,14 +605,10 @@ Presenta quindi un servizio semplice e veloce,
 estremamente robusto ma anche scalabile.
 La sua semplicità, sebbene contribuisca a ridurne il costo,
 ne comporta però la mancanza di ulteriori proprietà avanzate.
-Ad esempio, Azure Queue Service non presenta la capacità
+Ad esempio, Azure Queue Storage non presenta la capacità
 di gestire i messaggi in caso la loro esecuzione continui a fallire,
 che può essere desiderata in caso sia necessario assicurare che l'operazione giunga al suo termine.\\
-\begin{wrapfigure}{r}{0.25\textwidth}
-    \centering
-    \includegraphics[height=.12\textheight]{servicebus.png}
-    Service Bus
-\end{wrapfigure}
+\\
 Azure Service Bus è invece un servizio di messaggistica
 che supporta scenari più complessi rispetto a Queue Storage.
 Offre due tipologie principali di comunicazione: code e argomenti.
@@ -591,16 +616,17 @@ Le code di Service Bus supportano le stesse funzionalità del servizio precedent
 a cui però se ne aggiungono di più avanzate quali l'ordinamento,
 le sessioni per il raggruppamento di messaggi correlati,
 la funzionalità di "dead-letter queue" integrata per la gestione automatica dei messaggi non elaborabili e
-l'elaborazione transazionale.
-Gli argomenti prevedono un pattern publish/subscribe,
+l'elaborazione transazionale.\\
+\\
+Gli argomenti(topic) prevedono un pattern publish/subscribe,
 nel quale più fruitori possono collegarsi allo stesso argomento per poi
 venire tutti notificati in contemporanea in caso venga inviato un messaggio a esso inerente.
 Essendo stato progettato per soddisfare carichi di lavoro aziendale,
 oltre a fornire garanzie di consegna più robuste e
 integrare meccanismi di gestione degli errori,
 garantisce un'elevata scalabilità.
-Risulta però più costoso e relativamente più complesso da utilizzare.
-\clearpage
+Risulta però più costoso e relativamente più complesso da utilizzare.\\
+\\
 Azure Event Hub è un servizio di ingestione di dati altamente scalabile e a bassa latenza,
 progettato per lo streaming di grandi volumi di eventi da diverse fonti.
 Non è una coda di messaggi nel senso tradizionale,
@@ -608,8 +634,9 @@ ma piuttosto un "broker di eventi",
 in cui gli eventi vengono aggiunti a una coda distribuita su più partizioni
 dove rimangono disponibili per i consumer per un periodo configurabile (fino a 90 giorni).
 I consumer leggono gli eventi dalla partizione mantenendo ognuno il proprio progresso,
-il che permette a più consumer group di leggere gli stessi eventi indipendentemente.
-Anche in questo caso, la semantica garantisce che il messaggio venga elaborato almeno una volta.
+il che permette a più consumer group di leggere gli stessi eventi indipendentemente.\
+Anche in questo caso, la semantica garantisce che il messaggio venga elaborato almeno una volta.\\
+\\
 Presenta quindi elevate caratteristiche di scalabilità,
 fornendo una bassa latenza, un throughput estremamente elevato
 e la possibilità di parallelizzare il consumo dei messaggi.
@@ -632,13 +659,18 @@ rimane però a carico dello sviluppatore.\\
     \caption{Proprietà dei servizi Azure per la propagazione interna di messaggi }
 \end{longtable}
 
+\begin{wrapfigure}{r}{0.25\textwidth}
+    \centering
+    \includegraphics[height=.12\textheight]{servicebus.png}
+    Service Bus
+\end{wrapfigure}
 Viste queste considerazioni,
 per garantire la consistenza degli oggetti nei casi in cui non sia possibile sfruttare il Change Feed
 si è scelto di adottare Azure Service Bus.
 La scelta deriva principalmente dalla suo supporto nativo al controllo dell'esecuzione delle funzioni,
 grazie all'utilizzo di una dead-letter queue.
 La dead-letter queue è un contenitore in cui vengono inseriti
-tutti i messaggi la cui elaborazione è fallita una determinata quantità di volte.
+tutti i messaggi la cui elaborazione è stata tentata e fallita una determinata quantità di volte.
 Garantisce quindi, in aggiunta a ulteriori tentativi in caso di insuccesso,
 il monitoraggio di tutte le operazioni che non riescono a essere portate a termine.
 Questo permette di assicurare che gli aggiornamenti necessari per allineare i documenti
