@@ -1,16 +1,16 @@
 \chapter*{Introduzione}
 \addcontentsline{toc}{chapter}{Introduzione}
 
-
 In un contesto sociale sempre più connesso, la crescente quantità di contatti, 
 la rapidità delle comunicazioni e l'accesso universale alle informazioni 
-rendono la ricerca, l'organizzazione e la partecipazione ad eventi estremamente facile, 
+rendono la ricerca, l'organizzazione e la partecipazione a eventi estremamente facile, 
 ma al contempo generano un ambiente frenetico e spesso dispersivo.\\
 \\
 Risulta infatti difficile seguire tutte le opportunità a cui si potrebbe partecipare, 
 considerando le numerose occasioni che si presentano quotidianamente. 
 Basti pensare, ad esempio, alle riunioni di lavoro, alle serate con amici, agli appuntamenti informali per un caffè, 
-ma anche a eventi più strutturati come fiere, convention aziendali, concerti, partite sportive o mostre di artisti che visitano occasionalmente la città.\\
+ma anche a eventi più strutturati come fiere, convention aziendali, concerti, partite sportive o
+mostre di artisti che visitano occasionalmente la città.\\
 \\
 Questi eventi possono sovrapporsi, causando dimenticanze o conflitti di pianificazione, 
 con il rischio di delusione o frustrazione. 
@@ -20,17 +20,19 @@ In questi casi, la gestione degli impegni diventa complessa:
 spesso si conferma la partecipazione senza considerare possibili sovrapposizioni, o dimenticandosi, 
 per poi dover scegliere e disdire all'ultimo momento. \\
 \\
-D’altra parte, anche quando si desidera proporre un evento, 
+D'altra parte, anche quando si desidera proporre un evento, 
 la ricerca di un'attività interessante può diventare un compito arduo, 
 con la necessità di consultare numerosi profili social di locali e attività,
 senza avere inoltre la certezza che gli altri siano disponibili.
 Tali problemi si acuiscono ulteriormente quando si tratta di organizzare eventi di gruppo, 
 dove bisogna allineare gli impegni di più persone.\\
 \clearpage
-In questo contesto, emergono la necessità e l'opportunità di sviluppare uno strumento che semplifichi la proposta e la gestione degli eventi, 
+In questo contesto,
+emergono la necessità e l'opportunità di sviluppare uno strumento
+che semplifichi la proposta e la gestione degli eventi,
 separando il momento della proposta da quello della conferma di partecipazione. 
 In tal modo, gli utenti possono valutare la disponibilità degli altri prima di impegnarsi definitivamente, 
-facilitando in conteporanea sia l'invito sia la partecipazione.\\ 
+facilitando in contemporanea sia l'invito sia la partecipazione.\\ 
 \\
 In risposta a tali richieste è stata creata Wyd, 
 un'applicazione che permette agli utenti di organizzare i propri impegni, 
@@ -39,7 +41,8 @@ Essa permette anche di rendere più intuitiva la ricerca di eventi
 attraverso la creazione di uno spazio virtuale centralizzato 
 dove gli utenti possano pubblicare e consultare tutti gli eventi disponibili,
 diminuendo l’eventualità di perderne qualcuno.
-La funzionalità chiave di questo progetto si fonda sull'idea di affiancare alla tradizionale agenda degli impegni confermati un calendario separato, 
+La funzionalità chiave di questo progetto si fonda sull'idea di affiancare
+alla tradizionale agenda degli impegni confermati un calendario separato, 
 che mostri tutti gli eventi a cui si potrebbe partecipare. \\
 \\
 \begin{wrapfigure}{r}{0.4\textwidth}
@@ -54,40 +57,40 @@ permettendo di visualizzare le conferme di partecipazione.
 Considerando l'importanza della condivisione di contenuti multimediali, 
 questo progetto prevede la possibilità di condividere foto e video con tutti i partecipanti all'evento, 
 attraverso la generazione di link per applicazioni esterne o grazie all'ausilio di gruppi di profili. 
-Al termine dell’evento, l'applicazione carica automaticamente le foto scattate durante l'evento,
+Al termine dell'evento, l'applicazione carica automaticamente le foto scattate durante l'evento,
 per allegarle a seguito della conferma dell'utente.
 
 
 
 \clearpage
-La realizzazione di un progetto come Wyd implica la risoluzione e 
-la gestione di diverse problematiche tecniche. 
+La realizzazione di un progetto come Wyd implica
+la risoluzione e la gestione di diverse problematiche tecniche. 
 In primo luogo, la stabilità del programma deve essere garantita 
 da un'infrastruttura affidabile e scalabile. 
 La persistenza deve essere modellata per fornire alte prestazioni sia in lettura che in scrittura 
 indipendentemente dalla quantità delle richieste,
 rimanendo però aggiornata e coerente.
 La funzionalità di condivisione degli eventi richiede inoltre l'aggiornamento in tempo reale verso tutti gli utenti coinvolti.
-Infine, il caricamento ed il salvataggio delle foto aggiungono la necessità di gestire richieste di archiviazione di dimensioni significative.\\
+Infine, il caricamento e il salvataggio delle foto aggiungono la necessità di gestire richieste di archiviazione di dimensioni significative.\\
 \\
-\section*{Organizzazione dei capitoli}
+\section*{Descrizione dei capitoli}
 \addcontentsline{toc}{section}{Organizzazione dei capitoli}
 
-Il seguente elaborato è suddiviso in cinque capitoli.\\
+L'elaborato è suddiviso in cinque capitoli.\\
 Nel primo capitolo si affronta la fase di analisi delle funzionalità,
 durante la quale, partendo dall'idea astratta iniziale,
 si definiscono i requisiti e le necessità del sistema,
 per poi creare la struttura generale ad alto livello dell'applicazione.\\
 Nel secondo capitolo si affrontano le principali scelte architetturali e di sviluppo
-che hanno portato a definire la struttura centrale dell’applicazione.\\
+che hanno portato a definire la struttura centrale dell'applicazione.\\
 Il terzo capitolo osserva lo studio effettuato per gestire la memoria, 
 in quanto fattore che più incide sulle prestazioni. 
 Particolare attenzione è stata dedicata, infatti, 
 a determinare le tecnologie e i metodi che meglio corrispondono alle esigenze 
-derivate dal salvataggio e dall’interazione logica degli elementi.\\
+derivate dal salvataggio e dall'interazione logica degli elementi.\\
 Il quarto capitolo si concentra sulle scelte implementative adottate 
-per l’inserimento le funzionalità legate alla gestione delle immagini,
-che, oltre ad introdurre problematiche impattanti sia sulle dimensioni delle richieste 
+per l'inserimento le funzionalità legate alla gestione delle immagini,
+che, oltre a introdurre problematiche impattanti sia sulle dimensioni delle richieste 
 sia sull'integrazione con la persistenza, 
 richiedono l'automatizzazione del recupero delle immagini.\\
 Infine, nel quinto capitolo, verranno analizzati e discussi i risultati ottenuti

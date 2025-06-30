@@ -5,7 +5,6 @@
 \usepackage{enumitem}
 \usepackage{subfiles}
 \usepackage{multirow}
-\usepackage{color}
 \usepackage{titlesec}
 \usepackage{longtable}
 \usepackage{xcolor,colortbl}
@@ -19,6 +18,7 @@
 \usepackage{subcaption}
 \usepackage{changepage}
 \usepackage{fancyhdr}
+\usepackage{tocloft}
 
 \usepackage[a4paper,right=25mm,top=25mm,bottom=25mm,left=25mm]{geometry}
 \usepackage{afterpage}
@@ -34,8 +34,8 @@
   {./immagini/test/}
 }
 
-\setlength{\headheight}{14.49998pt}
-\addtolength{\topmargin}{-2.49998pt}
+\setlength{\headheight}{14.5pt}
+\addtolength{\topmargin}{-2.5pt}
 
 \newcommand\YUGE{\fontsize{33}{25}\selectfont}
 
@@ -78,7 +78,29 @@
 
 \mycomment{}
 
+\renewcommand{\cftchappresnum}{}
 
+\setlength{\cftchapnumwidth}{0pt}
+\setlength{\cftchapindent}{0pt}
+
+\renewcommand{\cftchapfont}{\bfseries}
+\renewcommand{\cftchappagefont}{\normalfont}
+
+\makeatletter
+\AtBeginDocument{
+  \addtocontents{toc}{
+    \protect\renewcommand{\protect\numberline}[1]{}
+  }
+}
+\makeatother
+% --- Main Document Chapter Heading Customization ---
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries} % Font and style for the entire heading (e.g., Analisi delle funzionalità)
+  {}                           % Empty label: This removes "Capitolo X"
+  {0pt}                        % Space between the (now empty) label and the title
+  {\normalfont\YUGE\bfseries} % Code to apply *before* the chapter title text
+  {}                           % Code to apply *after* the chapter title text
+% --- End Main Document Chapter Heading Customization ---
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -103,7 +125,7 @@
 \renewcommand\chaptermark[1]{\markboth{\thechapter\,--\,#1}{}}
 \fancyhead[L]{\leftmark}
 
-%\input{./3_analisi-1.tex}
+\input{./3_analisi-1.tex}
 %\input{./4_analisi-2.tex}
 %\input{./5_struttura-1.tex}
 %\input{./6_struttura-2.tex}
@@ -113,6 +135,6 @@
 %\input{./10_persistenza-3.tex}
 %\input{./11_immagini.tex}
 %\input{./12_test.tex}
-\input{./13_fine.tex}
+%\input{./13_fine.tex}
 \fancyhf{}
 \end{document}
