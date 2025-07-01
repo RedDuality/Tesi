@@ -1,28 +1,28 @@
-\chapter{Il recupero ed il salvataggio dei dati multimediali}
+\chapter{Capitolo 5}
 
 I file multimediali rappresentano un elemento centrale 
-all’interno di un’applicazione orientata alla condivisione sociale,
-contribuendo significativamente all’esperienza utente e all’interazione tra i partecipanti.
+all'interno di un'applicazione orientata alla condivisione sociale,
+contribuendo significativamente all'esperienza utente e all'interazione tra i partecipanti.
 La possibilità di acquisire e condividere contenuti visivi, come immagini e video, 
 consente di documentare eventi e attività,
 favorendo una memoria collettiva e rafforzando il legame tra gli utenti.
-In particolare, l’integrazione di materiale multimediale associato a eventi condivisi 
-permette di preservare una rappresentazione più completa e dettagliata dell’esperienza vissuta,
-migliorando l’engagement e la partecipazione all’interno della piattaforma, 
-rappresentando uno dei punti di forza dell’applicazione.\\
+In particolare, l'integrazione di materiale multimediale associato a eventi condivisi 
+permette di preservare una rappresentazione più completa e dettagliata dell'esperienza vissuta,
+migliorando l'engagement e la partecipazione all'interno della piattaforma, 
+rappresentando uno dei punti di forza dell'applicazione.\\
 \\
 Tuttavia, la gestione dei file multimediali introduce complessità operative 
 sia per il sistema sia per gli utenti stessi.
-Da un lato, la selezione e l’invio dei contenuti 
-possono rappresentare un onere significativo per l’utente, 
-aumentando l’attrito nell’utilizzo dell’applicazione.
-Per ottimizzare il processo e migliorare l’usabilità, 
-è essenziale semplificare al massimo l’interazione richiesta,
-automatizzando il recupero dei dati e limitando il ruolo dell’utente 
+Da un lato, la selezione e l'invio dei contenuti 
+possono rappresentare un onere significativo per l'utente, 
+aumentando l'attrito nell'utilizzo dell'applicazione.
+Per ottimizzare il processo e migliorare l'usabilità, 
+è essenziale semplificare al massimo l'interazione richiesta,
+automatizzando il recupero dei dati e limitando il ruolo dell'utente 
 alla semplice conferma dei contenuti selezionati.
-Questo approccio non solo semplifica l’esperienza d’uso, 
+Questo approccio non solo semplifica l'esperienza d'uso, 
 ma la rende più intuitiva e fruibile,
-contribuendo anche a un incremento del tasso di adozione e della frequenza di utilizzo dell’applicazione.\\
+contribuendo anche a un incremento del tasso di adozione e della frequenza di utilizzo dell'applicazione.\\
 \\
 Parallelamente, la memorizzazione e il trasferimento di file multimediali 
 pongono sfide significative a livello infrastrutturale,
@@ -31,8 +31,8 @@ sulle risorse computazionali e sulla gestione dello storage.
 Il volume elevato di richieste di caricamento e accesso ai file 
 può infatti compromettere le prestazioni del sistema,
 introducendo ritardi causati dal traffico di azioni 
-che potrebbero influire negativamente sulle altre operazioni dell’applicazione.
-Per garantire un’archiviazione efficiente e scalabile, 
+che potrebbero influire negativamente sulle altre operazioni dell'applicazione.
+Per garantire un'archiviazione efficiente e scalabile, 
 è quindi necessario implementare una strategia di gestione della memoria
 che separi il salvataggio dei file multimediali dal database principale, 
 evitando di sovraccaricare il server applicativo.
@@ -42,81 +42,81 @@ assicurando la sincronizzazione tra i dati archiviati e le modifiche effettuate 
 Per affrontare tali problematiche, 
 un primo esame osserverà le modalità di recupero dei file multimediali,
 con un focus sulle tecniche di selezione e rilevamento automatico delle immagini, 
-nonché sui vincoli normativi e di sicurezza che ne regolano l’utilizzo.
-In un secondo tempo l’analisi si concentrerà invece 
+nonché sui vincoli normativi e di sicurezza che ne regolano l'utilizzo.
+In un secondo tempo l'analisi si concentrerà invece 
 sulle strategie di salvataggio e gestione dello storage,
 analizzando le diverse tipologie di archiviazione disponibili e le soluzioni implementate 
-per garantire scalabilità, efficienza e riduzione dell’impatto sulle prestazioni del sistema.\\
+per garantire scalabilità, efficienza e riduzione dell'impatto sulle prestazioni del sistema.\\
 
-\section{Le modalità di recupero delle immagini }
+\section{Modalità di recupero delle immagini }
 
-L’aggiunta di immagini a un evento prevede una fase preliminare di recupero, 
-che consente all’utente di selezionare i file multimediali da associare. 
+L'aggiunta di immagini a un evento prevede una fase preliminare di recupero, 
+che consente all'utente di selezionare i file multimediali da associare. 
 Il sistema offre due modalità principali di acquisizione: 
-la selezione manuale da parte dell’utente, 
+la selezione manuale da parte dell'utente, 
 che può scegliere le immagini direttamente dalla memoria del dispositivo, 
 e in alternativa, disponibile sui dispositivi mobili, un meccanismo automatizzato, 
-che identifica le foto scattate durante lo svolgimento dell’evento.\\
+che identifica le foto scattate durante lo svolgimento dell'evento.\\
 \\
-L’implementazione di questa funzionalità automatica di analisi della galleria 
-per individuare i file multimediali desiderati  richiede l’accesso alla galleria fotografica del dispositivo, 
-un’operazione subordinata al consenso esplicito dell’utente. 
-Per questo motivo, al primo avvio dell’applicazione, 
-il sistema richiede l’autorizzazione per accedere ai file multimediali, 
+L'implementazione di questa funzionalità automatica di analisi della galleria 
+per individuare i file multimediali desiderati  richiede l'accesso alla galleria fotografica del dispositivo, 
+un'operazione subordinata al consenso esplicito dell'utente. 
+Per questo motivo, al primo avvio dell'applicazione, 
+il sistema richiede l'autorizzazione per accedere ai file multimediali, 
 unitamente al permesso per la gestione delle notifiche. 
-Nel caso in cui l’utente neghi l’accesso 
+Nel caso in cui l'utente neghi l'accesso 
 la richiesta verrà riproposta ogni qualvolta il sistema rilevi la necessità 
 di accedere alla galleria per il recupero delle immagini.\\
 \\
 Al termine di ogni evento, non appena possibile, 
-l'applicazione avvia automaticamente un’analisi della galleria locale, 
-individuando le immagini scattate durante tutta la durata dell’evento. 
+l'applicazione avvia automaticamente un'analisi della galleria locale, 
+individuando le immagini scattate durante tutta la durata dell'evento. 
 Se il sistema rileva la presenza di contenuti pertinenti, 
-ne memorizza temporaneamente i riferimenti in una memoria locale per poi inviare una notifica all’utente, 
+ne memorizza temporaneamente i riferimenti in una memoria locale per poi inviare una notifica all'utente, 
 informandolo del ritrovamento delle immagini. 
-A questo punto, l’utente ha la possibilità di esaminare le immagini suggerite, 
-escluderne alcune o confermarne l’intero set per il caricamento.\\
+A questo punto, l'utente ha la possibilità di esaminare le immagini suggerite, 
+escluderne alcune o confermarne l'intero set per il caricamento.\\
 \begin{figure}[htb]
     \centering
     \includegraphics[height=0.45\textheight]{IIRecuperaImmagini.png}
     \caption{Interazione tra i componenti per il recupero delle immagini}
 \end{figure}
 \clearpage
-Questa fase di conferma, oltre a garantire la trasparenza del servizio nei confronti dell’utente, 
+Questa fase di conferma, oltre a garantire la trasparenza del servizio nei confronti dell'utente, 
 riducendo il rischio di errori o caricamenti indesiderati, 
 presenta anche vantaggi in termini di ottimizzazione delle prestazioni. \\
 \\
 Da un punto di vista normativo, 
 la procedura di recupero e selezione automatica delle immagini
-è esplicitamente descritta nelle condizioni d’uso dell’applicazione, 
-alle quali l’utente deve aderire con accettazione espressa prima di utilizzare il servizio. 
-Tuttavia, la fase di conferma dell’utente non rappresenta un obbligo giuridico, 
+è esplicitamente descritta nelle condizioni d'uso dell'applicazione, 
+alle quali l'utente deve aderire con accettazione espressa prima di utilizzare il servizio. 
+Tuttavia, la fase di conferma dell'utente non rappresenta un obbligo giuridico, 
 poiché la responsabilità della pubblicazione di contenuti multimediali 
 ricade sul soggetto che realizza la fotografia. 
-In conformità con la normativa vigente in materia di tutela dell’immagine 
+In conformità con la normativa vigente in materia di tutela dell'immagine 
 (art. 10 c.c. e artt. 96-97 della Legge n. 633/1941) e protezione dei dati personali (Regolamento UE 2016/679 – GDPR), 
 chi scatta una fotografia è tenuto a ottenere il consenso delle persone ritratte 
 prima di procedere alla sua pubblicazione.\\
 \\
 Come già affrontato nel capitolo precedente, 
 le operazioni che coinvolgono la modifica di uno stesso componente del sistema 
-sono soggette a vincoli di concorrenza per l’accesso alla risorsa di interesse. 
+sono soggette a vincoli di concorrenza per l'accesso alla risorsa di interesse. 
 La conclusione di un evento condiviso tra più utenti 
-potrebbe generare richieste simultanee per l’aggiunta di immagini associate a un medesimo evento. 
-L’introduzione della fase di selezione introduce un ritardo nella fase di caricamento, 
+potrebbe generare richieste simultanee per l'aggiunta di immagini associate a un medesimo evento. 
+L'introduzione della fase di selezione introduce un ritardo nella fase di caricamento, 
 dilatando la distribuzione temporale delle richieste e riducendo la probabilità di collisioni 
 dovute a operazioni concorrenti sullo stesso elemento.
-L’attesa della conferma dell’utente prevede infatti un ritardo fisiologico 
-tra la fine dell’evento e l’effettivo caricamento delle immagini, 
+L'attesa della conferma dell'utente prevede infatti un ritardo fisiologico 
+tra la fine dell'evento e l'effettivo caricamento delle immagini, 
 contribuendo a distribuire le richieste nel tempo e 
 limitando il rischio di congestione del server, 
 dovuta a operazioni simultanee su un singolo evento.\\
 \\
-Una volta completata la selezione da parte dell’utente, 
+Una volta completata la selezione da parte dell'utente, 
 le immagini devono essere salvate sul server, 
 per essere rese disponibili anche agli altri profili con cui l'evento è condiviso.
 \clearpage
-\section{L'integrazione con il sistema}
+\section{Integrazione con il sistema}
 
 A differenza dei dati usualmente scambiati all'interno del sistema, 
 i file multimediali presentano dimensioni significativamente superiori, 
@@ -138,7 +138,7 @@ Infatti la possibilità di allegare più file a un singolo evento implica
 che i tempi di caricamento elevati dei file multimediali 
 possano prolungare sensibilmente la durata delle transazioni necessarie per la modifica degli eventi, 
 incidendo sulla reattività del sistema.\\
-\subsection{La scelta del servizio di persistenza}
+\subsection{Scelta del servizio di persistenza}
 
 La visualizzazione dei file multimediali riveste un'importanza secondaria
 rispetto ad altre funzionalità offerte dall'applicazione.
@@ -217,7 +217,7 @@ Le immagini vengono quindi identificate univocamente attraverso la combinazione
 del container, dell'hash dell'elemento a cui fanno riferimento(l'evento, il profilo...) 
 e del loro hash, concatenati per formare il percorso finale in cui sarà possibile recuperarle.\\
 \\
-\subsection{La procedura di salvataggio}
+\subsection{Procedura di salvataggio}
 
 Una volta inizializzato Azure Blob Storage, le Azure Functions potranno connettersi per 
 creare e gestire i container.
@@ -255,7 +255,7 @@ Ricevuta la risposta il client procederà, in simultanea,
 a comprimere i file selezionati, 
 per ridurre il consumo di banda e il volume dei dati totali trasmessi.
 Questa strategia consente di diminuire il carico computazionale sul server, 
-migliorando l’efficienza complessiva del sistema.
+migliorando l'efficienza complessiva del sistema.
 Nel momento in cui finisce la procedura di compressione, il device contatterà il Blob Storage e,
 usando il SAS token, caricherà le immagini usando il nome associato con l'estensione corretta.\\
 \\

@@ -1,4 +1,4 @@
-\section{La creazione del server principale}
+\section{Creazione del server principale}
 
 Il server principale è il componente con il compito di ricevere tutte le richieste dai client,
 elaborarle e restituire le informazioni volute,
@@ -35,7 +35,7 @@ garantendo il minimo utilizzo di risorse necessarie per rispondere alla richiest
 Inoltre, si semplifica così la creazione e la manutenzione del codice,
 riducendo il controllo dell'esecuzione all'esito del tentativo di risoluzione del singolo problema.
 \clearpage
-\subsection{La scelta del servizio adatto}
+\subsection{Individuazione del servizio adatto}
 
 I gestori in cloud che offrono servizi FaaS sono limitati.
 Escludendo i fornitori improntati allo sviluppo di applicazioni principalmente front-end,
@@ -137,7 +137,7 @@ sia a livello di costi che di prestazioni,
 ed essendo il progetto improntato su Azure,
 la scelta della tecnologia su cui implementare il server principale è ricaduta sulle Azure Functions.\\
 
-\subsection{Le scelte progettuali derivate dall'utilizzo delle Azure Functions}
+\subsection{Scelte progettuali derivate dall'utilizzo delle Azure Functions}
 
 L'utilizzo di un servizio FaaS comporta un approccio particolare per la scrittura del codice.
 A differenza di un programma normale,
@@ -244,7 +244,7 @@ gestito interamente dal programma.\\
 \clearpage
 
 
-\subsection{L'implementazione della logica applicativa}
+\subsection{Implementazione della logica applicativa}
 Per quanto ogni Function ricopra un unico compito,
 alcune parti della sua risoluzione possono essere condivise con altre.
 Per questo motivo,

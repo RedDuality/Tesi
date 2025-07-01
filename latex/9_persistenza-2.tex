@@ -1,4 +1,4 @@
-\section{L'implementazione del database}
+\section{Implementazione del database}
 Nelle sezioni precedenti si è discusso delle proprietà
 offerte dai diversi tipi di database e
 delle necessità che il dominio impone sul sistema.
@@ -16,9 +16,9 @@ l'utilizzo di servizi in cloud comporta una maggiore attenzione anche
 alle proprietà legate al mantenimento del servizio,
 dalle quali derivano le proprietà di scalabilità e affidabilità.
 La grande differenza tra i vari servizi sta nelle proprietà del server
-incaricato di fornire il potere computazionale necessario per l’esecuzione.
-L’architettura del server e la sua integrazione con la tecnologia del database
-determinano infatti l’effettiva capacità di scalabilità del servizio.\\
+incaricato di fornire il potere computazionale necessario per l'esecuzione.
+L'architettura del server e la sua integrazione con la tecnologia del database
+determinano infatti l'effettiva capacità di scalabilità del servizio.\\
 \\
 Si intende scalabilità verticale la capacità di aumentare le risorse
 della stessa macchina in cui si esegue il codice.
@@ -30,7 +30,7 @@ Trattandosi di macchine virtualizzate,
 Per scalabilità orizzontale si intende invece la capacità di
 delegare il carico di lavoro su più macchine, eventualmente coordinando le modifiche.
 Questo permette una risposta alle richieste più resistente,
-riducendo il rischio di colli di bottiglia che potrebbero venirsi a formare nell’utilizzo di un nodo singolo.
+riducendo il rischio di colli di bottiglia che potrebbero venirsi a formare nell'utilizzo di un nodo singolo.
 La scalabilità orizzontale richiede però l'implementazione
 di tecnologie apposite integrate con il database che permettano l'esecuzione in nodi fisici differenti. \\
 \\
@@ -38,7 +38,7 @@ Una volta individuata la tecnologia adatta e il livello di scalabilità desidera
 è bene considerare le altre necessità o le opportunità aggiuntive generate
 dalla presenza di un database nel progetto. \\
 \\
-L’alta disponibilità(HA) è la proprietà di garantire l’accesso al servizio nonostante i guasti.
+L'alta disponibilità(HA) è la proprietà di garantire l'accesso al servizio nonostante i guasti.
 Ad esempio, si può mantenere una macchina identica al server principale in grado di replicare il servizio,
 spostando il carico in caso di guasto del server principale.
 Si misura in “numero di nove”, ovvero la quantità di nove presenti
@@ -49,7 +49,7 @@ Alcuni servizi possono presentare offerte di backup
 per riportare il server nello stesso stato di qualche momento precedente.
 Questo permette il ripristino del sistema a un punto precedente
 rispetto all'avvenimento di eventuali errori o guasti del sistema.\\
-\subsection{La scelta del database}
+\subsection{Scelta del database}
 
 Viste le necessità del progetto in ambito di scalabilità
 e le caratteristiche del dominio,
@@ -155,7 +155,7 @@ Questi fattori combinati ci hanno portato a escludere il modello relazionale.\\
 \\
 Essendo il progetto già improntato sulla piattaforma Azure,
 la ricerca verte inizialmente tra le opzioni che mette a disposizione.
-Azure offre un’ampia scelta di database documentali che possono essere integrati con il resto dell’ecosistema.
+Azure offre un'ampia scelta di database documentali che possono essere integrati con il resto dell'ecosistema.
 Tuttavia, Azure presenta un servizio completamente gestito e nativo
 per i database non relazionali chiamato Azure Cosmos DB.
 Garantendo la massima interoperabilità all'interno dell'ecosistema,
@@ -233,11 +233,11 @@ Dato lo stadio iniziale del progetto queste caratteristiche sono state considera
 permettendo di sfruttare e testare le capacità di distribuzione.
 Nel caso in cui, sfruttando dati derivati dall'utilizzo effettivo dell'applicazione,
 un'analisi condotta durante fasi successive del progetto faccia emergere che
-Cosmos DB non rappresenti l’opzione più adeguata,
+Cosmos DB non rappresenti l'opzione più adeguata,
 lo spostamento dei dati verso un altro gestore comporterà uno sforzo limitato,
 data la compatibilità nella rappresentazione dei dati tra le diverse tecnologie di database documentali.
 
-\subsection{La configurazione di Cosmos DB}
+\subsection{Configurazione di Cosmos DB}
 
 La creazione di una nuova istanza di Cosmos DB
 richiede la definizione delle impostazioni di funzionamento,
@@ -310,7 +310,7 @@ Nel nostro caso si è scelto di applicare il servizio incluso gratuitamente
 che mantiene le modifiche avvenute negli ultimi sette giorni.\\
 
 
-\subsection{La definizione delle collezioni}
+\subsection{Definizione delle collezioni}
 
 Stabilita la tipologia e il comportamento del servizio che ospita il database,
 bisogna definire la struttura il cui le classi vengono salvate,
@@ -401,7 +401,7 @@ questo è reso possibile grazie alla denormalizzazione,
 che deve però prevedere un procedimento per l'allineamento
 dei dati copiati.\\
 
-\subsection{L'integrazione con le Azure Functions nel framework .Net}
+\subsection{Integrazione con le Azure Functions nel framework .Net}
 L'utilizzo di un database documentale comporta un sviluppi implementativi specifici.
 Il polimorfismo dei documenti e la denormalizzazione delle entità
 rendono la rappresentazione logica degli elementi e la loro relazione reciproca di secondaria importanza.

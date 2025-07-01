@@ -1,5 +1,5 @@
 
-\section{Lo sviluppo di una memoria locale}
+\section{Implementazione della memoria locale}
 
 Per poter visualizzare un elemento sul dispositivo utente
 è necessario resuperare le informazioni relative.
@@ -108,7 +108,7 @@ La principale fonte di aggiornamenti viene fornita direttamente dal server che,
 attraverso un processo di comunicazioni in tempo reale,
 invia delle notifiche ai client ogni qual volta vengano interessati da una modifica.\\
 
-\subsection{La scelta della tecnologia per la comunicazione in tempo reale}
+\subsection{Scelta della tecnologia per la comunicazione in tempo reale}
 La comunicazione con il server finora implementata 
 si basa sul protocollo Hypertext Transfer Protocol (HTTP). 
 HTTP prevede un fornitore di servizi (il server) mettere a disposizione una porta 
@@ -192,7 +192,7 @@ Non prevede il supporto alla persistenza,
 inviando direttamente i messaggi senza mantenerli in memoria,
 ma gestisce la scalabilità del sistema.\\
 
-\subsection{L'invio delle notifiche}
+\subsection{Invio delle notifiche}
 
 L'integrazione di Azure Web Pub Sub deve avvenire
 sia a livello server che con i device degli utenti. 
@@ -290,7 +290,7 @@ Per poter assicurare però che nessuna notifica sia andata persa
 si necessita l'implementazione di un processo che
 si confronti con il server per recuperare le modifiche non ricevute.\\
 \clearpage
-\subsection{Il processo per garantire l'allineamento della cache}
+\subsection{Garantire l'allineamento della cache}
 
 Il client ha la responsabilità di tenere allineata
 la propria cache ai valori della memoria centrale. 
