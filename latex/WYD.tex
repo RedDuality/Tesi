@@ -19,6 +19,7 @@
 \usepackage{changepage}
 \usepackage{fancyhdr}
 \usepackage{tocloft}
+\usepackage{natbib}
 
 \usepackage[a4paper,right=25mm,top=25mm,bottom=25mm,left=25mm]{geometry}
 \usepackage{afterpage}
@@ -73,7 +74,6 @@
     pdfpagemode=FullScreen,
 }
 
-
 \newcommand{\mycomment}[1]{}
 
 
@@ -118,18 +118,24 @@
 \input{./2_introduzione.tex}
 
 \renewcommand\chaptermark[1]{\markboth{\thechapter\,--\,#1}{}}
-\fancyhead[L]{\leftmark}
+%\fancyhead[L]{\leftmark}
 
-\input{./3_analisi-1.tex}
-\input{./4_analisi-2.tex}
-\input{./5_struttura-1.tex}
-\input{./6_struttura-2.tex}
-\input{./7_struttura-3.tex}
+%\input{./3_analisi-1.tex}
+%\input{./4_analisi-2.tex}
+%\input{./5_struttura-1.tex}
+%\input{./6_struttura-2.tex}
+%\input{./7_struttura-3.tex}
 \input{./8_persistenza-1.tex}
 \input{./9_persistenza-2.tex}
 \input{./10_persistenza-3.tex}
-\input{./11_immagini.tex}
-\input{./12_test.tex}
-\input{./13_fine.tex}
+%\input{./11_immagini.tex}
+%\input{./12_test.tex}
+%\input{./13_fine.tex}
+\nocite{*}
+\addcontentsline{toc}{chapter}{Bibliografia}
+\bibliographystyle{plainnat} 
+\bibliography{biblio}   
+
+%\input{./15_ringraziamenti.tex}
 \fancyhf{}
 \end{document}

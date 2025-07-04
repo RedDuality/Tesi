@@ -4,7 +4,7 @@ La realizzazione di qualunque prodotto software inizia da una fase in cui,
 partendo dall’abstract del progetto, si analizzano i requisiti e le funzionalità da realizzare.
 L’obiettivo è arrivare a una definizione delle proprietà e
 del comportamento desiderato nell’applicazione che sia concisa e condivisa col cliente,
-senza però entrare nel merito delle scelte implementative.\\
+senza però entrare nel merito delle scelte implementative.
 Solo a quel punto si può procedere con lo sviluppo del programma vero e proprio.\\
 \\
 L'abstract di Wyd è il seguente:\\
@@ -13,7 +13,7 @@ Wyd è un'applicazione che permette ai clienti di organizzare i propri impegni,
 siano essi confermati oppure proposti.
 Mette a disposizione due calendari,
 il primo con gli eventi in cui l'utente è convinto di partecipare,
-il secondo in cui vengono riuniti gli eventi a cui l'utente è stato invitato ma senza aver ancora dato conferma.
+il secondo in cui vengono riuniti gli eventi a cui l'utente è stato invitato ma non ha ancora dato conferma.
 L'utente ha la possibilità di creare, modificare, confermare o disdire un evento,
 ma anche condividerlo con altri o allegarci foto.\\
 \\
@@ -34,7 +34,7 @@ In particolare, si distinguono i requisiti e i casi d'uso.
 I requisiti formalizzano le funzionalità che l'applicazione deve fornire,
 sintetizzando e schematizzando le parti che descrivono del prodotto.
 I casi d'uso descrivono invece le interazioni previste tra l'utente e il sistema,
-suddividendo le funzionalità in azioni elementari.\\
+suddividendo le funzionalità in azioni elementari.
 \subsection{I requisiti e il vocabolario}
 I requisiti devono risultare chiari e precisi
 per permettere di procedere alle fasi successive in maniera corretta e trasparente.
@@ -58,8 +58,9 @@ evidenziando l'intuitività e la reattività dell'applicazione,
 che richiedono di conseguenza velocità nel recuperare i dati.
 Inoltre, essendo Wyd pensata per interagire con migliaia di utenti,
 in simultanea e interconnessi tra loro, le caratteristiche di scalabilità vengono individuate e introdotte fin da subito.
-La sicurezza del sistema, escludendo l'autenticazione che impatta direttamente sull'utente,
-necessitando di un'analisi approfondita apposita, viene trattata in seguito.\\
+La sicurezza del sistema viene trattata in seguito,
+in quanto necessita di un'apposita analisi approfondita,
+a esclusione dell'autenticazione che impatta direttamente sull'utente.\\
 
 \begin{longtable} {|P{1.3cm}|P{11.2cm}|P{3cm}|}
     \hline
@@ -215,7 +216,8 @@ Per ogni caso d'uso viene poi identificato uno scenario di utilizzo,
 che chiarifica il contesto, il comportamento e i punti critici dell'utilizzo.
 Lo scenario ha il solo compito di mostrare il comportamento desiderato,
 senza scendere quindi in dettagli o complessità progettuali.
-Dallo scenario risulta quindi complesso dedurre la difficoltà implementativa del caso d'uso,
+Dallo scenario risulta non si può quindi dedurre la difficoltà 
+introdotta dall'implementazione del caso d'uso,
 ma è il tassello da cui si stabiliranno poi la coordinazione e l'interazione delle varie parti del programma.\\
 \\
 Si riportano gli scenari di utilizzo per i principali casi d'uso di Wyd,
@@ -404,7 +406,7 @@ l'individuazione dei punti deboli delle tecnologie di cui si prevede l'utilizzo.
 La valutazione dei beni determina i componenti fondamentali da proteggere,
 risaltandone il valore e l'esposizione relativa.
 Questo permette di stabilire le priorità dei componenti sui cui concentrare le attenzioni.
-In particolare, Wyd non prevede altri sistemi diversi dai comuni sistema informatici,
+In particolare, Wyd non prevede altri sistemi diversi dai comuni sistemi informatici,
 ma i valori principali da proteggere risiedono nei dati degli utenti.\\
 \\
 \begin{longtable} {|P{3.5cm}|P{5.5cm}|P{6.7cm}|}
@@ -460,7 +462,8 @@ all'interruzione del servizio.\\
 
 \clearpage
 
-L'analisi tecnologica della sicurezza entra nel merito delle tecnologie che si prevede necessarie.
+L'analisi tecnologica della sicurezza entra nel merito 
+delle tecnologie di cui si prevede l'utilizzo.
 Per ognuna esamina i punti deboli e i limiti intrinseci,
 producendo un quadro delle particolarità su cui porre maggiore attenzione.\\
 \\
@@ -513,6 +516,7 @@ evidenziando i punti e la loro applicazione.\\
 In Wyd sono stati individuati quattro casi d'uso malevoli,
 tre dei quali relativi all'integrità e alla confidenzialità dei dati,
 e uno relativo alla disponibilità del servizio.\\
+\\
 Tramite la saturazione del database l'attaccante
 riesce a inserire quantità importanti di dati,
 che può comportare un rallentamento dell'applicazione temporaneo o permanente,
@@ -530,7 +534,7 @@ Per mitigare questo rischio si aggiunge un caso d'uso relativo al controllo dell
 
 La confidenzialità e l'integrità dei dati sono minacciati dal furto di credenziali,
 che permetterebbe a un utente d'identificarsi come qualcun altro;
-lo sniffing mina la riservatezza delle comunicazioni, se vengono intercettate;
+lo sniffing mina la riservatezza delle comunicazioni, che verrebbero così intercettate;
 infine tramite man in the middle un attore malevolo ha la possibilità di modificare le richieste
 ingannando entrambi i lati della conversazione.
 Si introducono i casi d'uso relativi al controllo delle credenziali,

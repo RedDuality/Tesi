@@ -1,16 +1,19 @@
 \chapter{Capitolo 3}
 
 Nel contesto di un sistema che prevede la gestione di eventi e impegni,
-è essenziale garantire all’utente di poter accedere in qualsiasi momento alla propria agenda,
+è essenziale garantire all'utente la possibilità 
+di accedere in qualsiasi momento alla propria agenda,
 visualizzando gli appuntamenti più urgenti e pianificando efficacemente il proprio tempo.
-Deve perciò essere possibile trovare e mostrare nel minor tempo possibile i dati relativi all’agenda.
+Deve perciò essere possibile trovare e mostrare
+nel minor tempo possibile i dati relativi all'agenda.
 Per soddisfare questo requisito,
 il recupero e la visualizzazione dei dati devono avvenire con la massima rapidità possibile,
-riducendo i tempi di latenza e ottimizzando il flusso di interazione con l’interfaccia utente.\\
+riducendo i tempi di latenza e ottimizzando il flusso di interazione con l'interfaccia utente.\\
 \\
 L'adozione di un meccanismo di salvataggio locale sui dispositivi
 offre il vantaggio di migliorare le prestazioni,
-consentendo un accesso immediato alle informazioni senza dover effettuare continue richieste al server remoto.
+consentendo un accesso immediato alle informazioni
+senza dover effettuare continue richieste al server remoto.
 Tuttavia questa soluzione rimane parziale,
 in quanto non garantisce una persistenza a lungo termine dei dati,
 né assicura la loro disponibilità in ogni momento,
@@ -29,26 +32,27 @@ integrità, coerenza e scalabilità nelle interazioni,
 per essere resistente anche in presenza di un volume significativo di richieste concorrenti.
 La struttura del sistema di memorizzazione deve inoltre essere progettata
 tenendo conto del dominio applicativo e delle esigenze specifiche di utilizzo,
-al fine di assicurare un bilanciamento ottimale tra efficienza e robustezza operativa.\\
+al fine di assicurare un bilanciamento tra efficienza e robustezza operativa.\\
 \\
-Oltre alla gestione della persistenza dei dati per il singolo utente,
+Oltre alla gestione della persistenza dei dati per il singolo utente
 è necessario affrontare il problema della modifica di eventi condivisi.
 Poiché l'applicazione consente a più utenti di interagire sugli stessi eventi,
 le modifiche effettuate da un partecipante devono essere propagate
 in tempo reale agli altri dispositivi coinvolti.
 Questo introduce la necessità di implementare un sistema di aggiornamento distribuito,
-in grado di mantenere sincronizzati non solo i dispositivi di un singolo utente,
-ma anche quelli di tutti gli utenti interessati dalle modifiche.\\
+in grado di mantenere sincronizzati non solo i dispositivi del singolo utente,
+ma anche quelli di tutti gli altri interessati dalle modifiche.\\
 \\
-La gestione dell’accesso ai dati richiede quindi l’implementazione di un’architettura che preveda
+Il recupero dei dati richiede quindi l'implementazione di un'architettura che preveda
 un punto di riferimento centrale chiaro e affidabile,
 capace di fungere da fonte primaria delle informazioni.
-Al tempo stesso, l’utilizzo di copie locali dei dati sui dispositivi client
-consente di ridurre l’impatto delle latenze di rete,
-migliorando la reattività dell’interfaccia e offrendo un’esperienza utente più fluida.
+Al tempo stesso, l'utilizzo di copie locali dei dati sui dispositivi client
+consente di ridurre l'impatto delle latenze di rete,
+migliorando la reattività dell'interfaccia e offrendo un'esperienza utente più fluida.
 Tuttavia, questa scelta introduce la necessità di gestire due livelli distinti di responsabilità:
 da un lato, il client deve occuparsi di mantenere aggiornati i dati memorizzati localmente,
-mentre il server deve garantire la corretta distribuzione delle modifiche agli altri dispositivi interessati.
+mentre il server deve garantire la corretta distribuzione
+delle modifiche agli altri dispositivi interessati.
 La sincronizzazione e la gestione delle versioni dei dati diventano quindi
 elementi chiave per assicurare la coerenza del sistema e
 prevenire eventuali conflitti tra modifiche concorrenti.
@@ -56,10 +60,11 @@ prevenire eventuali conflitti tra modifiche concorrenti.
 \clearpage
 \section{Analisi per l'identificazione del database}
 
-Nell’implementazione di applicazioni scalabili, la gestione del salvataggio dei dati
+Nell'implementazione di applicazioni scalabili,
+la gestione del salvataggio dei dati
 può essere strutturata secondo un modello centralizzato o distribuito,
 a seconda delle esigenze di affidabilità, scalabilità e prestazioni del sistema.
-L’adozione di un’architettura di memoria distribuita offre molteplici vantaggi,
+L'adozione di un'architettura di memoria distribuita offre molteplici vantaggi,
 tra cui una maggiore resilienza ai guasti di una singola fonte,
 la riduzione del carico di memoria su un'unica risorsa di archiviazione e
 una migliore scalabilità complessiva del sistema.
@@ -67,33 +72,35 @@ Tuttavia, questa soluzione introduce una maggiore complessità infrastrutturale,
 poiché richiede meccanismi avanzati per garantire il recupero,
 l'affidabilità e la consistenza delle informazioni.\\
 \\
-Salvo specifici requisiti che rendano indispensabile la distribuzione totale o parziale della memoria,
+Salvo specifici requisiti che rendano indispensabile
+la distribuzione totale o parziale della memoria,
 una strategia basata su un database centralizzato risulta più efficiente
 dal punto di vista prestazionale e semplifica la gestione complessiva del sistema.
-L’adozione di un’architettura centralizzata consente infatti
+L'adozione di un'architettura centralizzata consente infatti
 di ottimizzare i tempi di accesso ai dati e ridurre la latenza delle operazioni,
 grazie a una minore complessità di sincronizzazione e
 di mantenimento della consistenza delle informazioni.\\
 \\
-I database non distribuiti si suddividono in due macro categorie principali: relazionali e non relazionali.\\
+I database non distribuiti si suddividono in due macro categorie principali:
+relazionali e non relazionali.\\
 I database relazionali si caratterizzano per strutture dati rigide e schematizzate,
 che consentono di stabilire connessioni tra le diverse entità in tempi estremamente rapidi,
 garantendo allo stesso tempo operazioni atomiche.
 Viceversa, i database non relazionali offrono una maggiore flessibilità strutturale,
-permettendo l’archiviazione di dati eterogenei e adottando un accoppiamento più debole tra i vari oggetti. \\
+permettendo l'archiviazione di dati eterogenei e adottando un accoppiamento più debole tra i vari oggetti. \\
 \\
 La scelta della tipologia di database più appropriata dipende direttamente
 dalle esigenze specifiche del progetto.
-Ogni prodotto è stato infatti realizzato per rispondere a una funzionalità specifica,
+Ogni tecnologia è stata infatti realizzata per rispondere a una funzionalità specifica,
 introducendo vantaggi per un determinato caso d'uso ma comportando anche punti deboli,
 sia in termini di prestazioni che in termini di scalabilità.
 Determinare il database più adatto alle esigenze dipende
 quindi non solo dalle proprietà intrinseche della tecnologia,
-ma sopratutto di come queste riescano a risolvere i particolari problemi che il progetto presenta.
+ma sopratutto da come queste riescano a risolvere
+i particolari problemi che il progetto presenta.
 \clearpage
 
 \subsection{Proprietà dei database relazionali}
-
 
 I database relazionali gestiscono i dati tramite strutture chiamate schemi.
 Lo schema è una struttura rigida i cui campi e le relative proprietà
@@ -116,7 +123,7 @@ dedicati che consentono l'individuazione di un oggetto in tempi minimi,
 e facilitano l'incrocio delle informazioni contenute all'interno delle relazioni.
 L'utilizzo delle transazioni rende i database relazionali in grado di garantire
 le proprietà di Atomicità, Consistenza, Isolamento e Durabilità (ACID),
-assicurando un’elevata affidabilità dei dati.\\
+assicurando un'elevata affidabilità dei dati.\\
 \\
 La rigidità del modello non permette però di avere un elemento
 di uno schema che presenti proprietà diverse da tutti gli altri.
@@ -135,7 +142,6 @@ fortemente accoppiati con gli schemi delle entità coinvolte.
 Risulta quindi arduo dividere degli elementi su più tabelle(sharding),
 operazione necessaria per la distribuzione del database su più server,
 aumentando di conseguenza la complessità richiesta per essere in grado di scalare orizzontalmente.\\
-\\
 
 \subsection{Proprietà dei database non relazionali}
 
@@ -148,20 +154,23 @@ come la gestione di file, dati semi-strutturati, o la rappresentazione di relazi
 \\
 La loro caratteristica fondamentale è la capacità di salvare le informazioni in forme variabili,
 permettendo di modificare la struttura dei dati senza la necessità di riconfigurare lo schema del database.
-La vera forza dei database NoSQL, tuttavia, risiede nella loro predisposizione alla scalabilità orizzontale.
+La vera forza dei database NoSQL risiede tuttavia
+nella loro predisposizione alla scalabilità orizzontale.
 I NoSQL sono infatti progettati per distribuire il carico su più server,
-consentendo di gestire volumi crescenti di dati e richieste semplicemente aggiungendo nuovi nodi al sistema.\\
+consentendo di gestire volumi crescenti di dati e richieste,
+semplicemente aggiungendo nuovi nodi al sistema.\\
 \\
 Nonostante i vantaggi in termini di scalabilità,
 i database non relazionali presentano però alcune limitazioni significative.
 La più rilevante è la rinuncia alle proprietà ACID, alla quale si contrappone,
 per favorire la disponibilità e la tolleranza ai partizionamenti,
-una consistenza finale (eventual consistency),
-dove le modifiche ai dati si propagano attraverso il sistema in un certo lasso di tempo,
+la consistenza finale (eventual consistency).
+Nella consistenza finale le modifiche ai dati 
+si propagano attraverso il sistema in un certo lasso di tempo,
 piuttosto che essere immediatamente consistenti su tutti i nodi.
-Questo può portare a letture di dati non aggiornati in determinate circostanze,
-il che può essere un problema per applicazioni che richiedono forte consistenza,
-ma che deve essere comunque tenuto in considerazione durante l'analisi,
+Questo può portare, in determinate circostanze, a letture di dati non aggiornati,
+che può risultare un problema per applicazioni che richiedono una forte consistenza.
+Ciò deve essere dunque tenuto in considerazione durante l'analisi,
 per progettare un'applicazione che sia resistente a un asincronismo temporaneo dei dati.\\
 \\
 
@@ -181,10 +190,10 @@ e il carico computazionale che ogni operazione comporta.
 Tra le operazioni più costose in termini di prestazioni,
 che più ostacola e rallenta il recupero dei dati, vi è l'operazione di unione(join).
 Durante l'operazione di unione vengono incrociati i dati di vari elementi
-per restituire un oggetto coerente che presenti tutte le proprietà necessarie,
+per restituire una risposta coerente che presenti tutte le proprietà necessarie,
 originariamente distribuite in molteplici tabelle. \\
 \\
-Nonostante l'esecuzione di join su database sia altamente ottimizzata
+Nonostante l'esecuzione di join sui database sia altamente ottimizzata
 (particolarmente in quelli relazionali) e facilitata dall'utilizzo di indici,
 introduce comunque carichi computazionali di grande entità che impattano
 significativamente sui tempi di risposta delle richieste,
@@ -200,12 +209,13 @@ Nei casi uno a molti e molti a molti il reperimento delle informazioni richiede
 spesso un'operazione di join, ed è quindi bene eseguire un'attenta valutazione
 delle tipologie di accesso per ottimizzarne le prestazioni.
 Un'operazione di join è accettabile se il numero delle entità coinvolte è limitato o facilmente reperibile.
-Altrimenti, una delle strategie possibili per migliorare l’efficienza delle richieste
+Altrimenti, una delle strategie possibili per migliorare l'efficienza delle richieste
 offerte dai database non relazionali è la denormalizzazione delle entità.\\
 \\
 La denormalizzazione consiste nel duplicare o incorporare dati correlati all'interno della stessa entità o documento,
 eliminando la necessità di operazioni di join complesse e costose in fase di lettura.
-Questo significa che, anziché avere tabelle separate tra due elementi e collegarle tramite chiavi esterne,
+Questo significa che, 
+anziché avere tabelle separate tra due elementi e collegarle tramite chiavi esterne,
 un database denormalizzato potrebbe memorizzare direttamente
 un array dei dati del primo all'interno del documento del secondo.
 Recuperare tutti i dati necessari per una determinata operazione richiede spesso
@@ -227,8 +237,8 @@ In una relazione uno a molti,
 nel caso in cui la richiesta di quell'elemento non sia frequente
 ma sia invece importante restituire spesso gli elementi a lui collegati,
 conviene copiare gli oggetti relativi all'interno dell'elemento singolo.
-L’impostazione inversa, in cui si copia il singolo all’interno dei molti elementi,
-comporterebbe l’ispezione di tutti i componenti esistenti alla ricerca di quelli che contengono l’elemento dato.
+L'impostazione inversa, in cui si copia il singolo all'interno dei molti elementi,
+comporterebbe l'ispezione di tutti i componenti esistenti alla ricerca di quelli che contengono l'elemento dato.
 Se però, viceversa, sono frequenti le richieste relative agli elementi multipli, e la loro relazione è importante,
 conviene copiare il singolo all'interno di detti elementi, per evitarne il recupero ogni volta.\\
 \\
