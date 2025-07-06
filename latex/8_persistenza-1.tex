@@ -263,7 +263,7 @@ di dover recuperare il terzo elemento della relazione.
 Il dominio descrive i componenti dell'applicazione e le loro relazioni.
 Ne vengono espresse le dipendenze, i rapporti reciproci e la cardinalità delle relazioni.
 La sua analisi, integrata con la previsione del carico delle richieste,
-permette di fornire un quadro dettagliato sulle necessità relative,
+permette di fornire un quadro dettagliato sulle necessità associate,
 per poter poi definire la tipologia delle strutture in cui salvare i dati e
 le caratteristiche richieste al database.\\
 
@@ -277,9 +277,9 @@ le caratteristiche richieste al database.\\
 Le entità Account, User e Profile, assieme alla relazione UserRole,
 descrivono le specifiche di autenticazione, identificazione dell'utente e i suoi ruoli sui profili associati.
 I loro dati vengono recuperati solamente una volta nel ciclo di vita del programma,
-a seguito del login dell'utente.
-Vengono poi salvati in memoria locale,
-riducendo il numero di richieste relative successive a un controllo su eventuali aggiornamenti.
+durante il login dell'utente.
+Vengono quindi salvati in memoria locale,
+riducendo le relative richieste successive a un controllo su eventuali aggiornamenti.
 Si prevede che le modifiche a questi elementi siano sporadiche.\\
 Allo stesso modo gli oggetti Group vengono recuperati solo all'avvio dell'applicazione, e,
 salvo rari aggiornamenti, non comportano ulteriori richieste.
@@ -294,7 +294,8 @@ indicando che un evento è condiviso con un profilo.
 La proprietà più importante di ProfileEvent è sicuramente Confirmed,
 una variabile booleana che esprime la partecipazione o meno di un profilo all'evento.
 È ragionevole prevedere che la cardinalità dei profili associati a un evento non superi l'ordine delle centinaia.
-Agli eventi che si associano ai profili l'ordine di grandezza invece previsto risiede nelle migliaia.
+L'ordine di grandezza invece previsto per gli
+eventi correlati a un profilo risiede nelle migliaia.
 Ci sono molteplici situazioni da tenere in considerazione analizzando questa relazione.\\
 \\
 Sicuramente bisogna considerare il recupero specifico delle entità Event e Profile.
@@ -305,10 +306,10 @@ essendo l'utente in possesso dell'identificativo dell'elemento,
 la ricerca risulta diretta, e i dati da recuperare esigui.\\
 \\
 La conferma o la disdetta a un evento vede la modifica di un ProfileEvent.
-Questa operazioni di per sé risulta veloce
-in quanto necessita di recuperare un solo elemento per poi modificarlo.
+Questa operazione, presa singolarmente, risulta veloce
+in quanto necessita di recuperare un solo elemento, per poi modificarlo.
 Allo stesso modo la modifica di un evento comporta l'aggiornamento di un solo oggetto Event,
-a seguito però del recupero del ProfileEvent associato,
+a seguito del recupero del ProfileEvent associato,
 necessario per controllare i permessi del profilo sull'evento.
 Entrambe le operazioni richiedono però l'invio di una notifica verso tutti i profili interessati,
 che necessita il recupero di tutti i ProfileEvent associati ogni volta che una di queste accade.\\
@@ -325,8 +326,9 @@ Quando un utente accede per la prima volta su un dispositivo
 è necessario ottenere gli eventi associati ai suoi profili.
 Allo stesso modo, a ogni avvio dell'applicazione si recuperano gli eventi
 che hanno subito modifiche dall'ultimo accesso.
-Inoltre, per poter garantire(all'interno di un determinato vincolo temporale)
-la consistenza dei dati anche a livello locale,
+Inoltre, per poter garantire 
+la consistenza dei dati anche a livello locale
+(all'interno di un determinato vincolo temporale),
 il client applica una strategia di long polling
 per ottenere gli eventi che sono stati modificati dall'ultimo aggiornamento noto.
 L'operazione di ritrovamento degli eventi a partire dal profilo risulta quindi centrale e frequente,
