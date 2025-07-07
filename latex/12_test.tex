@@ -95,6 +95,7 @@ per il quale si vuole distribuire il test, nelle quali verrà duplicato.\\
 \\
 Per ogni test di entrambe le modalità si possono infine specificare quali altre risorse del progetto monitorare,
 affiancando alle prestazioni generali del test le prestazioni specifiche dei singoli componenti.
+
 \section{Velocità della procedura di creazione}
 
 Il primo test si concentra sulla velocità di creazione di elementi.
@@ -223,7 +224,7 @@ mantenendo le prestazioni costanti sia in caso di aumento di carico che in caso 
         \caption{Risultati del test di creazione}
     \end{center}
 \end{figure}
-\\
+\clearpage
 
 \section{Velocità degli aggiornamenti}
 L'aggiornamento di un dato su un database non relazionale
@@ -309,6 +310,7 @@ in quanto comprensivo della durata delle funzioni che, in contemporanea,
 stavano propagando le modifiche sul ProfileEvent.\\
 
 \section{Garanzia di propagazione delle informazioni}
+
 La presenza di elementi denormalizzati comporta la necessità 
 di propagare le modifiche sugli elementi coinvolti indirettamente.
 Potendo accettare un ritardo tra la modifica dell'elemento principale 
@@ -317,7 +319,7 @@ questo compito viene delegato a un'altra funzione,
 riducendo il carico di lavoro (e quindi il tempo di risposta) della prima.
 La separazione di questi compiti può essere però sfruttata 
 solo se viene garantita l'esecuzione della funzione secondaria incaricata di propagare gli aggiornamenti.\\
-
+\\
 Service Bus è stato scelto proprio per la sua proprietà 
 di assicurare che il messaggio venga preso in carico da una funzione, 
 per poi controllarne l'esecuzione e ripeterla in caso di fallimento.
@@ -375,6 +377,7 @@ I risultati del programma hanno successivamente confermato l'affidabilità
 del processo di propagazione dell'aggiornamento tramite Service Bus, 
 con un tempo medio di cinquecento millisecondi. 
 \clearpage
+
 \section{Velocità di salvataggio delle immagini}
 L'ultimo servizio che non è ancora stato testato,
 tra i principali che compongono l'applicazione,
