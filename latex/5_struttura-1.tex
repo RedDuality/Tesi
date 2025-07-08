@@ -463,16 +463,16 @@ che, grazie alla staticità del sito,
 restituisca solo gli elementi necessari per la visualizzazione e l'elaborazione locale,
 senza bisogno di modificarli.
 La creazione di questo tipo di risorsa usando
-\begin{wrapfigure}{o}{0.25\textwidth}
-    \centering
-    \includegraphics[height=.12\textheight]{staticwebapp.png}
-    Azure Static Web App
-\end{wrapfigure}
 tecnologie in cloud può avvenire in vari modi,
 dall'utilizzo di una macchina virtuale apposita
 a soluzioni che utilizzano container.
 Tuttavia, Azure mette a disposizione un servizio apposito per queste precise esigenze,
 Azure Static Web App (SWA).\newline
+\begin{wrapfigure}{o}{0.25\textwidth}
+    \centering
+    \includegraphics[height=.12\textheight]{staticwebapp.png}
+    Azure Static Web App
+\end{wrapfigure}
 Questa risorsa, 
 oltre a integrarsi direttamente con il resto dell'ambiente Azure,
 garantisce disponibilità e scalabilità in ogni momento,
@@ -511,8 +511,8 @@ non è stato ritenuto necessario approfondire ulteriormente la ricerca.\\
 Nonostante l'esecuzione del codice presenti alcune dipendenze in base al dispositivo,
 la distribuzione non ha introdotto nessuna necessità.
 Nessuna modifica del codice è stata quindi dovuta alla scelta della tecnologia usata per
-la loro distribuzione.\\
-\\
+la loro distribuzione.
+\clearpage
 Per garantire un processo di aggiornamento efficiente e automatizzato,
 sia il codice distribuito sulla web app che l'applicativo ospitato nel container
 vengono gestiti tramite GitHub Actions.

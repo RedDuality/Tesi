@@ -1,4 +1,4 @@
-\documentclass[12pt,italian]{book}
+\documentclass[12pt,italian, twoside]{report}
 \usepackage[T1]{fontenc}
 \usepackage{babel}
 \usepackage[utf8]{inputenc}
@@ -18,7 +18,6 @@
 \usepackage{subcaption}
 \usepackage{changepage}
 \usepackage{fancyhdr}
-\usepackage{tocloft}
 \usepackage{natbib}
 
 \usepackage[a4paper,right=25mm,top=25mm,bottom=25mm,left=25mm]{geometry}
@@ -76,27 +75,6 @@
 
 \newcommand{\mycomment}[1]{}
 
-
-\renewcommand{\cftchappresnum}{}
-\setlength{\cftchapnumwidth}{0pt}
-\setlength{\cftchapindent}{0pt}
-\renewcommand{\cftchapfont}{\bfseries}
-\renewcommand{\cftchappagefont}{\normalfont}
-
-\makeatletter
-\AtBeginDocument{
-  \addtocontents{toc}{
-    \protect\renewcommand{\protect\numberline}[1]{}
-  }
-}
-\makeatother
-
-\titleformat{\chapter}[display]
-  {\normalfont\huge\bfseries} 
-  {}                          
-  {0pt}                 
-  {\normalfont\YUGE\bfseries} 
-  {}                           
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
@@ -118,7 +96,7 @@
 \input{./2_introduzione.tex}
 
 \renewcommand\chaptermark[1]{\markboth{\thechapter\,--\,#1}{}}
-%\fancyhead[L]{\leftmark}
+\fancyhead[RO,LE]{\leftmark}
 
 \input{./3_analisi-1.tex}
 \input{./4_analisi-2.tex}
@@ -130,14 +108,18 @@
 \input{./10_persistenza-3.tex}
 \input{./11_immagini.tex}
 \input{./12_test.tex}
-\input{./13_fine.tex}
+\input{./13_costi.tex}
+\fancyhf{}
+
+\input{./14_conclusione.tex}
+
 
 \nocite{*}
 \addcontentsline{toc}{chapter}{Bibliografia}
 \bibliographystyle{plainnat} 
 \bibliography{biblio}
-\clearpage
+
 
 \input{./15_ringraziamenti.tex}
-\fancyhf{}
+
 \end{document}
