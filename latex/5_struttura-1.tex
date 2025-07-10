@@ -3,7 +3,7 @@
 Terminata l'analisi del problema, che ne ha stabilito i requisiti,
 le funzionalità e la struttura generale,
 si passa alla fase di progettazione.
-Durante questa fase l'obiettivo principale è identificare 
+Durante questa fase l'obiettivo principale è identificare
 le caratteristiche funzionali e comportamentali del sistema,
 delineando le componenti principali e le rispettive responsabilità.
 Questo permette di definire un'architettura coerente,
@@ -14,7 +14,7 @@ si procede con il passaggio dall'analisi teorica alla realizzazione concreta,
 dove la selezione dell'architettura e delle tecnologie di riferimento assumono un ruolo centrale.
 Le decisioni prese in questa fase determinano il comportamento dei diversi componenti e
 le modalità con cui essi interagiscono tra loro.
-Un'attenta selezione delle soluzioni ottimali, 
+Un'attenta selezione delle soluzioni ottimali,
 più adatte ai requisiti definiti in fase di progettazione,
 permette di impostare fin dalle prime iterazioni uno sviluppo efficiente e strutturato,
 minimizzando la necessità di revisioni successive.\\
@@ -23,7 +23,7 @@ Nonostante alcune decisioni risultino immediate o intercambiabili,
 altre richiedono analisi approfondite per individuare la soluzione più adatta.
 Un approccio efficace consiste nello sviluppare inizialmente i componenti con requisiti ben definiti,
 per poi affinare progressivamente l'integrazione e la configurazione con gli altri elementi del sistema.
-L'identificazione, anche parziale, di una struttura iniziale 
+L'identificazione, anche parziale, di una struttura iniziale
 consente di delineare i vincoli di integrazione e
 di semplificare la definizione delle soluzioni mancanti.\\
 \\
@@ -31,11 +31,11 @@ L'architettura dell'applicativo si basa su una chiara suddivisione in componenti
 ciascuno con un ruolo specifico all'interno del sistema.
 \\
 
-Tale organizzazione modulare consente di ottimizzare 
+Tale organizzazione modulare consente di ottimizzare
 la scalabilità e la manutenibilità dell'applicativo,
 facilitando eventuali evoluzioni future.
 La suddivisione chiara delle responsabilità, unita a un'architettura flessibile e sicura,
-rappresenta quindi un elemento chiave per garantire 
+rappresenta quindi un elemento chiave per garantire
 la stabilità e l'efficienza del sistema nel lungo periodo.\\
 \\
 \begin{figure}[htb]
@@ -77,7 +77,7 @@ può essere suddiviso in due fasi distinte,
 ciascuna con specifiche esigenze funzionali.\\
 \\
 La prima fase riguarda la pianificazione a lungo termine e l'organizzazione degli impegni.
-In questa circostanza l'utente decide come distribuire il proprio tempo, 
+In questa circostanza l'utente decide come distribuire il proprio tempo,
 pianificando attività e appuntamenti,
 e strutturando il proprio calendario nel modo più efficiente per le proprie necessità.
 La seconda fase riguarda invece la gestione degli eventi non ancora certi e definiti;
@@ -90,7 +90,7 @@ Queste due fasi implicano un approccio diverso da parte dell'utente,
 comportando di conseguenza esigenze differenti
 a cui l'applicazione deve rispondere adeguatamente.\\
 \\
-Per rispondere a tali necessità, 
+Per rispondere a tali necessità,
 è fondamentale che l'applicazione offra un'interfaccia utente versatile,
 fruibile sia da desktop che da dispositivi mobili.
 La versione desktop consente una pianificazione a lungo termine,
@@ -101,7 +101,7 @@ garantendo che l'utente possa rimanere sempre connesso e aggiornato sugli svilup
 \\
 Inoltre, considerando che l'applicazione è destinata
 a un utilizzo diffuso e a un'utenza potenzialmente elevata,
-è necessario garantire tempi di risposta ridotti e 
+è necessario garantire tempi di risposta ridotti e
 una gestione efficiente delle richieste concorrenti.
 Ciò implica la progettazione di un sistema in grado di scalare facilmente,
 per supportare un ampio numero di utenti simultanei senza compromettere le prestazioni.
@@ -124,9 +124,9 @@ evitando quindi di dover implementare una versione diversa
 per ogni tecnologia su cui si voglia distribuire l'applicazione.
 L'astrazione fornita permette inoltre di ottenere elevate prestazioni e
 garantire un'esperienza utente uniforme indipendentemente dal dispositivo usato.
-In secondo luogo, Flutter adotta un approccio dichiarativo 
+In secondo luogo, Flutter adotta un approccio dichiarativo
 nella progettazione dell'interfaccia grafica,
-che facilita lo sviluppo di componenti reattivi attraverso un codice conciso, 
+che facilita lo sviluppo di componenti reattivi attraverso un codice conciso,
 facilmente mantenibile.\\
 \\
 Un ulteriore vantaggio di Flutter è rappresentato dalla sua crescente adozione nel settore,
@@ -168,7 +168,7 @@ esponendo chiaramente le informazioni,
 concentrando l'attenzione sui dati eventualmente richiesti
 e segnalando le azioni eseguibili.\\
 \\
-Nei diagrammi di dettaglio le interfacce 
+Nei diagrammi di dettaglio le interfacce
 vengono presentate elencando le funzionalità di cui dispongono,
 assieme alle loro relazioni di dipendenza.
 Si riportano le interfacce di gestione dei gruppi e di visualizzazione degli eventi,
@@ -282,19 +282,19 @@ Collegando i servizi al dominio si concentrano anche le eventuali dipendenze da 
 riducendole alle sole inerenti all'elemento specifico,
 mantenendo un parallelismo logico anche a livello di relazione.\\
 \\
-La maggior parte delle richieste 
+La maggior parte delle richieste
 che riguardano gli elementi del dominio prevede
 la comunicazione con il server esterno.
 La ricezione e l'aggiornamento dei dati,
 così come la permanenza delle modifiche,
-avvengono infatti attraverso l'interazione con la persistenza principale, 
+avvengono infatti attraverso l'interazione con la persistenza principale,
 a cui si accede tramite il server.
 Vista la complessità specifica nella gestione delle trasmissioni e
 la loro secondaria importanza a livello logico,
 vengono realizzati dei componenti dedicati, chiamati API.
-I componenti API hanno il compito di gestire le trasmissioni 
+I componenti API hanno il compito di gestire le trasmissioni
 astraendo il rapporto con il server,
-semplificando così il codice e separando la logica applicativa 
+semplificando così il codice e separando la logica applicativa
 dalle complessità richieste dalla tecnologia di comunicazione usata.
 
 \clearpage
@@ -313,7 +313,7 @@ anch'essi separatati in base al ruolo che ricoprono.
 Un servizio è stato dedicato all'acquisizione e
 al salvataggio dei permessi necessari per operare,
 quali l'invio delle notifiche e l'accesso alla galleria.
-Mette a disposizione degli altri processi, quindi, 
+Mette a disposizione degli altri processi, quindi,
 la conferma dell'accesso ai permessi richiesti o,
 in caso non lo si possegga, gestirà il suo ottenimento.\\
 \\
@@ -393,16 +393,16 @@ La fase di inizializzazione avviene a seguito di un login andato a buon fine.
 Parallelamente alla visualizzazione della schermata iniziale
 vengono recuperano i dati relativi ai profili associati all'utente
 e vengono fatti partire i servizi autonomi.
-In particolare, 
+In particolare,
 vengono controllati i permessi necessari per i quali,
 se non ancora concessi, verrà richiesto l'ottenimento.
 Viene inoltre avviato il servizio di ricezione degli aggiornamenti,
 che si connette al canale relativo all'utente.
-Per ogni profilo vengono, sempre in maniera parallela, 
+Per ogni profilo vengono, sempre in maniera parallela,
 recuperati i gruppi e gli eventi associati.
-Al termine della ricezione degli eventi, 
+Al termine della ricezione degli eventi,
 indipendentemente dalle altre richieste,
-per ogni evento successivo al momento attuale viene avviato un timer, 
+per ogni evento successivo al momento attuale viene avviato un timer,
 che scatena, al momento giusto, il recupero delle immagini.
 Se l'applicazione è stata aperta tramite link di condivisione,
 la schermata a cui si verrà reindirizzati sarà quella degli eventi proposti,
@@ -425,8 +425,8 @@ Per quanto Flutter consenta di uniformare lo sviluppo e
 semplifichi la compilazione del codice per essere eseguito su diverse piattaforme,
 alcune configurazioni rimangono comunque dipendenti
 dalla tecnologia su cui l'applicazione viene eseguita.
-Di conseguenza, 
-ogni categoria di dispositivi per la quale si vuole distribuire l'applicazione 
+Di conseguenza,
+ogni categoria di dispositivi per la quale si vuole distribuire l'applicazione
 richiede l'introduzione di una manutenzione aggiuntiva.
 Oltre alle modifiche derivate dalle dipendenze specifiche,
 bisogna anche considerare la distribuzione e la gestione delle versioni.
@@ -453,7 +453,7 @@ funzionano in modalità completamente diversa.
 L'interfaccia web prevede l'utilizzo di un browser utente
 che si connette a un server apposito
 per ottenere la grafica da visualizzare.
-L'interfaccia Android 
+L'interfaccia Android
 (come qualunque interfaccia realizzata per essere eseguita direttamente su un dispositivo)
 richiede invece la creazione di un applicativo apposito,
 da scaricare e installare sul dispositivo.\\
@@ -462,22 +462,22 @@ Per la fruizione del codice web è necessario un server relativamente semplice,
 che, grazie alla staticità del sito,
 restituisca solo gli elementi necessari per la visualizzazione e l'elaborazione locale,
 senza bisogno di modificarli.
-La creazione di questo tipo di risorsa usando
+\clearpage
 \begin{wrapfigure}{o}{0.25\textwidth}
     \centering
     \includegraphics[height=.12\textheight]{staticwebapp.png}
     Azure Static Web App
-\end{wrapfigure}
+\end{wrapfigure}La creazione di questo tipo di risorsa usando
 tecnologie in cloud può avvenire in vari modi,
 dall'utilizzo di una macchina virtuale apposita
 a soluzioni che utilizzano container.
 Tuttavia, Azure mette a disposizione un servizio apposito per queste precise esigenze,
 Azure Static Web App (SWA).\newline
-Questa risorsa, 
+Questa risorsa,
 oltre a integrarsi direttamente con il resto dell'ambiente Azure,
 garantisce disponibilità e scalabilità in ogni momento,
 facendosi carico di gestire la capacità computazionale richiesta.
-Permette inoltre, ad esempio, 
+Permette inoltre, ad esempio,
 il collegamento con servizi di monitoraggio delle performance.
 Il consumo delle risorse è infatti calcolato in base alla bandwidth,
 ovvero la quantità di dati che viene fornita dal server.
@@ -518,8 +518,8 @@ sia il codice distribuito sulla web app che l'applicativo ospitato nel container
 vengono gestiti tramite GitHub Actions.
 Le Github Actions sono funzionalità offerte da Github,
 che è il sito dove viene salvato il codice.
-In particolare, 
-a ogni nuova versione del codice 
+In particolare,
+a ogni nuova versione del codice
 sia la Static Web App che il Blob Storage vengono notificati,
 modificando il loro contenuto.
 Questo consente di offrire un servizio aggiornato
