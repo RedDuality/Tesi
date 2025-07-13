@@ -198,7 +198,7 @@ Queste vengono assicurate anche in caso di interruzioni regionali,
 grazie a meccanismi di failover automatico.
 Inoltre, la distribuzione globale garantisce che i dati siano sempre vicini agli utenti,
 riducendo drasticamente la latenza a millisecondi
-(con SLA del 99.999\% di disponibilità per account multi-regione).
+(con HA del 99.999\% per account multi-regione).
 Consente l'indicizzazione attraverso più partizioni in maniera automatica e personalizzabile, ottimizzando le query, riducendo la complessità e migliorando le prestazioni,
 senza richiedere oneri di gestione manuale degli indici.\\
 \\
@@ -601,7 +601,7 @@ Ci sono situazioni in cui il Change Feed non può essere usato.
 L'elemento primario coinvolto in questa operazione è ProfileEvent,
 che sarà modificato dalla funzione iniziale.
 La conferma di partecipazione a un evento da parte di un profilo
-viene considerato come modifica all'evento stesso,
+viene considerata come modifica all'evento stesso,
 che comporta quindi l'aggiornamento del documento Event.
 Se però si associasse una funzione anche per le modifiche a ProfileEvent tramite Change Feed,
 si verrebbe a creare una ricorsione infinita per il quale 
