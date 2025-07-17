@@ -1,5 +1,6 @@
 latex/*
 !latex/*.pdf
 !latex/*.tex
+!latex/*.bib
 !latex/immagini
 WYD.pdf
