@@ -4,3 +4,5 @@ latex/*
 !latex/*.bib
 !latex/immagini
 WYD.pdf
+*.zip
+test/Test/RetrieveEvents/*
