@@ -1,0 +1,91 @@
+window.testRunData = {
+  "testRunName": "fdbce08c-586c-4efb-85b9-8aa75110f07c",
+  "displayName": "TestRun_6/21/2025_6:15:32 PM",
+  "testRunDescription": "3min 100 in 1 min",
+  "testName": "f5567bb6-9e88-442e-9095-fefd21dbd8f9",
+  "testRunId": "fdf9ff53-9144-458b-a34c-d79f882c38d1",
+  "lastUpdatedBy": "giacomo.romanini3@studio.unibo.it",
+  "createdOn": "2025-06-21T16:15:49.35Z",
+  "lastUpdatedOn": "2025-06-21T16:25:08.196Z",
+  "startTime": "2025-06-21T16:16:30Z",
+  "endTime": "2025-06-21T16:19:29Z",
+  "testType": "URL",
+  "engineInstances": 1,
+  "testResult": "NOT_APPLICABLE",
+  "status": "DONE",
+  "createdBy": "giacomo.romanini3@studio.unibo.it",
+  "duration": 179000,
+  "passFailCriteria": {
+    "passFailMetrics": null,
+    "passFailServerMetrics": {}
+  },
+  "errorDetails": null,
+  "testRunStatistics": {
+    "Total": {
+      "transaction": "Total",
+      "sampleCount": 71822.0,
+      "errorCount": 0.0,
+      "errorPct": 0.0,
+      "meanResTime": 208.0,
+      "medianResTime": 202.0,
+      "minResTime": 188.0,
+      "maxResTime": 3740.0,
+      "pct75ResTime": 208.0,
+      "pct1ResTime": 215.0,
+      "pct2ResTime": 220.0,
+      "pct96ResTime": 222.0,
+      "pct97ResTime": 225.0,
+      "pct98ResTime": 229.0,
+      "pct3ResTime": 243.0,
+      "pct999ResTime": 2460.0,
+      "pct9999ResTime": 2490.0,
+      "throughput": 401.24022346368713,
+      "receivedKBytesPerSec": null,
+      "sentKBytesPerSec": null
+    },
+    "RetrieveEventsByProfile": {
+      "transaction": "RetrieveEventsByProfile",
+      "sampleCount": 71822.0,
+      "errorCount": 0.0,
+      "errorPct": 0.0,
+      "meanResTime": 208.0,
+      "medianResTime": 202.0,
+      "minResTime": 188.0,
+      "maxResTime": 3740.0,
+      "pct75ResTime": 208.0,
+      "pct1ResTime": 215.0,
+      "pct2ResTime": 220.0,
+      "pct96ResTime": 222.0,
+      "pct97ResTime": 225.0,
+      "pct98ResTime": 229.0,
+      "pct3ResTime": 243.0,
+      "pct999ResTime": 2460.0,
+      "pct9999ResTime": 2490.0,
+      "throughput": 401.24022346368713,
+      "receivedKBytesPerSec": null,
+      "sentKBytesPerSec": null
+    }
+  },
+  "samplerNames": [
+    "RetrieveEventsByProfile"
+  ],
+  "responseCodes": [],
+  "groupBy": [
+    "5s"
+  ],
+  "percentiles": [
+    "Average",
+    "Percentile75",
+    "Percentile90",
+    "Percentile95",
+    "Percentile96",
+    "Percentile97",
+    "Percentile98",
+    "Percentile99",
+    "Percentile999",
+    "Percentile9999"
+  ],
+  "regions": [],
+  "regionalLoadTestConfig": {},
+  "regionalStatistics": {}
+}
